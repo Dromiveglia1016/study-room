@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STUDY ROOM · 自习室</title>
+<meta name="description" content="一个粉色 Y2K 风格的个人自习室：英语、数学、语文、物理，一门一门挂上来。">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+/* ============================================================
+   封面页专项
+   ============================================================ */
+.stage { position: relative; }
+
+/* ---- 左页：照片堆 + 玩家卡 ---- */
+.cov-pile {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 2px 0 0;
+}
+
+.cov-pile .polaroid {
+  width: min(58%, 244px);
+  flex: none;
+  margin: 0;
+}
+
+.cov-pile .polaroid img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: 50% 4%;
+}
+
+/* 照片右侧：CD 贴纸 + 手写批注 */
+.cov-side {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding-top: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.cov-cd {
+  position: relative;
+  width: 96px;
+  height: auto;
+  transform: rotate(-11deg);
+  --rot: -11deg;
+  filter: saturate(1.16) contrast(1.1) drop-shadow(0 2px 1px rgba(42, 22, 34, .10));
+}
+
+.cov-vert {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.3;
+  color: var(--rose-deep);
+  transform: rotate(-3.5deg);
+  transform-origin: left top;
+}
+
+.cov-vert small {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--f-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  transform: rotate(3.5deg);
+}
+
+.cov-card {
+  margin-top: 24px;
+  position: relative;
+  background: #fff;
+}
+
+.cov-card .kicker { margin: 0 0 7px; }
+
+.cov-card .dl dd { font-weight: 600; }
+
+.cov-hint {
+  margin: 12px 0 0;
+  font-family: var(--f-mono);
+  font-size: 9.5px;
+  letter-spacing: .1em;
+  line-height: 1.9;
+  color: var(--ink-3);
+}
+
+/* ---- 右页：标题区 ---- */
+.page--right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: clamp(28px, 4vw, 54px);
+}
+
+.cov-eyebrow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(18px, 2.4vw, 30px);
+}
+
+.cov-eyebrow .mono-label { line-height: 1.7; }
+.cov-eyebrow .mono-label b { color: var(--rose-deep); font-weight: 700; }
+
+.cov-title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  z-index: 1;
+}
+
+.cov-title .title-script {
+  margin-left: -6px;
+  text-shadow:
+    0 1px 0 #fff,
+    4px 5px 0 rgba(224, 49, 124, .14),
+    0 0 22px rgba(255, 95, 168, .22);
+}
+
+.cov-title .title-serif {
+  margin-top: -12px;
+  margin-left: 5px;
+  letter-spacing: -.015em;
+}
+
+.cov-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 标题末尾的雏菊簇（借海报上 ✿✿✿ 的排法） */
+.cov-bloom {
+  display: flex;
+  align-items: center;
+  padding-bottom: 26px;
+  pointer-events: none;
+}
+
+.cov-bloom svg {
+  display: block;
+  aspect-ratio: 1;
+  margin-left: -9px;
+}
+
+.cov-bloom svg:nth-child(1) { width: 42px; margin-left: 0; transform: translateY(-10px) rotate(-8deg); }
+.cov-bloom svg:nth-child(2) { width: 33px; transform: translateY(2px) rotate(6deg); }
+.cov-bloom svg:nth-child(3) { width: 23px; transform: translateY(12px) rotate(-4deg); }
+
+.cov-cn {
+  margin: clamp(16px, 2vw, 24px) 0 0;
+  padding-left: 3px;
+  font-family: var(--f-cn);
+  font-weight: 800;
+  font-size: clamp(16px, 1.35vw, 19.5px);
+  line-height: 1.75;
+  letter-spacing: .01em;
+  color: var(--ink);
+}
+
+.cov-lede {
+  margin: 9px 0 0;
+  padding-left: 3px;
+  max-width: 33em;
+}
+
+.cov-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: clamp(22px, 2.6vw, 32px);
+  padding-left: 3px;
+}
+
+.cov-cta .mono-label { max-width: 12em; line-height: 1.7; }
+
+/* 四个学科小圆点 */
+.cov-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(18px, 2.2vw, 26px) 0 0;
+  padding: 0 0 0 3px;
+  list-style: none;
+}
+
+.cov-dots li {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  font-family: var(--f-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  transition: transform .25s var(--ease-pop), border-color .25s;
+}
+
+.cov-dots li.on {
+  border-color: var(--ink);
+  background: var(--rose);
+  color: #fff;
+  box-shadow: 0 2px 0 var(--rose-soft);
+}
+
+.cov-dots li:hover { transform: translateY(-2px); border-color: var(--rose); }
+
+/* 手写签名 */
+.cov-sign {
+  position: absolute;
+  right: 84px;
+  bottom: 40px;
+  margin: 0;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--rose);
+  transform: rotate(-7deg);
+  text-shadow: 1.5px 1.5px 0 #fff, 3px 3px 0 rgba(224, 49, 124, .12);
+  pointer-events: none;
+}
+
+/* 星星 */
+.cov-star-a { position: absolute; right: 28px; bottom: 54px; width: 36px; aspect-ratio: 1;
+  filter: drop-shadow(0 3px 0 rgba(224, 49, 124, .18)); }
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 860px) {
+  .cov-pile { gap: 12px; padding: 0; }
+  .cov-pile .polaroid { width: min(54%, 186px); }
+  .cov-side { padding-top: 30px; gap: 10px; }
+  .cov-cd { width: 78px; }
+  .cov-vert { font-size: 13.5px; }
+  .cov-vert small { letter-spacing: .12em; font-size: 7px; }
+  .cov-card { margin-top: 16px; }
+  .page--right { padding-top: clamp(24px, 6vw, 40px); }
+  .cov-bloom { padding-bottom: 16px; }
+  .cov-bloom svg:nth-child(1) { width: 32px; }
+  .cov-bloom svg:nth-child(2) { width: 25px; }
+  .cov-bloom svg:nth-child(3) { width: 17px; }
+  .cov-star-a { width: 24px; bottom: 16px; right: 22px; }
+  .cov-sign { font-size: 19px; right: 62px; bottom: 14px; }
+  .cov-cta { gap: 12px; }
+  .cov-cta .mono-label { max-width: none; }
+}
+
+@media (max-height: 800px) and (min-width: 861px) {
+  .cov-card { margin-top: 18px; }
+  .cov-title .title-serif { margin-top: -8px; }
+  .cov-cn { margin-top: 14px; }
+  .cov-cta { margin-top: 18px; }
+  .cov-dots { margin-top: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 图标精灵 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2=".35" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".34" stop-color="#f0f3f8"/>
+      <stop offset=".5" stop-color="#a9b0bd"/>
+      <stop offset=".63" stop-color="#e2e7ef"/>
+      <stop offset="1" stop-color="#fdfdfe"/>
+    </linearGradient>
+  </defs>
+  <symbol id="i-star" viewBox="0 0 100 100">
+    <path d="M50 3 61.8 36.2 97 36.6 68.8 57.6 79.4 91.4 50 71.2 20.6 91.4 31.2 57.6 3 36.6 38.2 36.2Z"
+          fill="url(#chrome)" stroke="#7b8090" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M50 15 56.8 33.4 76 33.7 60.8 45.2 66.4 63.2 50 52.2 33.6 63.2 39.2 45.2 24 33.7 43.2 33.4Z"
+          fill="none" stroke="#fff" stroke-width="2.6" opacity=".9"/>
+  </symbol>
+  <symbol id="i-daisy" viewBox="0 0 100 100">
+    <g fill="#ffd9ec" stroke="#e8709f" stroke-width="2">
+      <ellipse cx="50" cy="27" rx="12.5" ry="21"/>
+      <ellipse cx="50" cy="27" rx="12.5" ry="21" transform="rotate(72 50 50)"/>
+      <ellipse cx="50" cy="27" rx="12.5" ry="21" transform="rotate(144 50 50)"/>
+      <ellipse cx="50" cy="27" rx="12.5" ry="21" transform="rotate(216 50 50)"/>
+      <ellipse cx="50" cy="27" rx="12.5" ry="21" transform="rotate(288 50 50)"/>
+    </g>
+    <circle cx="50" cy="50" r="9.5" fill="#ffe07a" stroke="#e8709f" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-spark" viewBox="0 0 100 100">
+    <path d="M50 0C54 32 68 46 100 50 68 54 54 68 50 100 46 68 32 54 0 50 32 46 46 32 50 0Z"/>
+  </symbol>
+</svg>
+
+<div class="page-root">
+
+  <!-- 顶部条 -->
+  <div class="strip" aria-hidden="true">
+    <div class="strip__track">
+      <span>welcome to my little study room <i>★</i> best viewed with a happy heart <i>♡</i> 04 subjects / 01 online <i>✿</i> est. 2026 <i>✦</i> 每日一页，慢慢积累 <i>♡</i></span>
+      <span>welcome to my little study room <i>★</i> best viewed with a happy heart <i>♡</i> 04 subjects / 01 online <i>✿</i> est. 2026 <i>✦</i> 每日一页，慢慢积累 <i>♡</i></span>
+    </div>
+  </div>
+
+  <main class="stage">
+    <div class="window rise">
+
+      <div class="win-bar">
+        <div class="win-dots"><i></i><i></i><i></i></div>
+        <div class="win-url">
+          <svg width="9" height="9" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4 60 40 96 50 60 60 50 96 40 60 4 50 40 40Z" fill="#ff5fa8"/></svg>
+          https://<b>study.room</b>/index.html
+        </div>
+        <div class="win-mark">ONLINE 100%</div>
+      </div>
+
+      <div class="spread">
+
+        <!-- ================= 左页 ================= -->
+        <section class="page page--left">
+          <div class="cov-pile">
+            <figure class="polaroid polaroid--hover">
+              <span class="tape tape--tl"></span>
+              <img src="assets/art/portrait-english.jpg" alt="英语学科代表形象：粉色系千禧风少女插画">
+              <figcaption class="polaroid__cap">english · p.01</figcaption>
+            </figure>
+            <div class="cov-side">
+              <img class="sticker cov-cd float" src="assets/art/stickers/st-00.jpg" alt="" aria-hidden="true">
+              <p class="cov-vert hand">one page<br>a day ♡<small>slow but steady</small></p>
+            </div>
+          </div>
+
+          <div class="note-card cov-card">
+            <p class="kicker">player card</p>
+            <dl class="dl">
+              <dt>player</dt><dd>我</dd>
+              <dt>server</dt><dd>自习室 #01</dd>
+              <dt>today</dt><dd>英语 · Day 02</dd>
+              <dt>words</dt><dd>40 个 / 2 天</dd>
+            </dl>
+            <p class="cov-hint">SINGLE MODE — 一个人也可以<br>很认真地做很多页。</p>
+          </div>
+
+          <span class="page__num">p.01 — welcome</span>
+        </section>
+
+        <!-- ================= 铁圈 ================= -->
+        <div class="rings" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+
+        <!-- ================= 右页 ================= -->
+        <section class="page page--right">
+
+          <div class="cov-eyebrow">
+            <p class="mono-label" style="margin:0">subjects<br><b>04</b> / 01 online</p>
+            <p class="mono-label" style="margin:0;text-align:right">est.<br><b>2026</b></p>
+          </div>
+
+          <h1 class="cov-title">
+            <span class="cov-line">
+              <span class="title-script">Study</span>
+              <span class="cov-bloom" aria-hidden="true">
+                <svg viewBox="0 0 100 100"><use href="#i-daisy"/></svg>
+                <svg viewBox="0 0 100 100"><use href="#i-daisy"/></svg>
+                <svg viewBox="0 0 100 100"><use href="#i-daisy"/></svg>
+              </span>
+            </span>
+            <span class="title-serif">Room</span>
+          </h1>
+
+          <p class="cov-cn">把喜欢的东西，<br>一页一页学成自己的。</p>
+          <p class="lede cov-lede">英语已经开张，数学、语文、物理在旁边排队。挑一门翻开来，今天这页就归你。</p>
+
+          <div class="cov-cta">
+            <a class="btn" href="subjects.html">打开学科 <span aria-hidden="true">→</span></a>
+            <span class="mono-label">04 subjects<br>01 online</span>
+          </div>
+
+          <ul class="cov-dots" aria-label="学科上线进度">
+            <li class="on" title="英语 · 已上线">EN</li>
+            <li title="数学 · 排队中">MA</li>
+            <li title="语文 · 排队中">CN</li>
+            <li title="物理 · 排队中">PH</li>
+          </ul>
+
+          <svg class="cov-star-a sparkle" aria-hidden="true"><use href="#i-star"/></svg>
+          <p class="cov-sign hand">keep going ♡</p>
+
+          <span class="page__num">p.02 — index</span>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部条 -->
+  <div class="strip strip--bottom" aria-hidden="true">
+    <div class="strip__track">
+      <span>study room <i>✦</i> 04 subjects / 01 online <i>✦</i> built by me, for me <i>✦</i> 2026 <i>✦</i> keep going ♡</span>
+      <span>study room <i>✦</i> 04 subjects / 01 online <i>✦</i> built by me, for me <i>✦</i> 2026 <i>✦</i> keep going ♡</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

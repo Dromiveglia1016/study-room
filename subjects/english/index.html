@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta name="robots" content="noindex, nofollow"/><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Word Journey · 每日背词故事</title>
+<style>
+:root{--paper:#fff8fb;--card:#fff8fb;--ink:#2a1622;--muted:#7a6472;--sage:#ffe4f0;--green:#e0317c;--line:#f0dbe6;--gold:#ff8fc4}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}header{padding:16px max(5vw,20px);background:#fff8fbed;position:sticky;top:0;border-bottom:1px solid var(--line);backdrop-filter:blur(10px);z-index:2;display:flex;justify-content:space-between}.brand{font-weight:800}.brand span{color:var(--green)}main{max-width:1100px;margin:auto;padding:30px 20px 70px}.hero{padding:34px;background:linear-gradient(120deg,#e7eee4,#f3eadb);border-radius:24px;display:flex;justify-content:space-between;align-items:center}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--green);font-weight:800}.hero h1{font-size:clamp(28px,4vw,42px);margin:8px 0}.hero p{color:#5d6a60;max-width:550px}.book{font-size:78px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}.stat b{font-size:23px;display:block}.stat small,.muted{color:var(--muted)}.layout{display:grid;grid-template-columns:235px 1fr;gap:18px}.panel h3{margin:0 0 14px}.days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.day{display:block;text-align:center;text-decoration:none;padding:8px 0;border:1px solid var(--line);background:white;border-radius:9px;color:var(--muted);font-size:13px}.day.active{background:var(--green);color:white;border-color:var(--green)}.day.pending{opacity:.48}.progress{height:6px;background:#eee;border-radius:10px;margin:12px 0}.progress span{display:block;width:.65%;height:100%;background:var(--green)}.head{display:flex;justify-content:space-between;gap:12px}.head h2{margin:4px 0;font-size:26px}.tag{background:var(--sage);color:var(--green);padding:5px 10px;border-radius:30px;font-size:12px;height:max-content}.controls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.toggle{position:absolute;opacity:0;width:1px;height:1px}.control-label{display:inline-block;border:1px solid var(--line);background:white;border-radius:10px;padding:9px 12px;cursor:pointer;user-select:none;font-size:14px}.control-label.primary{background:var(--green);color:white;border-color:var(--green)}.control-label:hover{filter:brightness(.97)}.story{font:18px/1.95 Georgia,"Times New Roman",serif;padding:5px 2px}.story p{margin:0 0 17px}.word{font-weight:bold;color:#c02361;background:linear-gradient(transparent 60%,#e6eee0 60%)}.translation,.answers{display:none;background:#fff8fb;border-left:3px solid #a2e5df;padding:14px;margin:15px 0;border-radius:0 12px 12px 0}.section{margin-top:25px}.table{border-collapse:collapse;width:100%;font-size:14px}.table th,.table td{text:text-align:left;text-align:left;border-bottom:1px solid var(--line);padding:10px}.table th{color:var(--muted);background:#fdf5fa}.table td:nth-child(2){font-weight:bold;color:var(--green)}.tip{background:#fdf5fa;padding:14px;border-radius:12px;color:#6b5560}.quiz{display:grid;gap:9px}.q{padding:12px;border:1px solid var(--line);border-radius:11px}.q input{border:0;border-bottom:1px solid #ccc;padding:5px;width:125px;font:inherit}.notice{margin-top:18px;background:#f4f1e8;padding:15px;border-radius:12px;color:#6b5560}.coming{margin-top:20px;padding:15px;border:1px dashed #d7d6cd;border-radius:12px;color:var(--muted)}footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+/* Native HTML disclosure widgets: no JavaScript required */
+details.disclosure{margin:16px 0;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 15px}details.disclosure>summary{cursor:pointer;font-weight:700;color:var(--green);list-style:none}details.disclosure>summary::-webkit-details-marker{display:none}details.disclosure>summary:after{content:"＋";float:right}details.disclosure[open]>summary:after{content:"－"}details.disclosure .inside{padding-top:12px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.hero{padding:23px}.book{font-size:55px}.stats{gap:7px}.stat{padding:12px}.days{grid-template-columns:repeat(7,1fr)}}
+
+/* Interactive word hints and quiz grading */
+.wordhint{display:inline;position:relative} .wordhint>summary{display:inline;cursor:pointer;color:#c02361;font-weight:700;text-decoration:none;list-style:none} .wordhint>summary::-webkit-details-marker{display:none} .wordhint[open]>.hintbox{display:inline-block} .hintbox{display:none;position:relative;background:#fff8fb;border:1px solid #a2e5df;box-shadow:0 5px 16px #2a162218;border-radius:9px;padding:7px 10px;margin:3px 4px;font:13px/1.5 system-ui,sans-serif;color:#2a1622;vertical-align:middle} .hintbox b{color:#e0317c}
+.quiz-tools{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0} .quiz-btn{border:1px solid var(--line);border-radius:10px;background:var(--green);color:white;padding:9px 14px;font:inherit;cursor:pointer} .quiz-btn.secondary{background:white;color:var(--ink)} .quiz .q{display:flex;align-items:center;gap:8px;flex-wrap:wrap} .quiz .q input{width:min(240px,48vw);border:1px solid #cfcfc5;border-radius:7px;padding:7px 9px;background:#fff8fb} .quiz .q.correct{border-color:#2fb6b0;background:#effbf9} .quiz .q.incorrect{border-color:#e8709f;background:#fff1f7} .feedback{font-size:13px;font-weight:700} .grade-summary{display:none;padding:12px 15px;border-radius:12px;background:#f5f2fa;margin:12px 0;font-weight:700}
+
+/* Click-to-translate every word in the English story */
+.story .wordhint{display:inline-block;position:relative;vertical-align:baseline}
+.story .wordhint>summary{display:inline;cursor:pointer;color:inherit;font-weight:inherit;text-decoration:none;list-style:none}
+.story .wordhint>summary::-webkit-details-marker{display:none}
+.story .wordhint .hintbox{display:none;position:absolute;z-index:5;left:0;top:calc(100% + 4px);min-width:125px;max-width:220px;white-space:normal;background:#fff8fb;border:1px solid #a2e5df;box-shadow:0 5px 16px #2a162218;border-radius:9px;padding:7px 10px;font:13px/1.5 system-ui,sans-serif;color:#2a1622}
+.story .wordhint[open] .hintbox{display:block}
+.story .wordhint.target-word>summary{font-weight:700;color:#c02361;background:linear-gradient(transparent 60%,#e6eee0 60%)}
+
+
+/* New independent sentence-analysis module; deliberately does not alter existing lesson styling */
+.grammar-module{margin-top:24px;border:1px solid var(--line);border-radius:18px;background:var(--card);padding:18px}
+.grammar-module>summary{cursor:pointer;list-style:none;font-weight:800;color:var(--green);font-size:18px}
+.grammar-module>summary::-webkit-details-marker{display:none}
+.grammar-module>summary:after{content:"＋";float:right}
+.grammar-module[open]>summary:after{content:"－"}
+.grammar-intro{background:#fdf5fa;padding:12px;border-radius:12px;margin:12px 0;color:#6b5560}
+.grammar-sentence{border:1px solid var(--line);border-radius:12px;padding:13px;margin:12px 0;background:#fff8fb}
+.grammar-sentence h4{margin:0 0 8px;color:var(--green)}
+.grammar-sentence .en{font:18px/1.8 Georgia,"Times New Roman",serif}
+.grammar-sentence .zh{color:var(--muted);margin:5px 0 10px}
+.grammar-sentence .explain{font-size:14px;line-height:1.75}
+.grammar-sentence details.word-explain{display:inline-block;margin:4px 2px;vertical-align:baseline}
+.grammar-sentence details.word-explain summary{cursor:pointer;display:inline;color:var(--green);font-weight:700;list-style:none;border-bottom:1px dotted #9eb59e}
+.grammar-sentence details.word-explain summary::-webkit-details-marker{display:none}
+.grammar-sentence details.word-explain .why{display:block;background:#fff8fb;border:1px solid #a2e5df;border-radius:9px;padding:8px 10px;margin-top:5px;max-width:520px}
+
+.grammar-module .grammar-map{background:#f5f7f3;border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin:14px 0 18px;line-height:1.75}.grammar-module .grammar-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.grammar-module .grammar-tag{display:inline-block;background:#e8efe5;color:#355d3a;border-radius:999px;padding:3px 9px;font-size:12px}.grammar-module .grammar-map small{color:var(--muted)}
+
+.advanced-fill{display:block;width:100%;max-width:100%;min-width:0;overflow:visible;box-sizing:border-box}
+.advanced-fill .inside,.advanced-fill .section{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+.advanced-fill .fill-bank{border:1px solid var(--line);background:#f5f7f3;border-radius:12px;padding:12px;margin:12px 0;width:100%;max-width:100%;box-sizing:border-box}
+.advanced-fill .fill-words{margin-top:6px;line-height:1.9;overflow-wrap:anywhere;word-break:normal}
+.advanced-fill .fill-passage{display:block;line-height:2;padding:12px 0;width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-wrap:normal;word-break:normal;white-space:normal}
+.advanced-fill .fill-slot{display:inline-block;vertical-align:baseline;white-space:nowrap;max-width:100%;margin:2px 2px;box-sizing:border-box}
+.advanced-fill .fill-slot select{display:inline-block;flex:none;box-sizing:border-box;border:1px solid #cfcfc5;border-radius:7px;background:#fff8fb;padding:5px 7px;width:132px;min-width:132px;max-width:132px;font:inherit;font-size:14px;vertical-align:baseline;white-space:normal}
+.advanced-fill .fill-controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.advanced-fill .fill-result{display:none;padding:12px;border-radius:12px;background:#f5f2fa;margin:12px 0;font-weight:700;overflow-wrap:anywhere}
+.advanced-fill .fill-explanations{border-top:1px solid var(--line);padding-top:12px;width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere;box-sizing:border-box}
+.advanced-fill .fill-translation{background:#fdf5fa;border-radius:12px;padding:14px;line-height:1.9}
+.advanced-fill .fill-pos-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.advanced-fill .fill-pos-card{border:1px solid var(--line);border-radius:12px;background:#fff8fb;padding:12px;min-width:0}
+.advanced-fill .fill-pos-title{font-weight:800;color:var(--green);border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:8px}
+.advanced-fill .fill-pos-item{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:4px 0;line-height:1.7}
+.advanced-fill .fill-pos-item b{min-width:100px;color:#2a1622}
+.advanced-fill .fill-pos-item span{color:var(--muted)}
+.advanced-fill .fill-explanations ol{padding-left:1.5em;line-height:1.9}
+.advanced-fill .fill-explanations li{margin:0 0 9px}
+.advanced-fill select.correct{border-color:#2fb6b0;background:#effbf9}
+.advanced-fill select.incorrect{border-color:#e8709f;background:#fff1f7}
+@media(max-width:700px){.advanced-fill .fill-passage{font-size:15px;line-height:1.9;padding:8px 0}.advanced-fill .fill-slot select{width:124px;min-width:124px;max-width:124px;font-size:13px;padding:4px}.advanced-fill .fill-pos-grid{grid-template-columns:1fr}.advanced-fill .fill-pos-item b{min-width:90px}}
+
+/* Final overflow fix: allow grid content to shrink and inline blanks to wrap naturally */
+.layout{grid-template-columns:235px minmax(0,1fr)}
+.layout>*{min-width:0}
+.advanced-fill{width:100%;min-width:0;max-width:100%;overflow:hidden}
+.advanced-fill .inside,.advanced-fill .section,.advanced-fill .fill-passage{min-width:0;width:100%;max-width:100%;overflow-wrap:break-word;word-wrap:break-word}
+.advanced-fill .fill-passage{white-space:normal;line-height:2.05}
+.advanced-fill .fill-slot{display:inline;white-space:normal;max-width:100%;margin:0 1px}
+.advanced-fill .fill-slot select{display:inline;width:clamp(88px,11vw,118px);min-width:0;max-width:100%;vertical-align:baseline;padding:4px 5px;font-size:13px}
+.advanced-fill .fill-bank,.advanced-fill .fill-explanations,.advanced-fill .fill-translation{min-width:0;max-width:100%;overflow-wrap:anywhere}
+@media(max-width:760px){.layout{grid-template-columns:minmax(0,1fr)}.advanced-fill .fill-slot select{width:108px;max-width:100%;font-size:12px}}
+
+/* ===== 进阶练习美化覆盖层（题目与批改逻辑不变） ===== */
+#advanced-fill .section h3{font-size:20px;margin:4px 0 6px;letter-spacing:.2px}
+#advanced-fill .section>p.muted{background:#fdf5fa;border-left:3px solid var(--sage);padding:10px 12px;border-radius:0 10px 10px 0;margin:10px 0 16px;line-height:1.8}
+#advanced-fill .fill-bank{background:linear-gradient(135deg,#f3f7f1,#f8f5ec);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 2px 10px #2a16220a}
+#advanced-fill .fill-bank>b{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-size:13px;letter-spacing:.5px}
+#advanced-fill .fill-words{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#advanced-fill .fw-chip{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:#fff8fb;border:1px solid var(--line);font:600 13px/1.2 Georgia,"Times New Roman",serif;color:#2a1622;box-shadow:0 1px 3px #2a162208}
+#advanced-fill .fw-chip:nth-child(odd){background:#f3f7f1}
+#advanced-fill .fill-passage{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px;font:17px/2.1 Georgia,"Times New Roman",serif;box-shadow:0 2px 12px #2a16220a;margin:6px 0}
+#advanced-fill .fill-slot{margin:0 3px}
+#advanced-fill .fill-slot select{border:1px solid #d3d6c9;border-radius:10px;background:#fbfcf7;padding:5px 8px;font:600 13px system-ui,sans-serif;color:#2a1622;box-shadow:inset 0 1px 2px #2a162208;transition:border-color .15s,box-shadow .15s,background .15s}
+#advanced-fill .fill-slot select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px #ffe4f0}
+#advanced-fill .fill-slot select.correct{border-color:#2fb6b0;background:#effbf9;box-shadow:0 0 0 3px #e3f0e2}
+#advanced-fill .fill-slot select.incorrect{border-color:#e8709f;background:#fff1f7;box-shadow:0 0 0 3px #fbe7e4}
+#advanced-fill .fill-controls{margin:16px 0 4px}
+#advanced-fill .fill-controls .quiz-btn{border-radius:12px;padding:10px 18px;font-weight:700;box-shadow:0 2px 6px #2a162214;transition:transform .12s,filter .12s}
+#advanced-fill .fill-controls .quiz-btn:hover{filter:brightness(1.03);transform:translateY(-1px)}
+#advanced-fill .fill-controls .quiz-btn.secondary{background:white}
+#advanced-fill .fill-result{border-radius:14px;padding:14px 16px;background:linear-gradient(135deg,#f5f2fa,#e9f1e6);border-left:4px solid var(--green);box-shadow:0 2px 8px #2a16220a}
+#advanced-fill .fill-explanations{border-top:1px dashed var(--line);padding-top:18px;margin-top:18px}
+#advanced-fill .fill-explanations h4{margin:18px 0 10px;font-size:15px;color:var(--green)}
+#advanced-fill .fill-translation{background:linear-gradient(135deg,#fdf5fa,#f4f1e6);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:16px 18px}
+#advanced-fill .fill-pos-grid{gap:14px}
+#advanced-fill .fill-pos-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 1px 6px #2a162208;border-top:3px solid var(--sage)}
+#advanced-fill .fill-pos-title{display:inline-block;color:var(--green);background:#eef3ea;border-radius:999px;padding:4px 12px;font-size:13px;border-bottom:none;margin-bottom:10px}
+#advanced-fill .fill-pos-item b{color:#2a1622}
+#advanced-fill .fill-explanations ol{list-style:none;padding-left:0;display:grid;gap:10px}
+#advanced-fill .fill-explanations li{background:#fff8fb;border:1px solid var(--line);border-radius:12px;padding:11px 14px 11px 42px;position:relative;line-height:1.75}
+#advanced-fill .fill-explanations li::before{content:counter(list-item);position:absolute;left:12px;top:11px;width:20px;height:20px;border-radius:50%;background:var(--sage);color:var(--green);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+#advanced-fill .fill-explanations>p{background:#fdf5fa;border:1px dashed #d9d2bd;border-radius:12px;padding:12px 14px;color:#6b5560;margin-top:12px;line-height:1.8}
+@media(max-width:700px){#advanced-fill .fill-passage{padding:16px 15px;font-size:15px}#advanced-fill .fill-pos-grid{grid-template-columns:1fr}}
+
+
+
+@import url("https://miaoda.feishu.cn/fonts/css2?family=Mali:wght@400;500;600&family=Itim&display=swap");
+/* ===== Momonga Fluffy Sky · 主题覆盖层（题目与逻辑不变） ===== */
+:root{
+  --mo-sky:#ffc9e2; --mo-sky-deep:#e0317c; --mo-cream:#fff1f8; --mo-paper:#fff8fb;
+  --mo-blush:#ff9ecb; --mo-blush-deep:#e0317c; --mo-sage:#a2e5df; --mo-ink:#2a1622;
+  --mo-ink-soft:rgba(42,22,34,.55); --mo-line:rgba(42,22,34,.28); --mo-sky-soft:#ffe4f0;
+  --mo-field:#fff8fb;
+}
+::selection{background:var(--mo-sky);color:var(--mo-ink)}
+body{
+  font-family:"Mali","Itim","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  color:var(--mo-ink);
+  background:#b7d9f2 url("../../assets/img/60a34b94.jpg") center bottom / cover no-repeat fixed;
+}
+@media(max-width:1000px){ body{background-image:url("../../assets/img/34bedcdf.jpg")} }
+
+/* 顶栏 */
+header{background:var(--mo-cream);border-bottom:2px solid var(--mo-ink);box-shadow:0 3px 0 rgba(255,201,226,.7);backdrop-filter:none}
+.brand{font-family:"Itim","Mali",sans-serif;letter-spacing:.5px}
+.brand span{color:var(--mo-sky-deep)}
+.muted{color:var(--mo-ink-soft)}
+
+/* 主视觉 */
+.hero{position:relative;overflow:hidden;background:var(--mo-paper);border:2px solid var(--mo-ink);
+  border-radius:22px;outline:1.5px dashed rgba(224,49,124,.55);outline-offset:-8px;
+  box-shadow:0 4px 0 rgba(255,201,226,.9);padding:34px}
+.hero::after{content:"";position:absolute;top:10px;right:20px;width:196px;aspect-ratio:900/294;
+  background:url("../../assets/img/73f0f8f2.png") center/contain no-repeat;pointer-events:none}
+.eyebrow{color:var(--mo-sky-deep);letter-spacing:3px}
+.hero h1{font-family:"Itim","Mali",sans-serif;color:var(--mo-ink)}
+.hero p{color:#6d5a61;max-width:46%}
+.book{display:none}
+
+/* 统计卡片 */
+.stats{gap:14px}
+.stat{background:var(--mo-paper);border:2px solid var(--mo-ink);border-radius:20px;box-shadow:0 4px 0 rgba(255,201,226,.9)}
+.stat b{color:var(--mo-sky-deep);font-family:"Itim"}
+.stat small{color:var(--mo-ink-soft)}
+
+/* 侧栏目录 */
+.panel{background:var(--mo-paper);border:2px solid var(--mo-ink);border-radius:22px;box-shadow:0 4px 0 rgba(255,201,226,.9)}
+.panel h3{color:var(--mo-ink)}
+.progress{background:var(--mo-sky-soft)}
+.progress span{background:var(--mo-sky-deep)}
+.days{gap:8px}
+.day{background:#fff;border:1.5px solid var(--mo-line);border-radius:12px;color:var(--mo-ink-soft);font-family:"Mali"}
+.day.active{background:var(--mo-sky);color:var(--mo-ink);border-color:var(--mo-ink);box-shadow:0 2px 0 rgba(42,22,34,.25)}
+.day.pending{opacity:.6}
+
+/* 标题与标签 */
+.head h2{font-family:"Itim","Mali",sans-serif;color:var(--mo-ink)}
+.tag{background:var(--mo-sky-soft);color:var(--mo-sky-deep);border:1.5px solid var(--mo-line)}
+
+/* 故事与点词提示 */
+.story{font-family:"Mali",Georgia,"Times New Roman",serif}
+.story .wordhint.target-word>summary{color:var(--mo-sky-deep);background:linear-gradient(transparent 60%,#dcebf6 60%)}
+.hintbox{background:#fff;border:1.5px solid var(--mo-line);border-radius:14px;box-shadow:0 5px 16px rgba(42,22,34,.18)}
+.hintbox b{color:var(--mo-sky-deep)}
+
+/* 折叠卡片 */
+details.disclosure{background:var(--mo-paper);border:2px solid var(--mo-ink);border-radius:20px;box-shadow:0 4px 0 rgba(255,201,226,.9)}
+details.disclosure>summary{color:var(--mo-sky-deep);font-family:"Itim","Mali",sans-serif}
+details.disclosure>summary:after{color:var(--mo-sky-deep)}
+
+/* 表格 / 提示 / 基础测试 */
+.section h3{font-family:"Itim","Mali",sans-serif;color:var(--mo-ink)}
+.table th{background:var(--mo-cream);color:var(--mo-ink)}
+.table td:nth-child(2){color:var(--mo-sky-deep)}
+.table td{border-bottom:1px dashed var(--mo-line)}
+.tip{background:rgba(198,216,181,.35);border:1.5px dashed rgba(184,112,143,.5);border-radius:16px;color:#5f5357}
+.tip b{color:var(--mo-blush-deep)}
+.q{background:#fff;border:1.5px solid var(--mo-line);border-radius:14px}
+.q input{background:var(--mo-field);border:1.5px solid var(--mo-line)!important;border-radius:10px;color:var(--mo-ink)}
+.q input:focus{border-color:var(--mo-sky-deep)!important;box-shadow:0 0 0 3px rgba(255,201,226,.55)}
+.quiz-btn{background:var(--mo-sky);color:var(--mo-ink);border:2px solid var(--mo-ink);border-radius:999px;box-shadow:0 3px 0 rgba(42,22,34,.25);font-family:"Mali";font-weight:600}
+.quiz-btn.secondary{background:#fff;color:var(--mo-ink)}
+.q.correct{border-color:#9ccfae;background:#f0f9f2}
+.q.incorrect{border-color:#e8a0a0;background:#fff4f3}
+.grade-summary{background:var(--mo-sky-soft);border-left:4px solid var(--mo-sky-deep)}
+.coming{border:1.5px dashed var(--mo-line);background:var(--mo-paper);color:var(--mo-ink-soft)}
+footer{color:var(--mo-ink-soft)}
+footer::before{content:"";display:block;height:34px;background:url("../../assets/img/64ac27c3.png") center/contain no-repeat;margin-bottom:10px}
+
+/* 语法拆解模块 */
+.grammar-module{background:var(--mo-paper)!important;border:2px solid var(--mo-ink)!important;border-radius:22px!important;box-shadow:0 4px 0 rgba(255,201,226,.9)}
+.grammar-module>summary{color:var(--mo-sky-deep);font-family:"Itim","Mali",sans-serif}
+.grammar-map{background:var(--mo-sky-soft)!important;border:1.5px dashed var(--mo-sky-deep)!important}
+.grammar-map strong{color:var(--mo-ink)}
+.grammar-tag{background:var(--mo-sage)!important;color:var(--mo-ink)!important;border-radius:999px}
+.grammar-intro{background:rgba(198,216,181,.25)!important;border-radius:14px!important;color:#5f5357}
+.grammar-sentence{background:#fff!important;border:1.5px solid var(--mo-line)!important;border-radius:18px!important}
+.grammar-sentence h4{color:var(--mo-sky-deep);font-family:"Itim","Mali",sans-serif}
+.word-explain summary{color:var(--mo-sky-deep)!important;border-bottom-color:var(--mo-sky)!important}
+.word-explain .why{background:var(--mo-sky-soft)!important;border:1.5px solid var(--mo-sky)!important;border-radius:12px!important}
+
+/* 进阶练习模块 */
+#advanced-fill .section h3{font-family:"Itim","Mali",sans-serif;color:var(--mo-ink)}
+#advanced-fill .section>p.muted{background:var(--mo-sky-soft);border-left:3px solid var(--mo-sky);border-radius:0 14px 14px 0}
+#advanced-fill .fill-bank{background:var(--mo-cream);border:2px solid var(--mo-ink);border-radius:20px;box-shadow:0 4px 0 rgba(255,201,226,.9)}
+#advanced-fill .fill-bank>b{color:var(--mo-ink)}
+#advanced-fill .fw-chip{background:#fff;border:1.5px solid var(--mo-line);color:var(--mo-sky-deep);border-radius:999px}
+#advanced-fill .fw-chip:nth-child(odd){background:var(--mo-sky-soft)}
+#advanced-fill .fill-passage{background:var(--mo-paper);border:2px solid var(--mo-ink);border-radius:20px;box-shadow:0 4px 0 rgba(255,201,226,.9);font-family:"Mali",Georgia,serif}
+#advanced-fill .fill-slot select{background:var(--mo-field);border:1.5px solid var(--mo-line);border-radius:10px;color:var(--mo-ink)}
+#advanced-fill .fill-slot select:focus{border-color:var(--mo-sky-deep);box-shadow:0 0 0 3px rgba(255,201,226,.55)}
+#advanced-fill .fill-result{background:var(--mo-sky-soft);border-left:4px solid var(--mo-sky-deep)}
+#advanced-fill .fill-translation{background:var(--mo-cream);border-left:4px solid var(--mo-blush)}
+#advanced-fill .fill-pos-card{background:#fff;border:1.5px solid var(--mo-line);border-top:3px solid var(--mo-sage);border-radius:18px}
+#advanced-fill .fill-pos-title{background:var(--mo-sky-soft);color:var(--mo-sky-deep)}
+#advanced-fill .fill-pos-item b{color:var(--mo-sky-deep)}
+#advanced-fill .fill-explanations h4{color:var(--mo-sky-deep)}
+#advanced-fill .fill-explanations li{background:#fffafc;border:1.5px solid var(--mo-line)}
+#advanced-fill .fill-explanations li::before{background:var(--mo-sky);color:var(--mo-ink)}
+#advanced-fill .fill-explanations>p{background:rgba(198,216,181,.25);border:1.5px dashed var(--mo-line)}
+
+@media(max-width:700px){
+  .hero{padding:22px 18px}
+  .hero::after{width:120px;top:8px;right:10px;opacity:.9}
+  .hero p{max-width:100%}
+  .stats{grid-template-columns:1fr;gap:10px}
+  .stat{padding:14px}
+  .stat,.panel,.grammar-sentence{border-radius:18px}
+}
+
+/* ===== 睡鼠贴纸装饰（内容与逻辑不变） ===== */
+.panel h3{display:flex;align-items:center;gap:8px}
+.panel h3::before{content:"";flex:none;width:34px;height:34px;background:url("../../assets/img/60cd8601.png") center/contain no-repeat}
+.grammar-module{position:relative}
+.grammar-module::before{content:"";position:absolute;top:12px;right:18px;width:86px;aspect-ratio:260/256;background:url("../../assets/img/7852ae2c.png") center/contain no-repeat;pointer-events:none;opacity:.95}
+#advanced-fill .fill-bank>b{display:inline-flex;align-items:center;gap:7px}
+#advanced-fill .fill-bank>b::before{content:"";width:22px;height:22px;background:url("../../assets/img/60cd8601.png") center/contain no-repeat}
+@media(max-width:700px){
+  .grammar-module::before{display:none}
+}
+
+
+/* ===== 应用壳层：首页卡片 + 视图切换 ===== */
+.hidden{display:none!important}
+.app-main{max-width:1100px;margin:0 auto;padding:24px 20px 70px}
+#view-app{min-height:100vh}
+.topbar{display:flex;align-items:center;gap:14px;padding:14px max(5vw,20px);
+  background:var(--mo-cream,#fff1f8);border-bottom:2px solid var(--mo-ink,#2a1622)}
+.back-btn{border:2px solid var(--mo-ink,#2a1622);background:#fff;color:var(--mo-sky-deep,#e0317c);
+  border-radius:999px;padding:8px 18px;font:600 14px "Mali",inherit;cursor:pointer;
+  box-shadow:0 2px 0 rgba(42,22,34,.2)}
+.back-btn:hover{background:var(--mo-sky-soft,#ffe4f0)}
+.topbar .cur{font-family:"Itim","Mali",sans-serif;font-weight:700;font-size:17px;color:var(--mo-ink,#2a1622)}
+.home-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.home-card{background:var(--mo-paper,#fff8fb);border:2px solid var(--mo-ink,#2a1622);border-radius:22px;
+  box-shadow:0 4px 0 rgba(255,201,226,.9);padding:28px 22px;text-align:center;cursor:pointer;
+  font-family:inherit;color:var(--mo-ink,#2a1622);transition:transform .15s,border-color .15s}
+.home-card:hover{transform:translateY(-3px);border-color:var(--mo-sky-deep,#e0317c)}
+.home-card .ic{font-size:34px}
+.home-card .t{font-family:"Itim","Mali",sans-serif;font-size:19px;font-weight:700;margin:10px 0 6px}
+.home-card .d{font-size:13px;color:var(--mo-ink-soft,rgba(42,22,34,.55));line-height:1.7}
+.module{animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 练习中心 tab */
+.seg{display:inline-flex;background:#fff;border:2px solid var(--mo-ink,#2a1622);border-radius:999px;
+  padding:4px;gap:4px;margin:4px 0 18px;flex-wrap:wrap}
+.seg button{border:none;background:transparent;padding:9px 22px;border-radius:999px;
+  font:600 14px "Mali",inherit;cursor:pointer;color:var(--mo-ink-soft,rgba(42,22,34,.55))}
+.seg button.active{background:var(--mo-sky,#ffc9e2);color:var(--mo-ink,#2a1622)}
+.panel-card{background:var(--mo-paper,#fff8fb);border:2px solid var(--mo-ink,#2a1622);border-radius:22px;
+  box-shadow:0 4px 0 rgba(255,201,226,.9);padding:22px}
+/* 词汇总表 */
+.vocab-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:4px 0 18px}
+.vocab-toolbar .search{flex:1;max-width:340px;border:2px solid var(--mo-ink,#2a1622);border-radius:999px;
+  padding:10px 16px;font:inherit;background:#fff8fb;color:var(--mo-ink,#2a1622);outline:none}
+.vocab-toolbar .search:focus{border-color:var(--mo-sky-deep,#e0317c);box-shadow:0 0 0 3px rgba(255,201,226,.55)}
+.vocab-toolbar .count{font-size:13.5px;color:var(--mo-ink-soft,rgba(42,22,34,.55));font-weight:600}
+.v-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v-item{background:var(--mo-paper,#fff8fb);border:2px solid var(--mo-ink,#2a1622);border-radius:18px;
+  padding:13px 15px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 3px 0 rgba(255,201,226,.9)}
+.v-idx{flex:none;width:28px;height:28px;border-radius:10px;background:var(--mo-sky-soft,#ffe4f0);
+  color:var(--mo-sky-deep,#e0317c);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.speak-btn{flex:none;border:1.5px solid var(--mo-ink,#2a1622);background:#fff;border-radius:9px;width:30px;height:30px;
+  cursor:pointer;font-size:14px;line-height:1;color:var(--mo-sky-deep,#e0317c);display:inline-flex;align-items:center;justify-content:center}
+.speak-btn:hover{background:var(--mo-sky-soft,#ffe4f0);border-color:var(--mo-sky-deep,#e0317c)}
+.v-main{flex:1;min-width:0}
+.v-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.v-word{font-family:"Itim","Mali",sans-serif;font-size:17px;font-weight:800;color:var(--mo-ink,#2a1622)}
+.v-pos{background:var(--mo-sky-soft,#ffe4f0);color:var(--mo-sky-deep,#e0317c);border-radius:999px;
+  padding:2px 10px;font-size:12px;font-weight:600}
+.v-mean{color:var(--mo-ink-soft,rgba(42,22,34,.55));font-size:13.5px;margin-top:3px;line-height:1.6}
+.v-empty{background:var(--mo-paper,#fff8fb);border:1.5px dashed var(--mo-ink,#2a1622);border-radius:16px;
+  padding:28px;text-align:center;color:var(--mo-ink-soft,rgba(42,22,34,.55))}
+@media(max-width:760px){
+  .home-btns{grid-template-columns:1fr}
+  .v-list{grid-template-columns:1fr}
+  .panel-card{padding:16px}
+}
+</style>
+<style>
+/* ===== 多日应用壳层 ===== */
+.hidden{display:none!important}
+.app-main{max-width:1100px;margin:0 auto;padding:24px 20px 70px}
+#view-app{min-height:100vh}
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px max(5vw,20px);
+  background:var(--mo-cream,#fff1f8);border-bottom:2px solid var(--mo-ink,#2a1622)}
+.back-btn{border:2px solid var(--mo-ink,#2a1622);background:#fff;color:var(--mo-sky-deep,#e0317c);
+  border-radius:999px;padding:8px 18px;font:600 14px "Mali",inherit;cursor:pointer;
+  box-shadow:0 2px 0 rgba(42,22,34,.2)}
+.back-btn:hover{background:var(--mo-sky-soft,#ffe4f0)}
+.topbar .cur{font-family:"Itim","Mali",sans-serif;font-weight:700;font-size:17px;color:var(--mo-ink,#2a1622)}
+.day-pills{display:inline-flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.day-pill{border:2px solid var(--mo-line,rgba(42,22,34,.28));background:#fff;border-radius:999px;
+  padding:7px 16px;font:600 13px "Mali",inherit;cursor:pointer;color:var(--mo-ink-soft,rgba(42,22,34,.55))}
+.day-pill.active{background:var(--mo-sky,#ffc9e2);color:var(--mo-ink,#2a1622);border-color:var(--mo-ink,#2a1622)}
+.home-btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:22px}
+.home-card{background:var(--mo-paper,#fff8fb);border:2px solid var(--mo-ink,#2a1622);border-radius:22px;
+  box-shadow:0 4px 0 rgba(255,201,226,.9);padding:28px 22px;text-align:center;cursor:pointer;
+  font-family:inherit;color:var(--mo-ink,#2a1622);transition:transform .15s,border-color .15s}
+.home-card:hover{transform:translateY(-3px);border-color:var(--mo-sky-deep,#e0317c)}
+.home-card .ic{font-size:34px}
+.home-card .t{font-family:"Itim","Mali",sans-serif;font-size:19px;font-weight:700;margin:10px 0 6px}
+.home-card .d{font-size:13px;color:var(--mo-ink-soft,rgba(42,22,34,.55));line-height:1.7}
+.module{animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.seg{display:inline-flex;background:#fff;border:2px solid var(--mo-ink,#2a1622);border-radius:999px;
+  padding:4px;gap:4px;margin:4px 0 18px;flex-wrap:wrap}
+.seg button{border:none;background:transparent;padding:9px 22px;border-radius:999px;
+  font:600 14px "Mali",inherit;cursor:pointer;color:var(--mo-ink-soft,rgba(42,22,34,.55))}
+.seg button.active{background:var(--mo-sky,#ffc9e2);color:var(--mo-ink,#2a1622)}
+.panel-card{background:var(--mo-paper,#fff8fb);border:2px solid var(--mo-ink,#2a1622);border-radius:22px;
+  box-shadow:0 4px 0 rgba(255,201,226,.9);padding:22px}
+.vocab-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:4px 0 18px}
+.vocab-toolbar .search{flex:1;max-width:340px;border:2px solid var(--mo-ink,#2a1622);border-radius:999px;
+  padding:10px 16px;font:inherit;background:#fff8fb;color:var(--mo-ink,#2a1622);outline:none}
+.vocab-toolbar .search:focus{border-color:var(--mo-sky-deep,#e0317c);box-shadow:0 0 0 3px rgba(255,201,226,.55)}
+.vocab-toolbar .count{font-size:13.5px;color:var(--mo-ink-soft,rgba(42,22,34,.55));font-weight:600}
+.v-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v-item{background:var(--mo-paper,#fff8fb);border:2px solid var(--mo-ink,#2a1622);border-radius:18px;
+  padding:13px 15px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 3px 0 rgba(255,201,226,.9)}
+.v-idx{flex:none;width:28px;height:28px;border-radius:10px;background:var(--mo-sky-soft,#ffe4f0);
+  color:var(--mo-sky-deep,#e0317c);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.speak-btn{flex:none;border:1.5px solid var(--mo-ink,#2a1622);background:#fff;border-radius:9px;width:30px;height:30px;
+  cursor:pointer;font-size:14px;line-height:1;color:var(--mo-sky-deep,#e0317c);display:inline-flex;align-items:center;justify-content:center}
+.speak-btn:hover{background:var(--mo-sky-soft,#ffe4f0);border-color:var(--mo-sky-deep,#e0317c)}
+.v-main{flex:1;min-width:0}
+.v-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.v-word{font-family:"Itim","Mali",sans-serif;font-size:17px;font-weight:800;color:var(--mo-ink,#2a1622)}
+.v-pos{background:var(--mo-sky-soft,#ffe4f0);color:var(--mo-sky-deep,#e0317c);border-radius:999px;
+  padding:2px 10px;font-size:12px;font-weight:600}
+.v-mean{color:var(--mo-ink-soft,rgba(42,22,34,.55));font-size:13.5px;margin-top:3px;line-height:1.6}
+.v-empty{background:var(--mo-paper,#fff8fb);border:1.5px dashed var(--mo-ink,#2a1622);border-radius:16px;
+  padding:28px;text-align:center;color:var(--mo-ink-soft,rgba(42,22,34,.55))}
+@media(max-width:760px){
+  .home-btns{grid-template-columns:1fr}
+  .v-list{grid-template-columns:1fr}
+  .panel-card{padding:16px}
+  .day-pills{margin-left:0}
+}
+</style>
+<style id="y2k-skin">
+/* ============================================================
+   Y2K 皮肤：把英语模块并入 STUDY ROOM 的粉色剪贴簿
+   只覆盖颜色与形态，不改任何内容、结构与脚本
+   ============================================================ */
+:root{
+  --paper:#fff8fb; --card:#fff; --ink:#2a1622; --muted:#7a6472;
+  --sage:#ffe4f0; --green:#e0317c; --line:rgba(42,22,34,.16); --gold:#ff8fc4;
+  --mo-sky:#ffc9e2; --mo-sky-deep:#e0317c; --mo-sky-soft:#ffe4f0;
+  --mo-cream:#fff1f8; --mo-paper:#fff; --mo-field:#fff;
+  --mo-blush:#ff9ecb; --mo-blush-deep:#e0317c; --mo-sage:#a2e5df;
+  --mo-ink:#2a1622; --mo-ink-soft:rgba(42,22,34,.62); --mo-line:rgba(42,22,34,.18);
+  --y2k-mono:"Space Mono",ui-monospace,monospace;
+  --y2k-pixel:"Silkscreen",monospace;
+  --y2k-serif:"Bodoni Moda",Georgia,serif;
+  --y2k-script:"Playball",cursive;
+  --y2k-cn:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+}
+
+::selection{background:#ff5fa8;color:#fff}
+
+html body{
+  background-color:#fff8fb !important;
+  background-image:
+    radial-gradient(120% 70% at 8% -10%, #ffd9ec, rgba(255,217,236,0) 58%),
+    radial-gradient(90% 60% at 96% 0%, #e9ddff, rgba(233,221,255,0) 52%),
+    radial-gradient(80% 50% at 50% 106%, #ffeaf4, rgba(255,234,244,0) 62%) !important;
+  background-attachment:fixed !important;
+  background-size:auto !important;
+  color:var(--mo-ink);
+  font-family:var(--y2k-cn) !important;
+}
+
+/* ---- 外层返回条：做成深色书脊 ---- */
+#site-return{
+  background:var(--mo-ink) !important;
+  border-bottom:0 !important;
+  box-shadow:none !important;
+  padding:9px max(5vw,20px) !important;
+}
+#site-return a{
+  background:#ff5fa8 !important; color:#fff !important;
+  border:1.5px solid #fff !important; border-radius:999px !important;
+  font-family:var(--y2k-mono) !important; font-size:10.5px !important;
+  letter-spacing:.14em !important; text-transform:uppercase;
+  padding:5px 14px !important; box-shadow:none !important;
+  text-decoration:none;
+}
+#site-return a:hover{ background:#e0317c !important; transform:translateY(-1px) }
+#site-return .name{
+  color:#ffc9e2 !important; font-family:var(--y2k-script) !important;
+  font-size:17px !important; font-weight:400 !important; letter-spacing:0 !important;
+}
+#site-return .note{
+  color:rgba(255,255,255,.5) !important; font-family:var(--y2k-mono) !important;
+  font-size:9px !important; letter-spacing:.18em !important;
+}
+
+/* ---- 站内顶栏 ---- */
+header{
+  background:#fff1f8 !important;
+  border-bottom:2px solid var(--mo-ink) !important;
+  padding-top:13px !important; padding-bottom:13px !important;
+}
+header>.brand{
+  font-family:var(--y2k-serif) !important; font-weight:900 !important;
+  font-size:14px !important; letter-spacing:.08em !important;
+  text-transform:uppercase; color:var(--mo-ink) !important;
+}
+header>.brand span{
+  font-family:var(--y2k-mono) !important; font-weight:400 !important;
+  font-size:9.5px !important; letter-spacing:.2em !important;
+  text-transform:none; color:rgba(42,22,34,.48) !important;
+}
+header>.muted{
+  font-family:var(--y2k-mono) !important; font-size:9px !important;
+  letter-spacing:.22em !important; text-transform:uppercase;
+  color:rgba(42,22,34,.42) !important;
+}
+
+/* ---- 首页主视觉 ---- */
+.hero{
+  background:#fff !important;
+  border:2px solid var(--mo-ink) !important;
+  border-radius:16px !important;
+  outline:1.5px dashed rgba(224,49,124,.32) !important;
+  outline-offset:-8px !important;
+  box-shadow:5px 6px 0 rgba(255,201,226,.95) !important;
+  padding:30px 32px !important;
+}
+.hero::after{ display:none !important }
+.eyebrow{
+  font-family:var(--y2k-mono) !important; font-size:9.5px !important;
+  letter-spacing:.26em !important; color:var(--mo-sky-deep) !important;
+  font-weight:700 !important;
+}
+.hero h1{
+  font-family:var(--y2k-cn) !important; font-weight:800 !important;
+  letter-spacing:-.01em !important; color:var(--mo-ink) !important;
+  line-height:1.3 !important;
+}
+.hero p{ font-size:13px !important; line-height:1.9 !important; color:rgba(42,22,34,.6) !important }
+
+/* ---- 数据卡 ---- */
+.stats .stat{
+  background:#fff !important;
+  border:1.5px solid var(--mo-ink) !important;
+  border-radius:10px !important;
+  box-shadow:3px 4px 0 rgba(255,201,226,.9) !important;
+  padding:13px 15px !important;
+}
+.stat b{
+  font-family:var(--y2k-pixel) !important; font-size:17px !important;
+  letter-spacing:.02em; color:var(--mo-sky-deep) !important; line-height:1.5;
+}
+.stat small{
+  font-size:10px !important; color:rgba(42,22,34,.5) !important;
+  letter-spacing:.02em;
+}
+
+/* ---- 天数卡 ---- */
+.home-card{
+  background:#fff !important;
+  border:2px solid var(--mo-ink) !important;
+  border-radius:14px !important;
+  box-shadow:5px 6px 0 rgba(255,201,226,.95) !important;
+  padding:16px 18px !important;
+  text-align:left !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:3px 14px;
+  align-items:center;
+}
+.home-card:hover{
+  transform:translateY(-4px) rotate(-.5deg) !important;
+  box-shadow:7px 10px 0 rgba(224,49,124,.26) !important;
+}
+.home-card .ic{
+  grid-row:1 / span 2;
+  width:46px; height:46px; margin:0;
+  display:grid; place-items:center;
+  background:linear-gradient(180deg,#ff92c6,#e0317c);
+  border:1.5px solid var(--mo-ink);
+  border-radius:9px;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55);
+  color:#fff !important;
+  font-size:0 !important;
+}
+.home-card .ic b{
+  font-family:var(--y2k-pixel); font-weight:400;
+  font-size:14px !important; line-height:1; letter-spacing:.04em;
+}
+.home-card .t{
+  font-family:var(--y2k-mono) !important; font-size:9.5px !important;
+  font-weight:700 !important; letter-spacing:.16em !important;
+  text-transform:uppercase; color:var(--mo-sky-deep) !important;
+}
+.home-card .d{
+  font-size:12px !important; color:rgba(42,22,34,.58) !important;
+  line-height:1.6 !important;
+}
+
+/* ---- 分段器 / 按钮 ---- */
+.seg{
+  background:#fff !important;
+  border:2px solid var(--mo-ink) !important;
+  box-shadow:3px 3px 0 rgba(255,201,226,.9) !important;
+}
+.seg button{
+  font-family:var(--y2k-cn) !important; font-size:12.5px !important;
+  font-weight:700 !important; color:rgba(42,22,34,.52) !important;
+}
+.seg button.active{
+  background:linear-gradient(180deg,#ff92c6,#e0317c) !important;
+  color:#fff !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.45);
+}
+
+/* ---- 内页顶栏 ---- */
+.topbar{
+  background:#fff1f8 !important;
+  border-bottom:2px solid var(--mo-ink) !important;
+}
+.back-btn{
+  border:1.5px solid var(--mo-ink) !important;
+  border-radius:999px !important;
+  background:#fff !important;
+  color:var(--mo-sky-deep) !important;
+  box-shadow:2px 2px 0 rgba(255,201,226,.95);
+  font-family:var(--y2k-cn) !important;
+}
+.cur{
+  font-family:var(--y2k-script) !important;
+  font-size:19px !important; color:var(--mo-sky-deep) !important;
+}
+.day-pill{
+  border:1.5px solid var(--line) !important;
+  border-radius:999px !important;
+  font-family:var(--y2k-mono) !important;
+  font-size:9px !important; letter-spacing:.1em !important;
+  text-transform:uppercase;
+}
+.day-pill.active{
+  background:var(--mo-ink) !important; color:#ffc9e2 !important;
+  border-color:var(--mo-ink) !important;
+}
+
+/* ---- 面板 / 卡片 ---- */
+.panel,.stat,.grammar-module,.advanced-fill .inside,.advanced-fill .section{
+  border-radius:12px !important;
+}
+.panel{ box-shadow:3px 4px 0 rgba(255,201,226,.55) }
+
+/* ---- 正文与词条 ---- */
+.story .wordhint>summary{
+  color:#c02361 !important;
+  border-bottom:1.5px dotted rgba(224,49,124,.45);
+  text-decoration:none !important;
+}
+.story .wordhint[open]>summary{ background:#ffe4f0 }
+.q.correct{ border-color:#7fd8cf !important; background:#eefbf9 !important }
+.q.incorrect{ border-color:#ff9ecb !important; background:#fff1f7 !important }
+.grade-summary{
+  background:#ffe4f0 !important;
+  border-left:4px solid var(--mo-sky-deep) !important;
+}
+
+
+/* 主视觉内部排版修正 + 贴纸点缀 */
+.hero{ position:relative !important; display:flex !important; align-items:center !important }
+.hero>div{ flex:1 1 auto; min-width:0 }
+.hero p{ max-width:46em !important }
+.hero::after{ display:none !important }
+
+/* 学科代表形象：站在主视觉右侧，像一张贴进去的照片 */
+.hero-mate{
+  flex:none;
+  width:146px; height:190px;
+  object-fit:cover; object-position:50% 6%;
+  margin:2px 2px 0 20px;
+  border:2px solid var(--mo-ink);
+  border-radius:8px;
+  box-shadow:4px 5px 0 rgba(255,201,226,.95);
+  transform:rotate(3deg);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.hero:hover .hero-mate{ transform:rotate(0deg) translateY(-3px) }
+/* 页面铺一层极淡的网点 */
+html body{
+  background-image:
+    radial-gradient(120% 70% at 8% -10%, #ffd9ec, rgba(255,217,236,0) 58%),
+    radial-gradient(90% 60% at 96% 0%, #e9ddff, rgba(233,221,255,0) 52%),
+    radial-gradient(circle, rgba(224,49,124,.18) .9px, transparent 1.1px) !important;
+  background-size:auto, auto, 9px 9px !important;
+  background-attachment:fixed !important;
+}
+
+
+
+/* 精读正文：固定衬线阅读面 + 控制行长 */
+#readBody{
+  font-family:Georgia,"Songti SC","SimSun","Times New Roman",serif;
+}
+#readBody p,#readBody .para{ max-width:72ch }
+
+/* 阅读行长：一行别超过 74 字符 */
+.story p,.read p,.read-html p{ max-width:74ch }
+
+/* 进入内页时收起品牌条，避免三层横条叠在一起 */
+body:has(#view-app:not(.hidden))>header{ display:none !important }
+
+/* 页脚草地花边去掉 */
+footer::before{ display:none !important }
+
+/* 小屏：保证返回条不挤 */
+@media(max-width:640px){
+  #site-return .name{ font-size:15px !important }
+  .hero{ padding:22px 20px !important }
+  .hero-mate{ width:76px; height:100px }
+  .home-card .ic{ width:40px; height:40px }
+  /* 窄屏贴纸会压到标题，收起来 */
+  header>.muted{ display:none !important }
+  .hero-mate{ width:92px; height:120px; margin-left:14px }
+  .stats .stat{ padding:11px 13px !important }
+  .stat b{ font-size:15px !important }
+}
+</style>
+</head>
+<style id="site-shell">
+/* ===== 站点外壳：外层返回条 =====
+   只做叠加，不改动上方任何既有规则；变量沿用本页已有的 --mo-* 令牌。 */
+#site-return{
+  position:sticky;top:0;z-index:80;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:8px max(5vw,20px);
+  background:var(--mo-cream,#fff1f8);
+  border-bottom:2px solid var(--mo-ink,#2a1622);
+  box-shadow:0 2px 0 rgba(255,201,226,.7);
+}
+#site-return a{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1.5px solid var(--mo-ink,#2a1622);background:#fff;color:var(--mo-sky-deep,#e0317c);
+  border-radius:999px;padding:5px 14px;
+  font:600 13px/1.4 "Mali",system-ui,-apple-system,sans-serif;
+  text-decoration:none;box-shadow:0 2px 0 rgba(42,22,34,.18);
+  transition:background .15s,transform .12s,border-color .15s;
+}
+#site-return a:hover{background:var(--mo-sky-soft,#ffe4f0);transform:translateY(-1px);border-color:var(--mo-sky-deep,#e0317c)}
+#site-return .name{font-family:"Itim","Mali",system-ui,sans-serif;font-weight:700;font-size:14px;color:var(--mo-ink,#2a1622);letter-spacing:.4px}
+#site-return .note{font-size:12px;color:var(--mo-ink-soft,rgba(42,22,34,.55));letter-spacing:.5px}
+/* 原顶栏本为吸顶，让位给返回条，避免两层叠在一起 */
+header{position:static!important}
+@media(max-width:640px){
+  #site-return{padding:7px 16px;gap:9px}
+  #site-return .note{display:none}
+  #site-return a{font-size:12.5px;padding:5px 12px}
+  #site-return .name{font-size:13px}
+}
+</style>
+<body>
+<div id="site-return">
+  <a href="../../subjects.html"><span aria-hidden="true">&larr;</span> 学科选择</a>
+  <span class="name">英语 · Word Journey</span>
+  <span class="note">每日背词故事</span>
+</div>
+
+<header>
+  <div class="brand">✦ Word Journey <span>/ 每日背词故事</span></div>
+  <div class="muted">阅读 · 记忆 · 进步</div>
+</header>
+
+<div id="view-home" class="app-view">
+  <div class="app-main">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">A LITTLE ENGLISH EVERY DAY</div>
+        <h1>把单词，读进故事里。</h1>
+        <p>每天一页词汇 · 一段故事 · 一点点进步。选择一天开始，故事、拆解、练习与词表都在里面。</p>
+      </div>
+      <img class="hero-mate" src="../../assets/art/portrait-english.jpg" alt="英语学科的代表形象">
+    </section>
+    <div class="stats">
+      <div class="stat"><b>2 / 153</b><small>已学习章节</small></div>
+      <div class="stat"><b>40 / 3,041</b><small>已学目标词 / 总词量</small></div>
+      <div class="stat"><b>DAY 01–02</b><small>当前收录</small></div>
+    </div>
+    <div class="home-btns">
+      <button class="home-card day-card" data-day="0"><div class="ic"><b>01</b></div><div class="t">DAY 01 · PDF PAGE 01</div><div class="d">The Mystery of the Old Elevator · 20 词</div></button>
+<button class="home-card day-card" data-day="1"><div class="ic"><b>02</b></div><div class="t">DAY 02 · PDF PAGE 02</div><div class="d">The Workshop of Steady Steps · 20 词</div></button>
+    </div>
+  </div>
+</div>
+
+<div id="view-app" class="app-view hidden">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">← 返回首页</button>
+    <span class="cur" id="curTitle"></span>
+    <div class="day-pills"><button class="day-pill" data-day="0">DAY 01 · PDF PAGE 01</button>
+<button class="day-pill" data-day="1">DAY 02 · PDF PAGE 02</button></div>
+  </div>
+  <div class="app-main">
+    <div class="seg" id="moduleSeg">
+      <button class="active" data-view="read" type="button">文章精读</button>
+      <button data-view="practice" type="button">练习中心</button>
+      <button data-view="vocab" type="button">词汇总表</button>
+    </div>
+
+    <section class="module" id="mod-read"><div id="readBody"></div></section>
+
+    <section class="module hidden" id="mod-practice">
+      <div class="seg" id="practiceSeg">
+        <button class="active" data-tab="basic" type="button">基础复习</button>
+        <button data-tab="advanced" type="button">进阶练习</button>
+      </div>
+      <div class="panel-card" id="panel-basic"></div>
+      <div class="panel-card" id="panel-advanced"></div>
+    </section>
+
+    <section class="module hidden" id="mod-vocab">
+      <div class="vocab-toolbar">
+        <input class="search" id="vocabSearch" type="search" placeholder="搜索单词或释义…" autocomplete="off"/>
+        <span class="count" id="vocabCount"></span>
+      </div>
+      <div class="v-list" id="vocabList"></div>
+    </section>
+  </div>
+</div>
+
+<footer>Word Journey · 每天把单词读进故事里</footer>
+
+<script>
+function gradeQuiz(){const qs=[...document.querySelectorAll('#quizForm .q')];let score=0;qs.forEach((q,i)=>{const ans=q.dataset.answer;const input=q.querySelector('input');const val=input.value.trim().toLowerCase();q.classList.remove('correct','incorrect');let fb=q.querySelector('.feedback');if(!fb){fb=document.createElement('span');fb.className='feedback';q.appendChild(fb)}if(val===ans){score++;q.classList.add('correct');fb.textContent='✓ 正确'}else{q.classList.add('incorrect');fb.textContent=val?`✗ 正确答案：${ans}`:`未填写 · 答案：${ans}`}});const summary=document.getElementById('gradeSummary');summary.style.display='block';summary.textContent=`批改完成：${score} / ${qs.length} 分。${score===qs.length?'太棒了！本页 20 个词全部掌握！':score>=15?'不错！再复习错题巩固一下。':'别着急，结合故事和单词表复习后再挑战一次。'}`;summary.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function resetQuiz(){document.querySelectorAll('#quizForm .q').forEach(q=>{q.classList.remove('correct','incorrect');q.querySelector('input').value='';const fb=q.querySelector('.feedback');if(fb)fb.remove()});const s=document.getElementById('gradeSummary');s.style.display='none';s.textContent='';}
+</script>
+<script>function gradeFill(){const sels=[...document.querySelectorAll('#advanced-fill select[data-answer]')];let score=0;const counts={};sels.forEach(s=>{if(s.value)counts[s.value]=(counts[s.value]||0)+1});sels.forEach(s=>{s.classList.remove('correct','incorrect');const ans=s.dataset.answer.toLowerCase(),val=s.value.toLowerCase();const ok=(val===ans)||false;if(ok&&counts[val]===1){score++;s.classList.add('correct')}else{s.classList.add('incorrect')}});const r=document.getElementById('fillResult');r.style.display='block';r.textContent=`成绩：${score} / 10。${score===10?'满分！你对词性和语境判断很棒！':score>=7?'做得不错，看看解析巩固易错点。':'别急，认真看解析里的词性线索和搭配，再试一次。'}`;document.getElementById('fillExplanations').style.display='block';}
+function resetFill(){document.querySelectorAll('#advanced-fill select[data-answer]').forEach(s=>{s.value='';s.classList.remove('correct','incorrect')});document.getElementById('fillResult').style.display='none';document.getElementById('fillExplanations').style.display='none';}</script>
+<script>
+const DAYS=[{"eyebrow": "DAY 01 · PDF PAGE 01", "title": "The Mystery of the Old Elevator", "muted": "PDF 第 1 页 · 词汇编号 1–20 · 覆盖 20 / 20", "readHTML": "<section class=\"panel\" id=\"lesson\"><div class=\"head\"><div><div class=\"eyebrow\">DAY 01 · PDF PAGE 01</div><h2>The Mystery of the Old Elevator</h2><div class=\"muted\">PDF 第 1 页 · 词汇编号 1–20 · 覆盖 <b>20 / 20</b></div></div><span class=\"tag\">✓ 全部覆盖</span></div>\n<div class=\"story\"><p><details class=\"wordhint\"><summary>When</summary><span class=\"hintbox\"><b>When</b> · 当……时</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>new</summary><span class=\"hintbox\"><b>new</b> · 新的</span></details> <details class=\"wordhint\"><summary>library</summary><span class=\"hintbox\"><b>library</b> · 图书馆</span></details> <details class=\"wordhint\"><summary>was</summary><span class=\"hintbox\"><b>was</b> · 是</span></details> <details class=\"wordhint\"><summary>built</summary><span class=\"hintbox\"><b>built</b> · 建造；被建成</span></details> <details class=\"wordhint\"><summary>in</summary><span class=\"hintbox\"><b>in</b> · 在……里面；在……中</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>small</summary><span class=\"hintbox\"><b>small</b> · 小的</span></details> <details class=\"wordhint\"><summary>town</summary><span class=\"hintbox\"><b>town</b> · 小镇</span></details>, <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>mayor</summary><span class=\"hintbox\"><b>mayor</b> · 镇长；市长</span></details> <details class=\"wordhint\"><summary>asked</summary><span class=\"hintbox\"><b>asked</b> · 询问；请求</span></details> <details class=\"wordhint\"><summary>for</summary><span class=\"hintbox\"><b>for</b> · 为了；向；给</span></details> <details class=\"wordhint\"><summary>everyone's</summary><span class=\"hintbox\"><b>everyone's</b> · 词义需结合上下文理解</span></details> <details class=\"wordhint target-word\"><summary>approval</summary><span class=\"hintbox\"><b>approval</b> · 批准</span></details> <details class=\"wordhint\"><summary>before</summary><span class=\"hintbox\"><b>before</b> · 在……之前</span></details> <details class=\"wordhint\"><summary>opening</summary><span class=\"hintbox\"><b>opening</b> · 开放；开幕</span></details> <details class=\"wordhint\"><summary>it</summary><span class=\"hintbox\"><b>it</b> · 它</span></details>. <details class=\"wordhint\"><summary>Most</summary><span class=\"hintbox\"><b>Most</b> · 大多数</span></details> <details class=\"wordhint\"><summary>people</summary><span class=\"hintbox\"><b>people</b> · 人们</span></details> <details class=\"wordhint\"><summary>agreed</summary><span class=\"hintbox\"><b>agreed</b> · 同意</span></details> <details class=\"wordhint\"><summary>with</summary><span class=\"hintbox\"><b>with</b> · 与；和</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>plan</summary><span class=\"hintbox\"><b>plan</b> · 计划</span></details>, <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>an</summary><span class=\"hintbox\"><b>an</b> · 一个（元音前）</span></details> <details class=\"wordhint\"><summary>official</summary><span class=\"hintbox\"><b>official</b> · 正式的；官方的</span></details> <details class=\"wordhint target-word\"><summary>agreement</summary><span class=\"hintbox\"><b>agreement</b> · 协议</span></details> <details class=\"wordhint\"><summary>was</summary><span class=\"hintbox\"><b>was</b> · 是</span></details> <details class=\"wordhint\"><summary>signed</summary><span class=\"hintbox\"><b>signed</b> · 签署</span></details>. <details class=\"wordhint\"><summary>However</summary><span class=\"hintbox\"><b>However</b> · 然而</span></details>, <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>young</summary><span class=\"hintbox\"><b>young</b> · 年轻</span></details> <details class=\"wordhint\"><summary>engineer</summary><span class=\"hintbox\"><b>engineer</b> · 工程师</span></details> <details class=\"wordhint\"><summary>named</summary><span class=\"hintbox\"><b>named</b> · 名叫</span></details> <details class=\"wordhint\"><summary>Leo</summary><span class=\"hintbox\"><b>Leo</b> · Leo（人名）</span></details> <details class=\"wordhint\"><summary>disagreed</summary><span class=\"hintbox\"><b>disagreed</b> · 不同意；有分歧</span></details>. <details class=\"wordhint\"><summary>He</summary><span class=\"hintbox\"><b>He</b> · 他</span></details> <details class=\"wordhint\"><summary>believed</summary><span class=\"hintbox\"><b>believed</b> · 相信；认为</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>old</summary><span class=\"hintbox\"><b>old</b> · 年老；旧</span></details> <details class=\"wordhint\"><summary>building</summary><span class=\"hintbox\"><b>building</b> · 建筑；楼房</span></details> <details class=\"wordhint\"><summary>had</summary><span class=\"hintbox\"><b>had</b> · 有；拥有</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>secret</summary><span class=\"hintbox\"><b>secret</b> · 秘密</span></details> <details class=\"wordhint\"><summary>that</summary><span class=\"hintbox\"><b>that</b> · 那；（引导从句）</span></details> <details class=\"wordhint\"><summary>nobody</summary><span class=\"hintbox\"><b>nobody</b> · 没有人</span></details> <details class=\"wordhint\"><summary>had</summary><span class=\"hintbox\"><b>had</b> · 有；拥有</span></details> <details class=\"wordhint\"><summary>discovered</summary><span class=\"hintbox\"><b>discovered</b> · 发现</span></details>.</p><p><details class=\"wordhint\"><summary>Leo</summary><span class=\"hintbox\"><b>Leo</b> · Leo（人名）</span></details> <details class=\"wordhint\"><summary>wanted</summary><span class=\"hintbox\"><b>wanted</b> · 想要</span></details> <details class=\"wordhint target-word\"><summary>proof</summary><span class=\"hintbox\"><b>proof</b> · 证据</span></details>. <details class=\"wordhint\"><summary>He</summary><span class=\"hintbox\"><b>He</b> · 他</span></details> <details class=\"wordhint\"><summary>hoped</summary><span class=\"hintbox\"><b>hoped</b> · 希望</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint target-word\"><summary>improve</summary><span class=\"hintbox\"><b>improve</b> · 改善</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>library</summary><span class=\"hintbox\"><b>library</b> · 图书馆</span></details> <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>make</summary><span class=\"hintbox\"><b>make</b> · 制作；使</span></details> <details class=\"wordhint\"><summary>it</summary><span class=\"hintbox\"><b>it</b> · 它</span></details> <details class=\"wordhint\"><summary>even</summary><span class=\"hintbox\"><b>even</b> · 甚至；更加</span></details> <details class=\"wordhint\"><summary>better</summary><span class=\"hintbox\"><b>better</b> · 更好</span></details>. <details class=\"wordhint\"><summary>He</summary><span class=\"hintbox\"><b>He</b> · 他</span></details> <details class=\"wordhint\"><summary>believed</summary><span class=\"hintbox\"><b>believed</b> · 相信；认为</span></details> <details class=\"wordhint\"><summary>that</summary><span class=\"hintbox\"><b>that</b> · 那；（引导从句）</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>small</summary><span class=\"hintbox\"><b>small</b> · 小的</span></details> <details class=\"wordhint target-word\"><summary>improvement</summary><span class=\"hintbox\"><b>improvement</b> · 改善</span></details> <details class=\"wordhint\"><summary>could</summary><span class=\"hintbox\"><b>could</b> · 能够</span></details> <details class=\"wordhint target-word\"><summary>enhance</summary><span class=\"hintbox\"><b>enhance</b> · 增强</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>lives</summary><span class=\"hintbox\"><b>lives</b> · 生活（life复数）</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>many</summary><span class=\"hintbox\"><b>many</b> · 许多</span></details> <details class=\"wordhint\"><summary>people</summary><span class=\"hintbox\"><b>people</b> · 人们</span></details>. <details class=\"wordhint\"><summary>He</summary><span class=\"hintbox\"><b>He</b> · 他</span></details> <details class=\"wordhint\"><summary>decided</summary><span class=\"hintbox\"><b>decided</b> · 决定</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>look</summary><span class=\"hintbox\"><b>look</b> · 看</span></details> <details class=\"wordhint target-word\"><summary>further</summary><span class=\"hintbox\"><b>further</b> · 进一步</span></details> <details class=\"wordhint\"><summary>into</summary><span class=\"hintbox\"><b>into</b> · 进入；深入到</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>history</summary><span class=\"hintbox\"><b>history</b> · 历史</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>building</summary><span class=\"hintbox\"><b>building</b> · 建筑；楼房</span></details>.</p><p><details class=\"wordhint\"><summary>As</summary><span class=\"hintbox\"><b>As</b> · 作为；随着</span></details> <details class=\"wordhint\"><summary>he</summary><span class=\"hintbox\"><b>he</b> · 他</span></details> <details class=\"wordhint\"><summary>began</summary><span class=\"hintbox\"><b>began</b> · 开始</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint target-word\"><summary>grow</summary><span class=\"hintbox\"><b>grow</b> · 增长；成长</span></details> <details class=\"wordhint\"><summary>more</summary><span class=\"hintbox\"><b>more</b> · 更；更多</span></details> <details class=\"wordhint\"><summary>curious</summary><span class=\"hintbox\"><b>curious</b> · 好奇的</span></details>, <details class=\"wordhint\"><summary>his</summary><span class=\"hintbox\"><b>his</b> · 他的</span></details> <details class=\"wordhint\"><summary>interest</summary><span class=\"hintbox\"><b>interest</b> · 兴趣</span></details> <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>excitement</summary><span class=\"hintbox\"><b>excitement</b> · 兴奋</span></details> <details class=\"wordhint\"><summary>showed</summary><span class=\"hintbox\"><b>showed</b> · 显示；表现</span></details> <details class=\"wordhint\"><summary>steady</summary><span class=\"hintbox\"><b>steady</b> · 稳定的；持续的</span></details> <details class=\"wordhint target-word\"><summary>growth</summary><span class=\"hintbox\"><b>growth</b> · 增长</span></details>. <details class=\"wordhint\"><summary>One</summary><span class=\"hintbox\"><b>One</b> · 一；一个</span></details> <details class=\"wordhint\"><summary>evening</summary><span class=\"hintbox\"><b>evening</b> · 傍晚；晚上</span></details>, <details class=\"wordhint\"><summary>he</summary><span class=\"hintbox\"><b>he</b> · 他</span></details> <details class=\"wordhint\"><summary>entered</summary><span class=\"hintbox\"><b>entered</b> · 进入</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>old</summary><span class=\"hintbox\"><b>old</b> · 年老；旧</span></details> <details class=\"wordhint\"><summary>building</summary><span class=\"hintbox\"><b>building</b> · 建筑；楼房</span></details> <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>found</summary><span class=\"hintbox\"><b>found</b> · 发现；找到</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>hidden</summary><span class=\"hintbox\"><b>hidden</b> · 藏；隐藏</span></details> <details class=\"wordhint\"><summary>door</summary><span class=\"hintbox\"><b>door</b> · 门</span></details> <details class=\"wordhint\"><summary>behind</summary><span class=\"hintbox\"><b>behind</b> · 后面</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>painting</summary><span class=\"hintbox\"><b>painting</b> · 画；绘画</span></details>. <details class=\"wordhint\"><summary>The</summary><span class=\"hintbox\"><b>The</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>door</summary><span class=\"hintbox\"><b>door</b> · 门</span></details> <details class=\"wordhint\"><summary>led</summary><span class=\"hintbox\"><b>led</b> · 带领；通向（lead过去式）</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>an</summary><span class=\"hintbox\"><b>an</b> · 一个（元音前）</span></details> <details class=\"wordhint\"><summary>underground</summary><span class=\"hintbox\"><b>underground</b> · 地下的；在地下</span></details> <details class=\"wordhint\"><summary>room</summary><span class=\"hintbox\"><b>room</b> · 房间</span></details>. <details class=\"wordhint\"><summary>He</summary><span class=\"hintbox\"><b>He</b> · 他</span></details> <details class=\"wordhint\"><summary>used</summary><span class=\"hintbox\"><b>used</b> · 使用</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>small</summary><span class=\"hintbox\"><b>small</b> · 小的</span></details> <details class=\"wordhint\"><summary>ladder</summary><span class=\"hintbox\"><b>ladder</b> · 梯子</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint target-word\"><summary>elevate</summary><span class=\"hintbox\"><b>elevate</b> · 提升</span></details> <details class=\"wordhint\"><summary>himself</summary><span class=\"hintbox\"><b>himself</b> · 他自己</span></details> <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>reach</summary><span class=\"hintbox\"><b>reach</b> · 够到；到达</span></details> <details class=\"wordhint\"><summary>an</summary><span class=\"hintbox\"><b>an</b> · 一个（元音前）</span></details> <details class=\"wordhint\"><summary>old</summary><span class=\"hintbox\"><b>old</b> · 年老；旧</span></details> <details class=\"wordhint\"><summary>control</summary><span class=\"hintbox\"><b>control</b> · 控制</span></details> <details class=\"wordhint\"><summary>panel</summary><span class=\"hintbox\"><b>panel</b> · 面板</span></details>.</p><p><details class=\"wordhint\"><summary>Suddenly</summary><span class=\"hintbox\"><b>Suddenly</b> · 突然</span></details>, <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint target-word\"><summary>elevator</summary><span class=\"hintbox\"><b>elevator</b> · 电梯</span></details> <details class=\"wordhint\"><summary>began</summary><span class=\"hintbox\"><b>began</b> · 开始</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>move</summary><span class=\"hintbox\"><b>move</b> · 移动</span></details>. <details class=\"wordhint\"><summary>It</summary><span class=\"hintbox\"><b>It</b> · 它</span></details> <details class=\"wordhint\"><summary>was</summary><span class=\"hintbox\"><b>was</b> · 是</span></details> <details class=\"wordhint\"><summary>strange</summary><span class=\"hintbox\"><b>strange</b> · 奇怪的</span></details> <details class=\"wordhint\"><summary>because</summary><span class=\"hintbox\"><b>because</b> · 因为</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>building</summary><span class=\"hintbox\"><b>building</b> · 建筑；楼房</span></details> <details class=\"wordhint\"><summary>had</summary><span class=\"hintbox\"><b>had</b> · 有；拥有</span></details> <details class=\"wordhint\"><summary>no</summary><span class=\"hintbox\"><b>no</b> · 没有；不</span></details> <details class=\"wordhint\"><summary>electricity</summary><span class=\"hintbox\"><b>electricity</b> · 电；电力</span></details>. <details class=\"wordhint\"><summary>Leo</summary><span class=\"hintbox\"><b>Leo</b> · Leo（人名）</span></details> <details class=\"wordhint\"><summary>stepped</summary><span class=\"hintbox\"><b>stepped</b> · 迈步；走</span></details> <details class=\"wordhint\"><summary>inside</summary><span class=\"hintbox\"><b>inside</b> · 里面</span></details>. <details class=\"wordhint\"><summary>The</summary><span class=\"hintbox\"><b>The</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>old</summary><span class=\"hintbox\"><b>old</b> · 年老；旧</span></details> <details class=\"wordhint target-word\"><summary>lift</summary><span class=\"hintbox\"><b>lift</b> · 升降机</span></details> <details class=\"wordhint\"><summary>took</summary><span class=\"hintbox\"><b>took</b> · 带；拿；花费（take过去式）</span></details> <details class=\"wordhint\"><summary>him</summary><span class=\"hintbox\"><b>him</b> · 他</span></details> <details class=\"wordhint\"><summary>down</summary><span class=\"hintbox\"><b>down</b> · 向下</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>secret</summary><span class=\"hintbox\"><b>secret</b> · 秘密</span></details> <details class=\"wordhint\"><summary>floor</summary><span class=\"hintbox\"><b>floor</b> · 楼层；地板</span></details>.</p><p><details class=\"wordhint\"><summary>The</summary><span class=\"hintbox\"><b>The</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>answer</summary><span class=\"hintbox\"><b>answer</b> · 回答；答案</span></details> <details class=\"wordhint\"><summary>became</summary><span class=\"hintbox\"><b>became</b> · 变得；成为</span></details> <details class=\"wordhint target-word\"><summary>obvious</summary><span class=\"hintbox\"><b>obvious</b> · 明显</span></details> <details class=\"wordhint\"><summary>when</summary><span class=\"hintbox\"><b>when</b> · 当……时</span></details> <details class=\"wordhint\"><summary>he</summary><span class=\"hintbox\"><b>he</b> · 他</span></details> <details class=\"wordhint\"><summary>saw</summary><span class=\"hintbox\"><b>saw</b> · 看见</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>collection</summary><span class=\"hintbox\"><b>collection</b> · 一批；收藏</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>old</summary><span class=\"hintbox\"><b>old</b> · 年老；旧</span></details> <details class=\"wordhint\"><summary>letters</summary><span class=\"hintbox\"><b>letters</b> · 信件；字母</span></details>. <details class=\"wordhint target-word\"><summary>Obviously</summary><span class=\"hintbox\"><b>Obviously</b> · 显然</span></details>, <details class=\"wordhint\"><summary>someone</summary><span class=\"hintbox\"><b>someone</b> · 某人</span></details> <details class=\"wordhint\"><summary>had</summary><span class=\"hintbox\"><b>had</b> · 有；拥有</span></details> <details class=\"wordhint\"><summary>hidden</summary><span class=\"hintbox\"><b>hidden</b> · 藏；隐藏</span></details> <details class=\"wordhint\"><summary>them</summary><span class=\"hintbox\"><b>them</b> · 他们/它们</span></details> <details class=\"wordhint\"><summary>there</summary><span class=\"hintbox\"><b>there</b> · 那里</span></details> <details class=\"wordhint\"><summary>many</summary><span class=\"hintbox\"><b>many</b> · 许多</span></details> <details class=\"wordhint\"><summary>years</summary><span class=\"hintbox\"><b>years</b> · 年</span></details> <details class=\"wordhint\"><summary>ago</summary><span class=\"hintbox\"><b>ago</b> · 以前</span></details>. <details class=\"wordhint target-word\"><summary>Apparently</summary><span class=\"hintbox\"><b>Apparently</b> · 看来</span></details>, <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>letters</summary><span class=\"hintbox\"><b>letters</b> · 信件；字母</span></details> <details class=\"wordhint\"><summary>belonged</summary><span class=\"hintbox\"><b>belonged</b> · 属于</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>town's</summary><span class=\"hintbox\"><b>town's</b> · 词义需结合上下文理解</span></details> <details class=\"wordhint\"><summary>founder</summary><span class=\"hintbox\"><b>founder</b> · 创始人</span></details>.</p><p><details class=\"wordhint\"><summary>The</summary><span class=\"hintbox\"><b>The</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>glass</summary><span class=\"hintbox\"><b>glass</b> · 玻璃</span></details> <details class=\"wordhint\"><summary>walls</summary><span class=\"hintbox\"><b>walls</b> · 墙（复数）</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>room</summary><span class=\"hintbox\"><b>room</b> · 房间</span></details> <details class=\"wordhint\"><summary>were</summary><span class=\"hintbox\"><b>were</b> · 是（复数过去式）</span></details> <details class=\"wordhint target-word\"><summary>transparent</summary><span class=\"hintbox\"><b>transparent</b> · 透明</span></details>, <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>through</summary><span class=\"hintbox\"><b>through</b> · 通过；穿过</span></details> <details class=\"wordhint\"><summary>them</summary><span class=\"hintbox\"><b>them</b> · 他们/它们</span></details> <details class=\"wordhint\"><summary>Leo</summary><span class=\"hintbox\"><b>Leo</b> · Leo（人名）</span></details> <details class=\"wordhint\"><summary>could</summary><span class=\"hintbox\"><b>could</b> · 能够</span></details> <details class=\"wordhint\"><summary>see</summary><span class=\"hintbox\"><b>see</b> · 看见</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>beautiful</summary><span class=\"hintbox\"><b>beautiful</b> · 美丽</span></details> <details class=\"wordhint\"><summary>garden</summary><span class=\"hintbox\"><b>garden</b> · 花园</span></details> <details class=\"wordhint\"><summary>underground</summary><span class=\"hintbox\"><b>underground</b> · 地下的；在地下</span></details>. <details class=\"wordhint\"><summary>It</summary><span class=\"hintbox\"><b>It</b> · 它</span></details> <details class=\"wordhint\"><summary>was</summary><span class=\"hintbox\"><b>was</b> · 是</span></details> <details class=\"wordhint target-word\"><summary>evident</summary><span class=\"hintbox\"><b>evident</b> · 明显</span></details> <details class=\"wordhint\"><summary>that</summary><span class=\"hintbox\"><b>that</b> · 那；（引导从句）</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>founder</summary><span class=\"hintbox\"><b>founder</b> · 创始人</span></details> <details class=\"wordhint\"><summary>had</summary><span class=\"hintbox\"><b>had</b> · 有；拥有</span></details> <details class=\"wordhint\"><summary>created</summary><span class=\"hintbox\"><b>created</b> · 创造；建造</span></details> <details class=\"wordhint\"><summary>this</summary><span class=\"hintbox\"><b>this</b> · 这个</span></details> <details class=\"wordhint\"><summary>place</summary><span class=\"hintbox\"><b>place</b> · 地方</span></details> <details class=\"wordhint\"><summary>for</summary><span class=\"hintbox\"><b>for</b> · 为了；向；给</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>special</summary><span class=\"hintbox\"><b>special</b> · 特别的</span></details> <details class=\"wordhint\"><summary>purpose</summary><span class=\"hintbox\"><b>purpose</b> · 目的</span></details>. <details class=\"wordhint target-word\"><summary>Evidently</summary><span class=\"hintbox\"><b>Evidently</b> · 显然</span></details>, <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>secret</summary><span class=\"hintbox\"><b>secret</b> · 秘密</span></details> <details class=\"wordhint\"><summary>was</summary><span class=\"hintbox\"><b>was</b> · 是</span></details> <details class=\"wordhint\"><summary>not</summary><span class=\"hintbox\"><b>not</b> · 不；没有</span></details> <details class=\"wordhint\"><summary>dangerous</summary><span class=\"hintbox\"><b>dangerous</b> · 危险的</span></details> <details class=\"wordhint\"><summary>at</summary><span class=\"hintbox\"><b>at</b> · 在</span></details> <details class=\"wordhint\"><summary>all</summary><span class=\"hintbox\"><b>all</b> · 全部；完全</span></details>—<details class=\"wordhint\"><summary>it</summary><span class=\"hintbox\"><b>it</b> · 它</span></details> <details class=\"wordhint\"><summary>was</summary><span class=\"hintbox\"><b>was</b> · 是</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 一个</span></details> <details class=\"wordhint\"><summary>gift</summary><span class=\"hintbox\"><b>gift</b> · 礼物</span></details> <details class=\"wordhint\"><summary>for</summary><span class=\"hintbox\"><b>for</b> · 为了；向；给</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>people</summary><span class=\"hintbox\"><b>people</b> · 人们</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>town</summary><span class=\"hintbox\"><b>town</b> · 小镇</span></details>.</p></div>\n<details class=\"disclosure\"><summary>显示 / 隐藏中文翻译</summary><div class=\"inside translation\" id=\"translation\" style=\"display:block\"><b>中文翻译</b><br/><br/>当一座新的图书馆在小镇建成时，镇长在开放之前征求了所有人的赞成。大多数人都同意这个计划，并且签署了一份正式的协议。然而，一位名叫 Leo 的年轻工程师却不同意。他认为这栋老建筑里藏着一个从未有人发现的秘密。<br/><br/>Leo 想要找到证据。他希望改善这座图书馆，让它变得更好。他相信，一点小小的改进就能提升许多人的生活。他决定进一步调查这栋建筑的历史。<br/><br/>随着他越来越好奇，他的兴趣和兴奋感也不断增长。一天晚上，他进入了这栋老建筑，在一幅画的后面发现了一扇隐藏的门。门通向一个地下房间。他用一架小梯子抬高自己，够到了一个旧控制面板。<br/><br/>突然，电梯开始移动。奇怪的是，这栋建筑根本没有电。Leo 走了进去。老式的升降机带着他来到了一层秘密楼层。<br/><br/>当他看到一堆旧信件时，答案变得显而易见。显然，有人很多年前就把这些信藏在了那里。看来，这些信属于小镇的创始人。<br/><br/>房间的玻璃墙是透明的，透过玻璃，Leo 看见了一个美丽的地下花园。很明显，镇子的创始人建造这个地方是有特殊目的的。显然，这个秘密一点也不危险——它其实是送给镇上居民的一份礼物。</div></details></section><details class=\"grammar-module\" id=\"sentence-analysis\"><div class=\"grammar-map\"><strong>📚 Day 1 语法地图（按原文实际出现整理）</strong><p>本篇确实有不少你图片里的语法点，我们会重点讲：<b>被动语态、时间/原因/条件类连接词（when、because、as）、主谓一致、并列结构、从句、非谓语（to do / doing / 过去分词）、情态动词、比较级、名词/形容词/副词词性变化、代词、冠词、介词、强调表达、标点破折号</b>等。</p><p><b>本篇没有出现：</b>倒装句、虚拟语气、独立主格、祈使句、疑问句等。不会为了凑知识点而编造例句；以后文章出现时再单独讲。</p><small>学习方法：先看原句和翻译，再看句子骨架；术语出现时会用简单中文解释。绿色语法词可点击展开。</small></div>\n<summary>🔎 句子拆解 · 从零理解语法（独立板块，点击展开）</summary>\n<div class=\"grammar-intro\">\n<b>怎么使用：</b>先看整句白话意思，再看句子结构。下面绿色带点线的语法词可以点击，查看为什么它要这样变化。这里尽量不用术语吓你；出现术语时也会解释。\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 1</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">时间状语从句 When</span><span class=\"grammar-tag\">被动语态 was built</span><span class=\"grammar-tag\">before + doing</span><span class=\"grammar-tag\">所有格 everyone’s</span><span class=\"grammar-tag\">代词 it</span></div>\n<div class=\"en\">When a new library was built in a small town, the mayor asked for everyone's approval before opening it.</div>\n<div class=\"zh\">当一座新图书馆在小镇建成时，镇长在开放之前征求了所有人的赞成。</div>\n<div class=\"explain\"><b>先理解：</b>这句话说的是图书馆已经建好，镇长在开放前征求大家是否同意。<br/><b>句子骨架：</b>主句是 <i>the mayor asked for everyone's approval</i>（镇长征求大家的赞成）；前面的 When… 是“当……时”的时间背景；before opening it 是“在开放它之前”。</div>\n<details class=\"word-explain\"><summary>was built</summary><div class=\"why\"><b>build → built；was built = 被建造、建成。</b><br/>这是“被动表达”：不是图书馆自己建造，而是别人建造它。was 是 be 动词过去式，built 是 build 的过去分词。两者搭配表达“过去被建成”。为什么用过去？整句叙述已经发生的事情，后面的 asked 也用过去式。</div></details>\n<details class=\"word-explain\"><summary>asked</summary><div class=\"why\"><b>ask → asked（过去式）</b><br/>镇长“征求”这件事发生在过去，所以动词加 -ed。ask 是规则动词，通常直接加 -ed。</div></details>\n<details class=\"word-explain\"><summary>everyone's</summary><div class=\"why\"><b>everyone + 's = 每个人的</b><br/>'s 在这里表示“所属”，不是 is。everyone（每个人）虽然意思上包含很多人，但英语语法把它当作单数。</div></details>\n<details class=\"word-explain\"><summary>opening</summary><div class=\"why\"><b>open → opening</b><br/>这里跟在 before 后面，表示“开放这件事之前”。英语中介词（before、after、without 等）后面如果接动作，常用动词 -ing 形式。它不是这里的过去时。</div></details>\n<details class=\"word-explain\"><summary>it</summary><div class=\"why\"><b>it = 这座图书馆</b><br/>用 it 代替前面提到的 library，避免重复说 library。这里作 opening 的对象，也就是“开放它”。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 2</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">并列句 and</span><span class=\"grammar-tag\">主谓一致 people / agreement</span><span class=\"grammar-tag\">被动语态 was signed</span><span class=\"grammar-tag\">词性变化 agree → agreement</span></div>\n<div class=\"en\">Most people agreed with the plan, and an official agreement was signed.</div>\n<div class=\"zh\">大多数人同意这个计划，并且一份正式协议被签署了。</div>\n<div class=\"explain\"><b>句子骨架：</b>前半句 Most people agreed with the plan（大多数人同意计划）；and 连接第二件事 an official agreement was signed（协议被签署）。</div>\n<details class=\"word-explain\"><summary>agreed</summary><div class=\"why\"><b>agree → agreed（过去式）</b><br/>描述故事中人们当时同意计划，事情发生在过去，所以用过去式。agree 以 e 结尾，只加 -d。</div></details>\n<details class=\"word-explain\"><summary>agreement</summary><div class=\"why\"><b>agree（同意，动词）→ agreement（协议/一致，名词）</b><br/>词尾 -ment 常把动词变成名词，表示“某个行为、结果或事物”。这里 official（正式的）修饰名词 agreement，所以需要名词。</div></details>\n<details class=\"word-explain\"><summary>was signed</summary><div class=\"why\"><b>sign → signed；was signed = 被签署</b><br/>协议是“被人签署”的，因此用 was + 过去分词 signed。was 表示过去；signed 表示签署这个动作。被动句重点是协议，而不是签署的人。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 3</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">过去式 disagreed</span><span class=\"grammar-tag\">过去分词短语 named Leo</span><span class=\"grammar-tag\">转折词 However</span></div>\n<div class=\"en\">However, a young engineer named Leo disagreed.</div>\n<div class=\"zh\">然而，一位名叫 Leo 的年轻工程师不同意。</div>\n<div class=\"explain\"><b>句子骨架：</b>a young engineer（一个年轻工程师）是“谁”；disagreed（不同意）是他做的动作。named Leo 补充说明工程师的名字。</div>\n<details class=\"word-explain\"><summary>named</summary><div class=\"why\"><b>name → named（被叫作 / 名叫）</b><br/>这里不是主句谓语，而是简化的描述，相当于 an engineer who was named Leo（一个被叫作 Leo 的工程师）。工程师“被命名”，所以用过去分词形式来表达被动含义。</div></details>\n<details class=\"word-explain\"><summary>disagreed</summary><div class=\"why\"><b>disagree = dis-（不/相反）+ agree（同意）</b><br/>disagree 是“不同意”。disagreed 是过去式，因为 Leo 在故事当时表达了不同意见。以 e 结尾的动词加 -d。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 4</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">宾语从句（believed 后）</span><span class=\"grammar-tag\">定语从句 that...</span><span class=\"grammar-tag\">过去完成时 had discovered</span><span class=\"grammar-tag\">had = 拥有（不是完成时）</span></div>\n<div class=\"en\">He believed the old building had a secret that nobody had discovered.</div>\n<div class=\"zh\">他认为这栋老建筑藏着一个从未有人发现的秘密。</div>\n<div class=\"explain\"><b>句子骨架：</b>He believed（他认为）+ 后面说他认为的内容：the old building had a secret（老建筑有个秘密）。that nobody had discovered 是补充说明 secret：一个没人发现过的秘密。</div>\n<details class=\"word-explain\"><summary>believed</summary><div class=\"why\"><b>believe → believed（过去式）</b><br/>Leo 当时“认为”某件事，所以叙述用过去式。believe 以 e 结尾，加 -d。</div></details>\n<details class=\"word-explain\"><summary>had</summary><div class=\"why\"><b>have → had（过去式）</b><br/>这里 had 表示“拥有/有”，不是“过去完成时”的助动词。主句在讲过去，所以 have 变成 had。</div></details>\n<details class=\"word-explain\"><summary>that</summary><div class=\"why\"><b>that 引出补充说明秘密的句子</b><br/>that nobody had discovered = “没有人发现过”。这里 that 类似连接标记，告诉我们后面的话用来描述 secret。</div></details>\n<details class=\"word-explain\"><summary>had discovered</summary><div class=\"why\"><b>discover → discovered；had + 过去分词 = 过去完成时</b><br/>过去完成时可以理解成“在过去某个时间点之前已经发生”。Leo 当时发现/想到这个秘密，而“没人发现它”在那个时间之前就已经成立，所以用 had discovered。had 是助动词，discovered 是过去分词。这里不是简单因为句子整体过去就随便加 had，而是表达“更早之前已经没有人发现”。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 5</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">一般过去时</span><span class=\"grammar-tag\">名词 proof（不可数）</span></div>\n<div class=\"en\">Leo wanted proof.</div>\n<div class=\"zh\">Leo 想要证据。</div>\n<div class=\"explain\"><b>句子骨架：</b>Leo（谁）+ wanted（想要）+ proof（证据，想要的东西）。</div>\n<details class=\"word-explain\"><summary>wanted</summary><div class=\"why\"><b>want → wanted（过去式）</b><br/>他当时想要证据。故事叙述过去的想法，用过去式。want 是规则动词，直接加 -ed。</div></details>\n<details class=\"word-explain\"><summary>proof</summary><div class=\"why\"><b>proof 是名词</b><br/>这里是“证据”。proof 通常作不可数名词，意思是证据/证明；一般不说 a proof 来表示一条证据，常说 some proof 或 a piece of proof。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 6</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">不定式 to do</span><span class=\"grammar-tag\">并列结构 improve and make</span><span class=\"grammar-tag\">使役/结果结构 make + 宾语 + 形容词</span><span class=\"grammar-tag\">比较级 better</span></div>\n<div class=\"en\">He hoped to improve the library and make it even better.</div>\n<div class=\"zh\">他希望改善这座图书馆，让它变得更好。</div>\n<div class=\"explain\"><b>句子骨架：</b>He hoped（他希望）+ to improve… and make…（希望做的两件事：改善图书馆、让它更好）。to 后面接动词原形；and 把两个动作连起来。</div>\n<details class=\"word-explain\"><summary>hoped</summary><div class=\"why\"><b>hope → hoped（过去式）</b><br/>Leo 当时抱有希望，所以用过去式。hope 以 e 结尾，加 -d。</div></details>\n<details class=\"word-explain\"><summary>to improve</summary><div class=\"why\"><b>to + 动词原形 improve</b><br/>to 在这里是“不定式标记”，提示后面是一个动作：“去改善”。hope to do something（希望做某事）是常见搭配。improve 没有变成过去式，因为 to 后面通常接动词原形。</div></details>\n<details class=\"word-explain\"><summary>make</summary><div class=\"why\"><b>make it better = 让它变得更好</b><br/>make 后面可以接对象（it）再接描述对象的词（better），表示“使某物变成某种状态”。这里 make 与 improve 并列，都是 hoped 后面的动作，因此都保持原形。</div></details>\n<details class=\"word-explain\"><summary>better</summary><div class=\"why\"><b>good → better（更好）</b><br/>better 是 good 的比较级，不按普通规则加 -er。这里表示图书馆变得“更好”，与原来相比。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 7</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">宾语从句 that...</span><span class=\"grammar-tag\">情态动词 could</span><span class=\"grammar-tag\">名词复数 lives</span><span class=\"grammar-tag\">词性变化 improvement</span></div>\n<div class=\"en\">He believed that a small improvement could enhance the lives of many people.</div>\n<div class=\"zh\">他相信，一点小小的改进就能提升许多人的生活。</div>\n<div class=\"explain\"><b>句子骨架：</b>He believed that…（他相信……）；that 后面是相信的内容。a small improvement（一个小改进）是做事的主体；could enhance（能够提升）是动作；the lives of many people（许多人的生活）是被提升的对象。</div>\n<details class=\"word-explain\"><summary>believed</summary><div class=\"why\"><b>believe → believed</b><br/>故事过去时叙述，所以“相信”用过去式。它也和前面句子中的 believed 呼应。</div></details>\n<details class=\"word-explain\"><summary>improvement</summary><div class=\"why\"><b>improve（改善，动词）→ improvement（改善/改进，名词）</b><br/>词尾 -ment 常把动作变成名词。这里 small（小的）修饰 improvement，因此要用名词形式：“一个小改进”。</div></details>\n<details class=\"word-explain\"><summary>could</summary><div class=\"why\"><b>can → could</b><br/>could 是 can 的过去形式，也可以表达过去视角下的能力/可能性。这里 Leo 当时相信一个小改进“能够”带来帮助。could 后必须接动词原形。</div></details>\n<details class=\"word-explain\"><summary>enhance</summary><div class=\"why\"><b>enhance 保持原形</b><br/>因为前面有情态动词 could（能够），英语规则是 could + 动词原形，所以不能写 enhances、enhanced 或 enhancing。</div></details>\n<details class=\"word-explain\"><summary>lives</summary><div class=\"why\"><b>life → lives（复数）</b><br/>这里 life 是“生活”，many people（许多人）对应很多人的生活，因此用复数 lives。以 f 结尾的部分名词会变成 ves：life → lives。注意 lives 在这里是名词复数，不是动词 lives（居住）。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 8</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">decide to do</span><span class=\"grammar-tag\">短语动词 look into</span><span class=\"grammar-tag\">副词 further</span></div>\n<div class=\"en\">He decided to look further into the history of the building.</div>\n<div class=\"zh\">他决定进一步调查这栋建筑的历史。</div>\n<div class=\"explain\"><b>句子骨架：</b>He decided（他决定）+ to look further into…（进一步调查……）。look into 是“调查、查看”的意思，further 表示更深入/进一步。</div>\n<details class=\"word-explain\"><summary>decided</summary><div class=\"why\"><b>decide → decided（过去式）</b><br/>他当时做出了决定，故事用过去式。decide 以 e 结尾加 -d。</div></details>\n<details class=\"word-explain\"><summary>to look</summary><div class=\"why\"><b>decide to do something = 决定做某事</b><br/>decide 后常接 to + 动词原形。to 不是“去某个地方”的介词，而是帮助组成“要做的动作”。look 保持原形。</div></details>\n<details class=\"word-explain\"><summary>further</summary><div class=\"why\"><b>further = 更进一步、更深入</b><br/>修饰 look into，告诉我们调查的程度：不是只看一点，而是继续深入调查。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 9</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">As 引导时间/伴随关系</span><span class=\"grammar-tag\">begin to do</span><span class=\"grammar-tag\">比较结构 more curious</span><span class=\"grammar-tag\">并列主语与主谓一致</span><span class=\"grammar-tag\">词性变化 growth</span></div>\n<div class=\"en\">As he began to grow more curious, his interest and excitement showed steady growth.</div>\n<div class=\"zh\">随着他越来越好奇，他的兴趣和兴奋感也不断增长。</div>\n<div class=\"explain\"><b>句子骨架：</b>前半句 As he began… 表示“随着……”；主句 his interest and excitement showed steady growth（他的兴趣和兴奋感显示出持续增长）。</div>\n<details class=\"word-explain\"><summary>began</summary><div class=\"why\"><b>begin → began（不规则过去式）</b><br/>begin 不能简单加 -ed，过去式是 began，需要记忆。它表示“开始”，发生在故事过去。</div></details>\n<details class=\"word-explain\"><summary>to grow</summary><div class=\"why\"><b>grow 保持原形：begin to do = 开始做某事</b><br/>began 后接 to grow。began 已经承担过去时，后面的 grow 不再变过去式。这是英语句子里很重要的规律：一个句子里不需要每个动词都变过去时。</div></details>\n<details class=\"word-explain\"><summary>curious</summary><div class=\"why\"><b>curious 是形容词：好奇的</b><br/>more curious = 更好奇。more 放在较长形容词前，表示“更……”。</div></details>\n<details class=\"word-explain\"><summary>showed</summary><div class=\"why\"><b>show → showed（不规则过去式）</b><br/>show 的过去式是 showed。这里主语 interest and excitement 是两个东西（复合主语），但在过去时中动词仍使用过去式 showed。</div></details>\n<details class=\"word-explain\"><summary>growth</summary><div class=\"why\"><b>grow（增长，动词）→ growth（增长，名词）</b><br/>这里 steady（持续稳定的）修饰 growth，因此需要名词。-th 在 growth 这个词中形成名词，词形变化不完全规则，需要整体记忆。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 10</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">并列谓语 entered and found</span><span class=\"grammar-tag\">过去分词 hidden 作修饰</span><span class=\"grammar-tag\">介词短语 behind...</span></div>\n<div class=\"en\">One evening, he entered the old building and found a hidden door behind a painting.</div>\n<div class=\"zh\">一天晚上，他进入了这栋老建筑，在一幅画的后面发现了一扇隐藏的门。</div>\n<div class=\"explain\"><b>句子骨架：</b>he entered… and found…（他进入……并发现……）。and 连接两个由同一个 he 做的动作，因此两个动词都用过去式。</div>\n<details class=\"word-explain\"><summary>entered</summary><div class=\"why\"><b>enter → entered（过去式）</b><br/>进入发生在故事过去，所以加 -ed。enter 后面直接接地点/建筑，不需要加 into：enter the building。</div></details>\n<details class=\"word-explain\"><summary>found</summary><div class=\"why\"><b>find → found（不规则过去式）</b><br/>find 的过去式是 found，不是 finded。和 entered 并列，都是 he 做的过去动作。</div></details>\n<details class=\"word-explain\"><summary>hidden</summary><div class=\"why\"><b>hide → hid → hidden</b><br/>hidden 是 hide 的过去分词形式。这里 hidden door 是“被藏起来的门”，hidden 像形容词一样修饰 door，表达门处于被隐藏的状态。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 11</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">一般过去时 led</span><span class=\"grammar-tag\">固定搭配 lead to</span><span class=\"grammar-tag\">冠词 an</span></div>\n<div class=\"en\">The door led to an underground room.</div>\n<div class=\"zh\">这扇门通向一个地下房间。</div>\n<div class=\"explain\"><b>句子骨架：</b>The door（这扇门）+ led to（通向）+ an underground room（一个地下房间）。lead to 是固定搭配，表示“通向、导致”。</div>\n<details class=\"word-explain\"><summary>led</summary><div class=\"why\"><b>lead → led（不规则过去式）</b><br/>这里 lead 读 /liːd/，意思是“通向/引领”。过去式 led，拼写变了，需要记住。不是 led by electricity 中的其他含义。</div></details>\n<details class=\"word-explain\"><summary>underground</summary><div class=\"why\"><b>under（下面）+ ground（地面）→ underground（地下的）</b><br/>它在 room 前面修饰 room，说明房间在哪里：地下的房间。它也可以作副词，表示在地下。</div></details>\n<details class=\"word-explain\"><summary>an</summary><div class=\"why\"><b>an 用在元音音素开头的单词前</b><br/>underground 开头发音是元音，所以用 an underground room。a/an 都表示一个，选择主要看后面单词的开头发音，而不是字母。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 12</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">目的状语 to do</span><span class=\"grammar-tag\">并列动词 elevate and reach</span><span class=\"grammar-tag\">反身代词 himself</span><span class=\"grammar-tag\">冠词 a / an</span></div>\n<div class=\"en\">He used a small ladder to elevate himself and reach an old control panel.</div>\n<div class=\"zh\">他用一架小梯子抬高自己，够到了一个旧控制面板。</div>\n<div class=\"explain\"><b>句子骨架：</b>He used a small ladder（他用了一个小梯子）+ to elevate himself and reach…（用它来抬高自己并够到……）。to 后面的两个动作 elevate 和 reach 并列，都用原形。</div>\n<details class=\"word-explain\"><summary>used</summary><div class=\"why\"><b>use → used（过去式）</b><br/>他当时使用梯子，故事过去时，所以加 -d。注意 used to do（过去常常）是另一个结构；本句 used 是普通动词“使用”。</div></details>\n<details class=\"word-explain\"><summary>to elevate</summary><div class=\"why\"><b>to + 动词原形，表示目的：为了抬高</b><br/>他使用梯子的目的是什么？为了让自己升高、够到面板。elevate 保持原形，因为 to 后接动词原形。</div></details>\n<details class=\"word-explain\"><summary>himself</summary><div class=\"why\"><b>he → himself（他自己）</b><br/>动作施加在自己身上时用反身代词。he 是“他”，himself 是“他自己”。这里 Leo 抬高的是自己。</div></details>\n<details class=\"word-explain\"><summary>reach</summary><div class=\"why\"><b>reach 保持原形</b><br/>它与 elevate 并列，都跟在 to 后面：to elevate himself and reach…。第一个动词前有 to，第二个并列动作通常不重复 to，但仍用原形。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 13</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">begin to do</span><span class=\"grammar-tag\">一般过去时 began</span></div>\n<div class=\"en\">Suddenly, the elevator began to move.</div>\n<div class=\"zh\">突然，电梯开始移动。</div>\n<div class=\"explain\"><b>句子骨架：</b>the elevator（电梯）+ began（开始）+ to move（移动）。Suddenly 是“突然”，说明动作发生得很突然。</div>\n<details class=\"word-explain\"><summary>began</summary><div class=\"why\"><b>begin → began（不规则过去式）</b><br/>电梯在故事中开始移动，是过去发生的动作，因此用 began。</div></details>\n<details class=\"word-explain\"><summary>to move</summary><div class=\"why\"><b>begin to do = 开始做某事</b><br/>began 已经是过去式，to 后面的 move 用原形。英语并不是把所有动词都改成过去式。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 14</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">原因状语从句 because</span><span class=\"grammar-tag\">一般过去时 was / had</span><span class=\"grammar-tag\">no + 名词</span></div>\n<div class=\"en\">It was strange because the building had no electricity.</div>\n<div class=\"zh\">奇怪的是，这栋建筑根本没有电。</div>\n<div class=\"explain\"><b>句子骨架：</b>It was strange（这很奇怪）+ because（因为）+ the building had no electricity（建筑没有电）。because 后面解释原因。</div>\n<details class=\"word-explain\"><summary>was</summary><div class=\"why\"><b>is → was（过去式）</b><br/>描述当时的情况“很奇怪”，时间在故事过去。be 动词过去式：I/he/she/it 用 was；you/we/they 用 were。</div></details>\n<details class=\"word-explain\"><summary>had</summary><div class=\"why\"><b>have → had（过去式）</b><br/>这里表示“拥有/有电”，不是完成时的 had。建筑当时没有电，所以用过去形式 had。no electricity = 没有电。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 15</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">一般过去时</span><span class=\"grammar-tag\">过去式拼写：step → stepped</span></div>\n<div class=\"en\">Leo stepped inside.</div>\n<div class=\"zh\">Leo 走了进去。</div>\n<div class=\"explain\"><b>句子骨架：</b>Leo（谁）+ stepped（迈步）+ inside（里面/向里面）。inside 在这里告诉我们他走到哪里/朝哪里。</div>\n<details class=\"word-explain\"><summary>stepped</summary><div class=\"why\"><b>step → stepped（过去式）</b><br/>step 是“迈步”。短元音 + 单个辅音结尾的词，变过去式时常双写最后辅音再加 -ed：step → stepped。这样保持前面短元音的读音。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 16</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">一般过去时 took</span><span class=\"grammar-tag\">宾格代词 him</span><span class=\"grammar-tag\">方向副词 down</span><span class=\"grammar-tag\">固定搭配 take someone to</span></div>\n<div class=\"en\">The old lift took him down to a secret floor.</div>\n<div class=\"zh\">老式升降机带着他来到了一层秘密楼层。</div>\n<div class=\"explain\"><b>句子骨架：</b>The old lift（老升降机）+ took（带/载）+ him（他）+ down（向下）+ to a secret floor（到秘密楼层）。take someone to… 表示带某人去某处。</div>\n<details class=\"word-explain\"><summary>took</summary><div class=\"why\"><b>take → took（不规则过去式）</b><br/>电梯带他下去，这件事发生在过去。take 的过去式不是 taked，而是 took。</div></details>\n<details class=\"word-explain\"><summary>him</summary><div class=\"why\"><b>he → him（宾格）</b><br/>he 是“他”在句子里做动作的主语形式；him 是“他”作为动作对象的形式。电梯带的是 Leo，所以用 him。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 17</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">时间状语从句 when</span><span class=\"grammar-tag\">系动词 become + 形容词</span><span class=\"grammar-tag\">名词 collection</span><span class=\"grammar-tag\">冠词 a</span></div>\n<div class=\"en\">The answer became obvious when he saw a collection of old letters.</div>\n<div class=\"zh\">当他看到一堆旧信件时，答案变得显而易见。</div>\n<div class=\"explain\"><b>句子骨架：</b>The answer became obvious（答案变得明显）+ when he saw…（当他看到……时）。when 引出发生时间。</div>\n<details class=\"word-explain\"><summary>became</summary><div class=\"why\"><b>become → became（不规则过去式）</b><br/>become（变成）过去式 became。答案在那时变得明显，是故事过去的变化。</div></details>\n<details class=\"word-explain\"><summary>obvious</summary><div class=\"why\"><b>obvious 是形容词：明显的</b><br/>became（变得）后面可以接形容词，说明变成什么状态：became obvious（变得明显）。</div></details>\n<details class=\"word-explain\"><summary>saw</summary><div class=\"why\"><b>see → saw（不规则过去式）</b><br/>看到信件是过去发生的动作，see 的过去式是 saw，不是 seed。</div></details>\n<details class=\"word-explain\"><summary>collection</summary><div class=\"why\"><b>collect（收集，动词）→ collection（收藏/一批，名词）</b><br/>这里 a collection of letters 表示“一批/一组信件”。a 后面需要一个名词，因此使用 collection。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 18</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">句首评述副词 Obviously</span><span class=\"grammar-tag\">过去完成时 had hidden</span><span class=\"grammar-tag\">宾格 them</span><span class=\"grammar-tag\">ago 与过去时间</span></div>\n<div class=\"en\">Obviously, someone had hidden them there many years ago.</div>\n<div class=\"zh\">显然，有人很多年前就把这些信藏在了那里。</div>\n<div class=\"explain\"><b>句子骨架：</b>someone（某人）+ had hidden（藏了）+ them（它们）+ there（在那里）。Obviously 是说话者对整件事的判断：“显然”。</div>\n<details class=\"word-explain\"><summary>Obviously</summary><div class=\"why\"><b>obvious（明显的，形容词）→ obviously（显然地，副词）</b><br/>词尾 -ly 常把形容词变成副词。副词可以放在句首，表达说话者对整句话的判断。</div></details>\n<details class=\"word-explain\"><summary>had hidden</summary><div class=\"why\"><b>hide → hid → hidden；had + 过去分词 = 过去完成时</b><br/>隐藏信件发生在 Leo 发现它们之前很多年。以故事的过去时“发现”为参照，更早发生的隐藏动作使用 had hidden。had 是助动词，hidden 是过去分词。</div></details>\n<details class=\"word-explain\"><summary>them</summary><div class=\"why\"><b>they → them（宾格）</b><br/>them 指前面提到的 letters（信件）。someone 把信藏起来，“信”是动作对象，所以用 them。</div></details>\n<details class=\"word-explain\"><summary>ago</summary><div class=\"why\"><b>ago = 以前</b><br/>many years ago = 很多年前。ago 通常搭配过去时间，帮助我们明确事情发生在过去。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 19</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">句首评述副词 Apparently</span><span class=\"grammar-tag\">belong to</span><span class=\"grammar-tag\">所有格 town’s</span></div>\n<div class=\"en\">Apparently, the letters belonged to the town's founder.</div>\n<div class=\"zh\">看来，这些信属于小镇的创始人。</div>\n<div class=\"explain\"><b>句子骨架：</b>the letters（这些信）+ belonged to（属于）+ the town's founder（小镇的创始人）。Apparently 表示根据现有线索“看来/似乎”。</div>\n<details class=\"word-explain\"><summary>Apparently</summary><div class=\"why\"><b>apparent（看起来明显的）→ apparently（看来/显然，副词）</b><br/>-ly 常把形容词变成副词。Apparently 放句首，表示这是根据目前情况作出的判断，语气常有“看来是这样”。</div></details>\n<details class=\"word-explain\"><summary>belonged</summary><div class=\"why\"><b>belong → belonged（过去式）</b><br/>belong to = 属于。信属于创始人这个情况在故事过去被发现/判断，所以用 belonged。belong 以 g 结尾直接加 -ed。</div></details>\n<details class=\"word-explain\"><summary>town's</summary><div class=\"why\"><b>town + 's = 小镇的</b><br/>这里 's 表示所属：the town's founder = 小镇的创始人。它不是 is 的缩写。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 20</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">并列句 and</span><span class=\"grammar-tag\">主谓一致 walls were</span><span class=\"grammar-tag\">情态动词 could + 原形</span><span class=\"grammar-tag\">介词 through + them</span><span class=\"grammar-tag\">地点补充 underground</span></div>\n<div class=\"en\">The glass walls of the room were transparent, and through them Leo could see a beautiful garden underground.</div>\n<div class=\"zh\">房间的玻璃墙是透明的，透过玻璃，Leo 看见了一个美丽的地下花园。</div>\n<div class=\"explain\"><b>句子骨架：</b>前半句 glass walls were transparent（玻璃墙是透明的）；后半句 Leo could see a garden（Leo 能看见花园）。through them（透过它们）指透过玻璃墙。</div>\n<details class=\"word-explain\"><summary>were</summary><div class=\"why\"><b>are → were（过去式）</b><br/>主语 glass walls 是复数（多面墙），be 动词过去式用 were。was 用于 I/he/she/it 等单数；were 用于 you/we/they 及复数主语。</div></details>\n<details class=\"word-explain\"><summary>transparent</summary><div class=\"why\"><b>transparent 是形容词：透明的</b><br/>be 动词 were 后面接形容词，说明玻璃墙是什么状态：were transparent（是透明的）。</div></details>\n<details class=\"word-explain\"><summary>through</summary><div class=\"why\"><b>through = 穿过/透过</b><br/>through them 指透过前面提到的玻璃墙看过去。</div></details>\n<details class=\"word-explain\"><summary>could see</summary><div class=\"why\"><b>can → could；could + 动词原形 see</b><br/>could 是 can 的过去形式，表示当时“能够看见”。could 后的 see 必须用原形，不能写 saw。虽然中文说“看见了”，英语用 could see 强调当时能看到。</div></details>\n<details class=\"word-explain\"><summary>underground</summary><div class=\"why\"><b>underground = 地下的/在地下</b><br/>这里描述 garden 所在的位置：一个地下花园。它放在 garden 后面，补充说明花园在哪里。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 21</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">形式主语 It</span><span class=\"grammar-tag\">that 主语从句</span><span class=\"grammar-tag\">过去完成时 had created</span><span class=\"grammar-tag\">for 表目的/对象</span></div>\n<div class=\"en\">It was evident that the founder had created this place for a special purpose.</div>\n<div class=\"zh\">很明显，镇子的创始人建造这个地方是有特殊目的的。</div>\n<div class=\"explain\"><b>句子骨架：</b>It was evident（很明显）+ that 后面的内容：the founder had created this place（创始人建造了这个地方）。这里 It 是形式上的开头，真正要说明的事情在 that 后面。</div>\n<details class=\"word-explain\"><summary>was</summary><div class=\"why\"><b>is → was（过去式）</b><br/>当时“很明显”，故事以过去视角叙述，所以用 was。</div></details>\n<details class=\"word-explain\"><summary>evident</summary><div class=\"why\"><b>evident 是形容词：明显的</b><br/>was 后面接形容词，描述“明显”这个状态。It was evident that… 是常见表达：“很明显……”。</div></details>\n<details class=\"word-explain\"><summary>had created</summary><div class=\"why\"><b>create → created；had + 过去分词 = 过去完成时</b><br/>创始人建造这个地方的动作发生在故事当前过去时间之前。用 had created 表示“在那个过去时刻之前已经建造好了”。had 是助动词，created 是过去分词。</div></details>\n</div>\n<div class=\"grammar-sentence\">\n<h4>句子 22</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">句首评述副词 Evidently</span><span class=\"grammar-tag\">否定强调 not...at all</span><span class=\"grammar-tag\">破折号解释补充</span><span class=\"grammar-tag\">be + 名词 was a gift</span></div>\n<div class=\"en\">Evidently, the secret was not dangerous at all—it was a gift for the people of the town.</div>\n<div class=\"zh\">显然，这个秘密一点也不危险——它其实是送给镇上居民的一份礼物。</div>\n<div class=\"explain\"><b>句子骨架：</b>the secret was not dangerous（秘密并不危险）— it was a gift（它是一份礼物）。Evidently 是“显然/看来”，not…at all 是“一点也不”。破折号连接进一步解释。</div>\n<details class=\"word-explain\"><summary>Evidently</summary><div class=\"why\"><b>evident（明显的，形容词）→ evidently（显然地，副词）</b><br/>词尾 -ly 常把形容词变成副词。放句首时，表达说话者对后面内容的判断。</div></details>\n<details class=\"word-explain\"><summary>was</summary><div class=\"why\"><b>is → was（过去式）</b><br/>秘密当时“不危险”，并且“是一份礼物”，叙述故事时用过去式 was。</div></details>\n<details class=\"word-explain\"><summary>dangerous</summary><div class=\"why\"><b>danger（危险，名词）→ dangerous（危险的，形容词）</b><br/>-ous 常见作用是构成形容词，表示“具有……性质的”。not dangerous = 不危险。</div></details>\n<details class=\"word-explain\"><summary>at all</summary><div class=\"why\"><b>not … at all = 一点也不……</b><br/>at all 常用于否定句，加强否定语气。这里 not dangerous at all = 一点也不危险。</div></details>\n<details class=\"word-explain\"><summary>was a gift</summary><div class=\"why\"><b>was + 名词</b><br/>be 动词可以连接主语和名词，表示“是什么”。it was a gift = 它是一份礼物。a 表示“一份/一个”，gift 是名词。</div></details>\n</div>\n</details>\n<div class=\"panel-card\"><div class=\"section\"><h3>易混词提示</h3><div class=\"tip\"><b>agree → agreement</b>：动词“同意”→ 名词“协议 / 一致”。<br><b>improve → improvement</b>：动词“改善”→ 名词“改进”。<br><b>obvious / evident</b>：都表示“明显的”。<br><b>obviously / evidently / apparently</b>：都可表达“显然 / 看来”；apparently 常有“据目前情况看来”的语气。<br><b>elevator / lift</b>：都指电梯；elevator 更常见于美式英语，lift 更常见于英式英语。</br></br></br></br></div></div>\n</div>", "basicHTML": "<div class=\"section\" id=\"quiz\"><h3>复习测试 · 20 词全覆盖</h3><p class=\"muted\">根据中文或句子提示填写英文。每个 PDF 目标词都考查一次；完成后点击批改。</p><div class=\"quiz\" id=\"quizForm\">\n<div class=\"q\" data-answer=\"approval\">1. 赞成；批准：<input aria-label=\"第1题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"agree\">2. Most people ______ with the plan.（同意）<input aria-label=\"第2题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"agreement\">3. 协议；一致（名词）：<input aria-label=\"第3题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"disagree\">4. He ______ with the decision.（不同意）<input aria-label=\"第4题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"proof\">5. 证据；证明：<input aria-label=\"第5题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"improve\">6. We hope to ______ the library.（改善）<input aria-label=\"第6题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"improvement\">7. 改进；改善（名词）：<input aria-label=\"第7题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"enhance\">8. 提高；增强：<input aria-label=\"第8题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"further\">9. 调查得更深入；进一步：<input aria-label=\"第9题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"grow\">10. Interest began to ______.（增长；逐渐变得）<input aria-label=\"第10题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"growth\">11. 增长；成长（名词）：<input aria-label=\"第11题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"elevate\">12. 用动作/高度“抬高；提升”：<input aria-label=\"第12题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"elevator\">13. 电梯（美式英语）：<input aria-label=\"第13题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"lift\">14. 电梯（英式）；举起：<input aria-label=\"第14题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"obvious\">15. The answer was ______.（明显的）<input aria-label=\"第15题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"obviously\">16. ______, someone had hidden the letters.（显然地）<input aria-label=\"第16题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"apparently\">17. 看来；据目前情况显然：<input aria-label=\"第17题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"transparent\">18. 玻璃是 ______ 的。（透明的）<input aria-label=\"第18题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"evident\">19. 很明显的；显而易见的（形容词）：<input aria-label=\"第19题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n<div class=\"q\" data-answer=\"evidently\">20. ______, the secret was harmless.（显然地；看来）<input aria-label=\"第20题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div>\n</div><div class=\"quiz-tools\"><button class=\"quiz-btn\" onclick=\"gradeQuiz()\" type=\"button\">批改答案</button><button class=\"quiz-btn secondary\" onclick=\"resetQuiz()\" type=\"button\">重新作答</button></div><div aria-live=\"polite\" class=\"grade-summary\" id=\"gradeSummary\"></div>", "advancedHTML": "<div class=\"section\"><h3>Reading · A New Community Reading Room</h3><p class=\"muted\">全新短文，与今日故事不同。根据上下文、词性、搭配和逻辑选择单词。每个选项最多使用一次；15个选项中有5个不需要使用。</p>\n<div class=\"fill-bank\"><b>Word Bank（15选10）</b><div class=\"fill-words\"><span class=\"fw-chip\">approval</span><span class=\"fw-chip\">agree</span><span class=\"fw-chip\">agreement</span><span class=\"fw-chip\">proof</span><span class=\"fw-chip\">improve</span><span class=\"fw-chip\">improvement</span><span class=\"fw-chip\">enhance</span><span class=\"fw-chip\">further</span><span class=\"fw-chip\">growth</span><span class=\"fw-chip\">obvious</span><span class=\"fw-chip\">apparently</span><span class=\"fw-chip\">transparent</span><span class=\"fw-chip\">evidently</span><span class=\"fw-chip\">benefit</span><span class=\"fw-chip\">maintain</span></div></div>\n<div class=\"fill-passage\">Last month, a small community decided to open a reading room. The plan first needed the town council’s <span class=\"fill-slot\">(1) <select aria-label=\"第1空\" data-answer=\"approval\"><option value=\"\">请选择</option></select></span>. Most residents seemed to <span class=\"fill-slot\">(2) <select aria-label=\"第2空\" data-answer=\"agree\"><option value=\"\">请选择</option></select></span> that children needed a quiet place to study. After several meetings, they reached an <span class=\"fill-slot\">(3) <select aria-label=\"第3空\" data-answer=\"agreement\"><option value=\"\">请选择</option></select></span> about how to use the building.<br><br>Volunteers collected books and offered to <span class=\"fill-slot\">(4) <select aria-label=\"第4空\" data-answer=\"improve\"><option value=\"\">请选择</option></select></span> the old room. At first, the lack of furniture was an <span class=\"fill-slot\">(5) <select aria-label=\"第5空\" data-answer=\"obvious\"><option value=\"\">请选择</option></select></span> problem. They then made a few small changes, and the space became more comfortable. These changes brought a real <span class=\"fill-slot\">(6) <select aria-label=\"第6空\" data-answer=\"improvement\"><option value=\"\">请选择</option></select></span>.<br><br>The organizers wanted to <span class=\"fill-slot\">(7) <select aria-label=\"第7空\" data-answer=\"enhance\"><option value=\"\">请选择</option></select></span> the reading experience, so they added lamps and soft chairs. The number of visitors began to show steady <span class=\"fill-slot\">(8) <select aria-label=\"第8空\" data-answer=\"growth\"><option value=\"\">请选择</option></select></span>. The room’s rules were posted clearly on a <span class=\"fill-slot\">(9) <select aria-label=\"第9空\" data-answer=\"transparent\"><option value=\"\">请选择</option></select></span> system, and everyone could see how donations were spent. <span class=\"fill-slot\">(10) <select aria-label=\"第10空\" data-answer=\"Evidently\"><option value=\"\">请选择</option></select></span>, the project had become a valued part of the neighborhood.</div>\n<div class=\"fill-controls\"><button class=\"quiz-btn\" type=\"button\" onclick=\"gradeFill()\">提交并批改</button><button class=\"quiz-btn secondary\" type=\"button\" onclick=\"resetFill()\">重新作答</button></div><div class=\"fill-result\" id=\"fillResult\" aria-live=\"polite\"></div><div class=\"fill-explanations\" id=\"fillExplanations\" style=\"display:none\">\n<h4>📖 全文翻译</h4><div class=\"fill-translation\"><p>上个月，一个小社区决定开设一间阅览室。这个计划首先需要得到镇议会的批准。大多数居民似乎都同意，孩子们需要一个安静的学习场所。经过几次会议，他们就如何使用这栋建筑达成了协议。</p><p>志愿者们收集了书籍，并主动提出改善旧房间。起初，缺少家具是一个明显的问题。随后他们做了一些小改动，空间变得更加舒适。这些变化带来了真正的改善。</p><p>组织者希望提升阅读体验，于是添置了灯和舒适的椅子。访客数量开始稳步增长。阅览室的规则被清楚地公布在一个透明公开的制度中，大家都能看到捐款是如何使用的。显然，这个项目已经成为社区中备受珍视的一部分。</p></div>\n<h4>🔤 词性分析 · 15个备选词</h4><div class=\"fill-pos-grid\">\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">名词 Nouns</div><div class=\"fill-pos-item\"><b>approval</b><span>批准；赞同</span></div><div class=\"fill-pos-item\"><b>agreement</b><span>协议；一致</span></div><div class=\"fill-pos-item\"><b>proof</b><span>证据</span></div><div class=\"fill-pos-item\"><b>improvement</b><span>改善；改进</span></div><div class=\"fill-pos-item\"><b>growth</b><span>增长</span></div><div class=\"fill-pos-item\"><b>benefit</b><span>益处；好处</span></div></div>\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">动词 Verbs</div><div class=\"fill-pos-item\"><b>agree</b><span>同意</span></div><div class=\"fill-pos-item\"><b>improve</b><span>改善；提高</span></div><div class=\"fill-pos-item\"><b>enhance</b><span>提升；增强</span></div><div class=\"fill-pos-item\"><b>maintain</b><span>维持；保持</span></div><div class=\"fill-pos-item\"><b>benefit</b><span>使受益；得益</span></div></div>\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">形容词 Adjectives</div><div class=\"fill-pos-item\"><b>obvious</b><span>明显的</span></div><div class=\"fill-pos-item\"><b>transparent</b><span>透明的；公开的</span></div><div class=\"fill-pos-item\"><b>further</b><span>进一步的</span></div></div>\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">副词 Adverbs</div><div class=\"fill-pos-item\"><b>apparently</b><span>看来；似乎</span></div><div class=\"fill-pos-item\"><b>evidently</b><span>显然</span></div><div class=\"fill-pos-item\"><b>further</b><span>进一步地</span></div></div></div>\n\n<h4>📝 每题详细解析</h4><ol><li><b>approval（名词，批准）</b>：town council’s 所有格后需要名词，表示“镇议会的批准”。</li><li><b>agree（动词，同意）</b>：seemed to 后接动词原形；agree that... 表示“同意……”。</li><li><b>agreement（名词，协议）</b>：an 后面需要可数名词单数；reach an agreement 是“达成协议”。</li><li><b>improve（动词，改善）</b>：offer to 后接动词原形；改善旧房间。</li><li><b>obvious（形容词，明显的）</b>：修饰名词 problem；obvious problem 是“明显的问题”。</li><li><b>improvement（名词，改善）</b>：a real 后面需要名词；改动让空间更舒适，带来了改善。</li><li><b>enhance（动词，提升）</b>：wanted to 后接动词原形；提升阅读体验。</li><li><b>growth（名词，增长）</b>：steady（稳定的）修饰名词；steady growth 表示“稳步增长”。</li><li><b>transparent（形容词，透明公开的）</b>：修饰名词 system，指规则与资金使用公开透明。</li><li><b>evidently（副词，显然）</b>：句首副词修饰整句话，表示根据前文可看出项目受到社区认可。</li></ol><p><b>未使用的混淆项：</b>apparently（看来/似乎）、benefit（益处/受益）、maintain（维持）、further（进一步）、proof（证据）。它们虽然意思或词性看似有用，但放入对应空格无法同时满足语法和语境。</p></div>", "bank": ["approval", "agree", "agreement", "proof", "improve", "improvement", "enhance", "further", "growth", "obvious", "apparently", "transparent", "evidently", "benefit", "maintain"], "words": [{"n": 1, "w": "approval", "p": "n.", "m": "赞成；批准"}, {"n": 2, "w": "agree", "p": "v.", "m": "同意；赞成"}, {"n": 3, "w": "agreement", "p": "n.", "m": "协议；一致"}, {"n": 4, "w": "disagree", "p": "v.", "m": "不同意；有分歧"}, {"n": 5, "w": "proof", "p": "n.", "m": "证据；证明"}, {"n": 6, "w": "improve", "p": "v.", "m": "改善；提高"}, {"n": 7, "w": "improvement", "p": "n.", "m": "改进；改善"}, {"n": 8, "w": "enhance", "p": "v.", "m": "提高；增强；改善"}, {"n": 9, "w": "further", "p": "adv./adj.", "m": "进一步；更远的"}, {"n": 10, "w": "grow", "p": "v.", "m": "生长；增长；逐渐变得"}, {"n": 11, "w": "growth", "p": "n.", "m": "增长；成长"}, {"n": 12, "w": "elevate", "p": "v.", "m": "提升；举起；提高"}, {"n": 13, "w": "elevator", "p": "n.", "m": "电梯"}, {"n": 14, "w": "lift", "p": "v./n.", "m": "举起；提升；电梯"}, {"n": 15, "w": "obvious", "p": "adj.", "m": "明显的；显而易见的"}, {"n": 16, "w": "obviously", "p": "adv.", "m": "显然地"}, {"n": 17, "w": "apparently", "p": "adv.", "m": "看来；显然"}, {"n": 18, "w": "transparent", "p": "adj.", "m": "透明的；公开的"}, {"n": 19, "w": "evident", "p": "adj.", "m": "明显的；显而易见的"}, {"n": 20, "w": "evidently", "p": "adv.", "m": "显然地；看来"}]}, {"eyebrow": "DAY 02 · PDF PAGE 02", "title": "The Workshop of Steady Steps", "muted": "PDF 第 2 页 · 词汇编号 21–40 · 覆盖 20 / 20", "readHTML": "<section class=\"panel\" id=\"lesson\"><div class=\"head\"><div><div class=\"eyebrow\">DAY 02 · PDF PAGE 02</div><h2>The Workshop of Steady Steps</h2><div class=\"muted\">PDF 第 2 页 · 词汇编号 21–40 · 覆盖 <b>20 / 20</b></div></div><span class=\"tag\">✓ 全部覆盖</span></div><div class=\"story\"><p><details class=\"wordhint\"><summary>During</summary><span class=\"hintbox\"><b>During</b> · 在……期间</span></details> <details class=\"wordhint\"><summary>an</summary><span class=\"hintbox\"><b>an</b> · 一个（元音前）</span></details> <details class=\"wordhint target-word\"><summary>ongoing</summary><span class=\"hintbox\"><b>ongoing</b> · 进行中的，不间断的</span></details> <details class=\"wordhint\"><summary>community</summary><span class=\"hintbox\"><b>community</b> · 社区</span></details> <details class=\"wordhint\"><summary>workshop</summary><span class=\"hintbox\"><b>workshop</b> · 讲习班；工作坊</span></details>, <details class=\"wordhint\"><summary>several</summary><span class=\"hintbox\"><b>several</b> · 几个</span></details> <details class=\"wordhint\"><summary>senior</summary><span class=\"hintbox\"><b>senior</b> · 高年级的；年长的</span></details> <details class=\"wordhint\"><summary>students</summary><span class=\"hintbox\"><b>students</b> · 学生（复数）</span></details> <details class=\"wordhint target-word\"><summary>assist</summary><span class=\"hintbox\"><b>assist</b> · 帮助，协助；促进</span></details> <details class=\"wordhint\"><summary>newcomers</summary><span class=\"hintbox\"><b>newcomers</b> · 新来的人</span></details> <details class=\"wordhint\"><summary>with</summary><span class=\"hintbox\"><b>with</b> · 和；用；在……方面</span></details> <details class=\"wordhint\"><summary>English</summary><span class=\"hintbox\"><b>English</b> · 英语</span></details> <details class=\"wordhint\"><summary>review</summary><span class=\"hintbox\"><b>review</b> · 复习</span></details>. <details class=\"wordhint\"><summary>One</summary><span class=\"hintbox\"><b>One</b> · 一个</span></details> <details class=\"wordhint\"><summary>volunteer</summary><span class=\"hintbox\"><b>volunteer</b> · 志愿者</span></details>, <details class=\"wordhint\"><summary>Mia</summary><span class=\"hintbox\"><b>Mia</b> · Mia（人名）</span></details>, <details class=\"wordhint\"><summary>offers</summary><span class=\"hintbox\"><b>offers</b> · 提供</span></details> <details class=\"wordhint target-word\"><summary>assistance</summary><span class=\"hintbox\"><b>assistance</b> · 帮助，援助，支持（名词）</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 结合上下文理解</span></details> <details class=\"wordhint\"><summary>quiet</summary><span class=\"hintbox\"><b>quiet</b> · 安静的</span></details> <details class=\"wordhint\"><summary>girl</summary><span class=\"hintbox\"><b>girl</b> · 女孩</span></details> <details class=\"wordhint\"><summary>named</summary><span class=\"hintbox\"><b>named</b> · 名叫</span></details> <details class=\"wordhint\"><summary>Nina</summary><span class=\"hintbox\"><b>Nina</b> · Nina（人名）</span></details>, <details class=\"wordhint\"><summary>whose</summary><span class=\"hintbox\"><b>whose</b> · 她的；（定语从句）</span></details> <details class=\"wordhint target-word\"><summary>aid</summary><span class=\"hintbox\"><b>aid</b> · 援助；帮助，辅助（名词/动词）</span></details> <details class=\"wordhint\"><summary>notes</summary><span class=\"hintbox\"><b>notes</b> · 笔记</span></details> <details class=\"wordhint\"><summary>are</summary><span class=\"hintbox\"><b>are</b> · 是</span></details> <details class=\"wordhint\"><summary>full</summary><span class=\"hintbox\"><b>full</b> · 满的</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>doubts</summary><span class=\"hintbox\"><b>doubts</b> · 疑问；怀疑</span></details>. <details class=\"wordhint\"><summary>Nina</summary><span class=\"hintbox\"><b>Nina</b> · Nina（人名）</span></details> <details class=\"wordhint target-word\"><summary>insists</summary><span class=\"hintbox\"><b>insists</b> · 坚称，坚决要求（insist）</span></details> <details class=\"wordhint\"><summary>that</summary><span class=\"hintbox\"><b>that</b> · 那；（引导从句）</span></details> <details class=\"wordhint\"><summary>she</summary><span class=\"hintbox\"><b>she</b> · 她</span></details> <details class=\"wordhint\"><summary>can</summary><span class=\"hintbox\"><b>can</b> · 能够</span></details> <details class=\"wordhint\"><summary>catch</summary><span class=\"hintbox\"><b>catch</b> · 赶上</span></details> <details class=\"wordhint\"><summary>up</summary><span class=\"hintbox\"><b>up</b> · 向上；赶上</span></details> <details class=\"wordhint\"><summary>on</summary><span class=\"hintbox\"><b>on</b> · 继续；在……上</span></details> <details class=\"wordhint\"><summary>her</summary><span class=\"hintbox\"><b>her</b> · 她的</span></details> <details class=\"wordhint\"><summary>own</summary><span class=\"hintbox\"><b>own</b> · 自己的</span></details>, <details class=\"wordhint\"><summary>but</summary><span class=\"hintbox\"><b>but</b> · 但是</span></details> <details class=\"wordhint\"><summary>Mia</summary><span class=\"hintbox\"><b>Mia</b> · Mia（人名）</span></details> <details class=\"wordhint target-word\"><summary>persists</summary><span class=\"hintbox\"><b>persists</b> · 坚持，持续（persist）</span></details> <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>sits</summary><span class=\"hintbox\"><b>sits</b> · 坐</span></details> <details class=\"wordhint\"><summary>down</summary><span class=\"hintbox\"><b>down</b> · 向下；记下</span></details> <details class=\"wordhint\"><summary>beside</summary><span class=\"hintbox\"><b>beside</b> · 在……旁边</span></details> <details class=\"wordhint\"><summary>her</summary><span class=\"hintbox\"><b>her</b> · 她的</span></details>.</p>\n<p><details class=\"wordhint\"><summary>Nina</summary><span class=\"hintbox\"><b>Nina</b> · Nina（人名）</span></details> <details class=\"wordhint\"><summary>tries</summary><span class=\"hintbox\"><b>tries</b> · 尝试</span></details> <details class=\"wordhint\"><summary>hard</summary><span class=\"hintbox\"><b>hard</b> · 努力地</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint target-word\"><summary>resist</summary><span class=\"hintbox\"><b>resist</b> · 忍住；抵抗，抵制</span></details> <details class=\"wordhint\"><summary>giving</summary><span class=\"hintbox\"><b>giving</b> · 放弃（give up）</span></details> <details class=\"wordhint\"><summary>up</summary><span class=\"hintbox\"><b>up</b> · 向上；赶上</span></details> <details class=\"wordhint\"><summary>when</summary><span class=\"hintbox\"><b>when</b> · 当……时</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>reading</summary><span class=\"hintbox\"><b>reading</b> · 阅读</span></details> <details class=\"wordhint\"><summary>passages</summary><span class=\"hintbox\"><b>passages</b> · 文章；段落</span></details> <details class=\"wordhint\"><summary>grow</summary><span class=\"hintbox\"><b>grow</b> · 变得</span></details> <details class=\"wordhint\"><summary>difficult</summary><span class=\"hintbox\"><b>difficult</b> · 困难的</span></details>. <details class=\"wordhint\"><summary>She</summary><span class=\"hintbox\"><b>She</b> · 她</span></details> <details class=\"wordhint\"><summary>finds</summary><span class=\"hintbox\"><b>finds</b> · 发现</span></details> <details class=\"wordhint\"><summary>that</summary><span class=\"hintbox\"><b>that</b> · 那；（引导从句）</span></details> <details class=\"wordhint\"><summary>some</summary><span class=\"hintbox\"><b>some</b> · 一些</span></details> <details class=\"wordhint\"><summary>learners</summary><span class=\"hintbox\"><b>learners</b> · 学习者</span></details> <details class=\"wordhint\"><summary>are</summary><span class=\"hintbox\"><b>are</b> · 是</span></details> <details class=\"wordhint target-word\"><summary>resistant</summary><span class=\"hintbox\"><b>resistant</b> · 有抵抗力的；抗…的，耐…的</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>new</summary><span class=\"hintbox\"><b>new</b> · 新的</span></details> <details class=\"wordhint\"><summary>methods</summary><span class=\"hintbox\"><b>methods</b> · 方法</span></details>, <details class=\"wordhint\"><summary>yet</summary><span class=\"hintbox\"><b>yet</b> · 然而</span></details> <details class=\"wordhint\"><summary>her</summary><span class=\"hintbox\"><b>her</b> · 她的</span></details> <details class=\"wordhint\"><summary>own</summary><span class=\"hintbox\"><b>own</b> · 自己的</span></details> <details class=\"wordhint target-word\"><summary>resistance</summary><span class=\"hintbox\"><b>resistance</b> · 抵抗力；抵制，阻力</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>change</summary><span class=\"hintbox\"><b>change</b> · 改变</span></details> <details class=\"wordhint\"><summary>slowly</summary><span class=\"hintbox\"><b>slowly</b> · 慢慢地</span></details> <details class=\"wordhint\"><summary>fades</summary><span class=\"hintbox\"><b>fades</b> · 消退</span></details>. <details class=\"wordhint\"><summary>The</summary><span class=\"hintbox\"><b>The</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>workshop</summary><span class=\"hintbox\"><b>workshop</b> · 讲习班；工作坊</span></details> <details class=\"wordhint target-word\"><summary>consists</summary><span class=\"hintbox\"><b>consists</b> · 由…组成（consist）</span></details> <details class=\"wordhint\"><summary>of</summary><span class=\"hintbox\"><b>of</b> · ……的</span></details> <details class=\"wordhint\"><summary>small</summary><span class=\"hintbox\"><b>small</b> · 小的</span></details> <details class=\"wordhint\"><summary>group</summary><span class=\"hintbox\"><b>group</b> · 小组</span></details> <details class=\"wordhint\"><summary>tasks</summary><span class=\"hintbox\"><b>tasks</b> · 任务</span></details>, <details class=\"wordhint target-word\"><summary>sample</summary><span class=\"hintbox\"><b>sample</b> · 样品；抽样（名词）；试用（动词）</span></details> <details class=\"wordhint\"><summary>exercises</summary><span class=\"hintbox\"><b>exercises</b> · 练习</span></details>, <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint\"><summary>short</summary><span class=\"hintbox\"><b>short</b> · 短的</span></details> <details class=\"wordhint\"><summary>quizzes</summary><span class=\"hintbox\"><b>quizzes</b> · 小测验</span></details>. <details class=\"wordhint\"><summary>Its</summary><span class=\"hintbox\"><b>Its</b> · 它的</span></details> <details class=\"wordhint\"><summary>teachers</summary><span class=\"hintbox\"><b>teachers</b> · 老师</span></details> <details class=\"wordhint\"><summary>stay</summary><span class=\"hintbox\"><b>stay</b> · 保持</span></details> <details class=\"wordhint target-word\"><summary>consistent</summary><span class=\"hintbox\"><b>consistent</b> · 一贯的；一致的</span></details> <details class=\"wordhint\"><summary>in</summary><span class=\"hintbox\"><b>in</b> · 在……中</span></details> <details class=\"wordhint\"><summary>their</summary><span class=\"hintbox\"><b>their</b> · 他们的</span></details> <details class=\"wordhint\"><summary>methods</summary><span class=\"hintbox\"><b>methods</b> · 方法</span></details>: <details class=\"wordhint\"><summary>they</summary><span class=\"hintbox\"><b>they</b> · 他们</span></details> <details class=\"wordhint target-word\"><summary>consistently</summary><span class=\"hintbox\"><b>consistently</b> · 一贯地，前后一致地（副词）</span></details> <details class=\"wordhint\"><summary>review</summary><span class=\"hintbox\"><b>review</b> · 复习</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>same</summary><span class=\"hintbox\"><b>same</b> · 相同的</span></details> <details class=\"wordhint\"><summary>points</summary><span class=\"hintbox\"><b>points</b> · 要点</span></details> <details class=\"wordhint\"><summary>until</summary><span class=\"hintbox\"><b>until</b> · 直到</span></details> <details class=\"wordhint\"><summary>everyone</summary><span class=\"hintbox\"><b>everyone</b> · 每个人</span></details> <details class=\"wordhint\"><summary>understands</summary><span class=\"hintbox\"><b>understands</b> · 理解</span></details>; <details class=\"wordhint target-word\"><summary>inconsistent</summary><span class=\"hintbox\"><b>inconsistent</b> · 不一致的；不符合的；无常的</span></details> <details class=\"wordhint\"><summary>habits</summary><span class=\"hintbox\"><b>habits</b> · 习惯</span></details>, <details class=\"wordhint\"><summary>such</summary><span class=\"hintbox\"><b>such</b> · 例如</span></details> <details class=\"wordhint\"><summary>as</summary><span class=\"hintbox\"><b>as</b> · 作为；像</span></details> <details class=\"wordhint\"><summary>cramming</summary><span class=\"hintbox\"><b>cramming</b> · 临时抱佛脚；填塞</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>night</summary><span class=\"hintbox\"><b>night</b> · 夜晚</span></details> <details class=\"wordhint\"><summary>before</summary><span class=\"hintbox\"><b>before</b> · 在……之前</span></details>, <details class=\"wordhint\"><summary>are</summary><span class=\"hintbox\"><b>are</b> · 是</span></details> <details class=\"wordhint\"><summary>discouraged</summary><span class=\"hintbox\"><b>discouraged</b> · 不被鼓励；被劝阻</span></details>.</p>\n<p><details class=\"wordhint\"><summary>An</summary><span class=\"hintbox\"><b>An</b> · 一个（元音前）</span></details> <details class=\"wordhint target-word\"><summary>instant</summary><span class=\"hintbox\"><b>instant</b> · 立即的；刹那，顷刻（形容词/名词）</span></details> <details class=\"wordhint\"><summary>review</summary><span class=\"hintbox\"><b>review</b> · 复习</span></details> <details class=\"wordhint\"><summary>sheet</summary><span class=\"hintbox\"><b>sheet</b> · 纸张；讲义</span></details> <details class=\"wordhint\"><summary>is</summary><span class=\"hintbox\"><b>is</b> · 结合上下文理解</span></details> <details class=\"wordhint\"><summary>handed</summary><span class=\"hintbox\"><b>handed</b> · 递；交</span></details> <details class=\"wordhint\"><summary>out</summary><span class=\"hintbox\"><b>out</b> · 出来</span></details>, <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint target-word\"><summary>instantly</summary><span class=\"hintbox\"><b>instantly</b> · 立刻，立即，马上（副词）</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>room</summary><span class=\"hintbox\"><b>room</b> · 房间</span></details> <details class=\"wordhint\"><summary>goes</summary><span class=\"hintbox\"><b>goes</b> · 变得；去</span></details> <details class=\"wordhint\"><summary>quiet</summary><span class=\"hintbox\"><b>quiet</b> · 安静的</span></details>. <details class=\"wordhint\"><summary>A</summary><span class=\"hintbox\"><b>A</b> · 结合上下文理解</span></details> <details class=\"wordhint\"><summary>teacher</summary><span class=\"hintbox\"><b>teacher</b> · 结合上下文理解</span></details> <details class=\"wordhint\"><summary>asks</summary><span class=\"hintbox\"><b>asks</b> · 问；要求</span></details> <details class=\"wordhint\"><summary>students</summary><span class=\"hintbox\"><b>students</b> · 学生（复数）</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint target-word\"><summary>quote</summary><span class=\"hintbox\"><b>quote</b> · 引用，引述（动词）；引文（名词）</span></details> <details class=\"wordhint\"><summary>one</summary><span class=\"hintbox\"><b>one</b> · 一个</span></details> <details class=\"wordhint\"><summary>useful</summary><span class=\"hintbox\"><b>useful</b> · 有用的</span></details> <details class=\"wordhint\"><summary>sentence</summary><span class=\"hintbox\"><b>sentence</b> · 句子</span></details> <details class=\"wordhint\"><summary>from</summary><span class=\"hintbox\"><b>from</b> · 从</span></details> <details class=\"wordhint\"><summary>their</summary><span class=\"hintbox\"><b>their</b> · 他们的</span></details> <details class=\"wordhint\"><summary>notes</summary><span class=\"hintbox\"><b>notes</b> · 笔记</span></details>. <details class=\"wordhint\"><summary>The</summary><span class=\"hintbox\"><b>The</b> · 这/那；定冠词</span></details> <details class=\"wordhint target-word\"><summary>quotation</summary><span class=\"hintbox\"><b>quotation</b> · 引文，引语（名词）</span></details> <details class=\"wordhint\"><summary>she</summary><span class=\"hintbox\"><b>she</b> · 她</span></details> <details class=\"wordhint\"><summary>writes</summary><span class=\"hintbox\"><b>writes</b> · 写</span></details> <details class=\"wordhint\"><summary>on</summary><span class=\"hintbox\"><b>on</b> · 继续；在……上</span></details> <details class=\"wordhint\"><summary>the</summary><span class=\"hintbox\"><b>the</b> · 这/那；定冠词</span></details> <details class=\"wordhint\"><summary>board</summary><span class=\"hintbox\"><b>board</b> · 黑板</span></details> <details class=\"wordhint\"><summary>comes</summary><span class=\"hintbox\"><b>comes</b> · 来</span></details> <details class=\"wordhint\"><summary>from</summary><span class=\"hintbox\"><b>from</b> · 从</span></details> <details class=\"wordhint\"><summary>a</summary><span class=\"hintbox\"><b>a</b> · 结合上下文理解</span></details> <details class=\"wordhint\"><summary>famous</summary><span class=\"hintbox\"><b>famous</b> · 著名的</span></details> <details class=\"wordhint\"><summary>writer</summary><span class=\"hintbox\"><b>writer</b> · 作家</span></details>: <details class=\"wordhint\"><summary>small</summary><span class=\"hintbox\"><b>small</b> · 小的</span></details> <details class=\"wordhint\"><summary>steps</summary><span class=\"hintbox\"><b>steps</b> · 步骤</span></details> <details class=\"wordhint\"><summary>beat</summary><span class=\"hintbox\"><b>beat</b> · 胜过</span></details> <details class=\"wordhint target-word\"><summary>constant</summary><span class=\"hintbox\"><b>constant</b> · 经常的，不断的；恒定的</span></details> <details class=\"wordhint\"><summary>pressure</summary><span class=\"hintbox\"><b>pressure</b> · 压力</span></details>. <details class=\"wordhint\"><summary>Nina</summary><span class=\"hintbox\"><b>Nina</b> · Nina（人名）</span></details> <details class=\"wordhint\"><summary>writes</summary><span class=\"hintbox\"><b>writes</b> · 写</span></details> <details class=\"wordhint\"><summary>it</summary><span class=\"hintbox\"><b>it</b> · 它</span></details> <details class=\"wordhint\"><summary>down</summary><span class=\"hintbox\"><b>down</b> · 向下；记下</span></details>, <details class=\"wordhint\"><summary>and</summary><span class=\"hintbox\"><b>and</b> · 和；并且</span></details> <details class=\"wordhint target-word\"><summary>constantly</summary><span class=\"hintbox\"><b>constantly</b> · 持续不断地，经常地（副词）</span></details> <details class=\"wordhint\"><summary>reminds</summary><span class=\"hintbox\"><b>reminds</b> · 提醒</span></details> <details class=\"wordhint\"><summary>herself</summary><span class=\"hintbox\"><b>herself</b> · 她自己</span></details> <details class=\"wordhint\"><summary>to</summary><span class=\"hintbox\"><b>to</b> · 去；向；（不定式标记）</span></details> <details class=\"wordhint\"><summary>practice</summary><span class=\"hintbox\"><b>practice</b> · 练习</span></details> <details class=\"wordhint\"><summary>daily</summary><span class=\"hintbox\"><b>daily</b> · 每天</span></details>.</p></div>\n<details class=\"disclosure\"><summary>显示 / 隐藏中文翻译</summary><div class=\"inside translation\" id=\"translation\" style=\"display:block\">在一场进行中的社区讲习班里，几位高年级学生协助新来的同学复习英语。志愿者 Mia 向安静的女孩 Nina 提供帮助，她的辅助笔记里满是疑问。Nina 坚称自己能赶上进度，但 Mia 坚持下来，坐到了她身边。<br/><br/>阅读文章变难时，Nina 努力克制自己不放弃。她发现有些学习者对新方法有抵触，不过她自己对改变的抗拒慢慢消退了。讲习班由小组任务、样题练习和小测验组成。老师们的方法始终如一：他们一贯地复习相同要点，直到每个人都听懂；临时抱佛脚之类前后不一致的习惯则不被鼓励。<br/><br/>一张即时复习讲义发了下来，房间里立刻安静下来。老师让学生们引用笔记中一句有用的话。她写在黑板上的引文出自一位著名作家：小小的步骤胜过持续不断的压力。Nina 把这句话记下，并不断提醒自己每天练习。</div></details></section><details class=\"grammar-module\" id=\"sentence-analysis\"><div class=\"grammar-map\"><strong>📚 Day 2 语法地图（按原文实际出现整理）</strong><p>本篇确实出现的图片语法点：<b>动词时态（一般现在时、被动语态）、从句（宾语从句、定语从句、whose 定语从句）、非谓语动词（to do / doing / 过去分词 named）、系动词（stay / grow / go + 形容词）、情态动词 can、主谓一致、并列结构、名词、代词（含反身代词 herself）、冠词、介词、形容词、副词、连词（yet / when / until）、构词法（派生词：-ance / -ant / -ence / -ent / -ly / -tion）、省略（定语从句省略关系代词 that/which）、英文标点（冒号）、动词搭配（assist sb. with sth. / consist of / resist the urge）</b>等。</p><p><b>本篇没有出现：</b>虚拟语气、独立主格、倒装句、强调句、使役动词、数词、叹词。不会为了凑知识点而编造例句；以后文章出现时再单独讲。</p><small>学习方法：先看原句和翻译，再看句子骨架；术语出现时会用简单中文解释。绿色语法词可点击展开。</small></div><summary>🔎 句子拆解 · 从零理解语法（独立板块，点击展开）</summary><div class=\"grammar-intro\"><b>怎么使用：</b>先看整句白话意思，再看句子结构。下面绿色带点线的语法词可以点击，查看为什么它要这样变化。这里尽量不用术语吓你；出现术语时也会解释。</div><div class=\"grammar-sentence\"><h4>句子 1</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">介词短语作状语 During...</span><span class=\"grammar-tag\">动词搭配 assist sb. with sth.</span><span class=\"grammar-tag\">形容词 ongoing</span><span class=\"grammar-tag\">限定词 several</span></div><div class=\"en\">During an ongoing community workshop, several senior students assist newcomers with English review.</div><div class=\"zh\">在一场进行中的社区讲习班里，几位高年级学生协助新来的同学复习英语。</div><div class=\"explain\"><b>句子骨架：</b>students（学生们）+ assist（协助）+ newcomers（新来的人）+ with English review（在英语复习方面）；During an ongoing community workshop 交代背景。</div><details class=\"word-explain\"><summary>ongoing</summary><div class=\"why\">on（在……中）+ going（进行）→ ongoing 形容词“进行中的”，修饰 workshop。</div></details><details class=\"word-explain\"><summary>assist</summary><div class=\"why\">assist sb. with sth. = 在某方面帮助某人；assist 是动词“协助”。</div></details><details class=\"word-explain\"><summary>several</summary><div class=\"why\">限定词，修饰可数名词复数 students，表示“几个”。</div></details></div><div class=\"grammar-sentence\"><h4>句子 2</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">过去分词 named 作后置修饰</span><span class=\"grammar-tag\">定语从句 whose</span><span class=\"grammar-tag\">名词 assistance / aid</span><span class=\"grammar-tag\">构词法 assist → assistance</span></div><div class=\"en\">One volunteer, Mia, offers assistance to a quiet girl named Nina, whose aid notes are full of doubts.</div><div class=\"zh\">志愿者 Mia 向安静的女孩 Nina 提供帮助，她的辅助笔记里满是疑问。</div><div class=\"explain\"><b>句子骨架：</b>主句 One volunteer offers assistance to a quiet girl；named Nina 补充说明女孩名字；whose aid notes 是定语从句，说明笔记属于 Nina。</div><details class=\"word-explain\"><summary>assistance</summary><div class=\"why\">assist（动词，协助）→ assistance（名词，帮助）。offers 后需要名词作宾语。</div></details><details class=\"word-explain\"><summary>named</summary><div class=\"why\">name → named（过去分词），相当于 a girl who is named Nina；女孩“被叫作”Nina，用过去分词表被动。</div></details><details class=\"word-explain\"><summary>whose</summary><div class=\"why\">关系代词，引导定语从句，在从句中作定语修饰 aid notes，表示“她的笔记”。</div></details><details class=\"word-explain\"><summary>aid</summary><div class=\"why\">可作名词“援助、辅助”，这里 aid notes 指辅助/参考笔记。</div></details></div><div class=\"grammar-sentence\"><h4>句子 3</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">宾语从句 that</span><span class=\"grammar-tag\">情态动词 can + 原形</span><span class=\"grammar-tag\">动词分类 insist</span><span class=\"grammar-tag\">一般现在时</span><span class=\"grammar-tag\">所有格 her own</span></div><div class=\"en\">Nina insists that she can catch up on her own.</div><div class=\"zh\">Nina 坚称自己能赶上进度。</div><div class=\"explain\"><b>句子骨架：</b>主句 Nina insists；that 后面是她坚称的内容：she can catch up on her own。can 是情态动词，后接动词原形 catch up。</div><details class=\"word-explain\"><summary>insists</summary><div class=\"why\">insist 可接 that 从句，表示“坚称、坚决要求”。故事用一般现在时，主语 Nina 是第三人称单数，动词加 -s。</div></details><details class=\"word-explain\"><summary>can</summary><div class=\"why\">情态动词“能够”，后面必须接动词原形，不能写 catches。</div></details><details class=\"word-explain\"><summary>catch up</summary><div class=\"why\">固定短语“赶上、补上”；on her own = 靠她自己。</div></details></div><div class=\"grammar-sentence\"><h4>句子 4</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">不定式 to resist</span><span class=\"grammar-tag\">非谓语 giving up</span><span class=\"grammar-tag\">时间状语从句 when</span><span class=\"grammar-tag\">系动词 grow + 形容词</span><span class=\"grammar-tag\">副词 hard</span></div><div class=\"en\">Nina tries hard to resist giving up when the reading passages grow difficult.</div><div class=\"zh\">阅读文章变难时，Nina 努力克制自己不放弃。</div><div class=\"explain\"><b>句子骨架：</b>主句 Nina tries hard to resist giving up；when 引导时间背景：文章变得困难。grow 在这里是“变得”，后接形容词 difficult。</div><details class=\"word-explain\"><summary>to resist</summary><div class=\"why\">try to do = 努力做某事；to 后接动词原形 resist。</div></details><details class=\"word-explain\"><summary>giving up</summary><div class=\"why\">give up = 放弃；跟在 resist（忍住）后面用 -ing 形式：resist doing sth. 忍住做某事。</div></details><details class=\"word-explain\"><summary>grow</summary><div class=\"why\">系动词，“变得”，后接形容词 difficult，不接副词。</div></details></div><div class=\"grammar-sentence\"><h4>句子 5</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">宾语从句 that</span><span class=\"grammar-tag\">连词 yet</span><span class=\"grammar-tag\">形容词 resistant</span><span class=\"grammar-tag\">名词 resistance</span><span class=\"grammar-tag\">介词 to</span><span class=\"grammar-tag\">构词法 resist → resistant → resistance</span></div><div class=\"en\">She finds that some learners are resistant to new methods, yet her own resistance to change slowly fades.</div><div class=\"zh\">她发现有些学习者对新方法有抵触，不过她自己对改变的抗拒慢慢消退了。</div><div class=\"explain\"><b>句子骨架：</b>finds 后 that 引导宾语从句；yet（然而）连接前后两种情况。resistant 是形容词“有抵触的”，resistance 是名词“抗拒、抵抗力”。</div><details class=\"word-explain\"><summary>resistant</summary><div class=\"why\">resist（动词，抵抗）+ -ant → 形容词“有抵抗力的；抵触的”；be resistant to... 对……有抵触/抵御。</div></details><details class=\"word-explain\"><summary>resistance</summary><div class=\"why\">resist + -ance → 名词“抵抗力；抵制”；her own resistance 作从句主语。</div></details><details class=\"word-explain\"><summary>yet</summary><div class=\"why\">连词，“然而、但是”，连接转折关系的两个分句。</div></details></div><div class=\"grammar-sentence\"><h4>句子 6</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">动词搭配 consist of</span><span class=\"grammar-tag\">主谓一致（单数主语）</span><span class=\"grammar-tag\">名词复数</span><span class=\"grammar-tag\">并列结构 and</span><span class=\"grammar-tag\">名词 sample</span></div><div class=\"en\">The workshop consists of small group tasks, sample exercises, and short quizzes.</div><div class=\"zh\">讲习班由小组任务、样题练习和小测验组成。</div><div class=\"explain\"><b>句子骨架：</b>主语 the workshop 是单数，谓语 consists 用第三人称单数；consist of = 由……组成；and 连接三项并列内容。</div><details class=\"word-explain\"><summary>consists</summary><div class=\"why\">consist 是不及物动词，必须加 of 才能接组成成分；不能说 consist sth.。</div></details><details class=\"word-explain\"><summary>sample</summary><div class=\"why\">名词作定语修饰 exercises，表示“样品、样例”：sample exercises 样题练习。</div></details><details class=\"word-explain\"><summary>主谓一致</summary><div class=\"why\">workshop 单数 → consists；若主语是复数 workshops，则用 consist。</div></details></div><div class=\"grammar-sentence\"><h4>句子 7</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">系动词 stay + 形容词</span><span class=\"grammar-tag\">副词 consistently</span><span class=\"grammar-tag\">形容词 consistent / inconsistent</span><span class=\"grammar-tag\">构词法词族</span><span class=\"grammar-tag\">被动语态 are discouraged</span><span class=\"grammar-tag\">时间状语 until</span></div><div class=\"en\">Its teachers stay consistent in their methods: they consistently review the same points until everyone understands; inconsistent habits are discouraged.</div><div class=\"zh\">老师们的方法始终如一：他们一贯地复习相同要点，直到每个人都听懂；前后不一致的习惯则不被鼓励。</div><div class=\"explain\"><b>句子骨架：</b>stay consistent = 保持一致；consistently 是副词修饰 review；冒号后具体解释；inconsistent 是 consistent 的否定形式；are discouraged 是被动“不被鼓励”。</div><details class=\"word-explain\"><summary>stay</summary><div class=\"why\">系动词“保持”，后接形容词 consistent，不接副词。</div></details><details class=\"word-explain\"><summary>consistently</summary><div class=\"why\">consistent（形容词）+ -ly → 副词“一贯地”，修饰动词 review。</div></details><details class=\"word-explain\"><summary>inconsistent</summary><div class=\"why\">in-（否定前缀）+ consistent → 形容词“不一致的、无常的”。</div></details><details class=\"word-explain\"><summary>are discouraged</summary><div class=\"why\">discourage → discouraged；习惯“被劝阻”，用 be + 过去分词的被动形式。</div></details></div><div class=\"grammar-sentence\"><h4>句子 8</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">被动语态 is handed out</span><span class=\"grammar-tag\">并列句 and</span><span class=\"grammar-tag\">形容词 instant</span><span class=\"grammar-tag\">副词 instantly</span><span class=\"grammar-tag\">冠词 an</span><span class=\"grammar-tag\">系动词 go + 形容词</span></div><div class=\"en\">An instant review sheet is handed out, and instantly the room goes quiet.</div><div class=\"zh\">一张即时复习讲义发了下来，房间里立刻安静下来。</div><div class=\"explain\"><b>句子骨架：</b>前半句讲义“被发出来”，用被动 is handed out；and 连接后半句；instant 是形容词修饰 sheet，instantly 是副词修饰整个后半句。</div><details class=\"word-explain\"><summary>instant</summary><div class=\"why\">形容词“立即的、速食的”，修饰名词 sheet：an instant sheet。</div></details><details class=\"word-explain\"><summary>instantly</summary><div class=\"why\">instant + -ly → 副词“立刻、马上”，放在句首修饰句子。</div></details><details class=\"word-explain\"><summary>is handed out</summary><div class=\"why\">hand out = 分发；sheet 是“被分发”，be + 过去分词构成被动。</div></details></div><div class=\"grammar-sentence\"><h4>句子 9</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">定语从句省略关系代词</span><span class=\"grammar-tag\">一般现在时</span><span class=\"grammar-tag\">介词 from</span><span class=\"grammar-tag\">名词 quotation</span><span class=\"grammar-tag\">构词法 quote → quotation</span></div><div class=\"en\">The quotation she writes on the board comes from a famous writer.</div><div class=\"zh\">她写在黑板上的引文出自一位著名作家。</div><div class=\"explain\"><b>句子骨架：</b>主干 The quotation comes from a famous writer；she writes on the board 是修饰 quotation 的定语从句，关系代词 that/which 被省略（在从句中作宾语时可省）。</div><details class=\"word-explain\"><summary>省略</summary><div class=\"why\">定语从句 that/which she writes，关系代词在从句中作 writes 的宾语，可以省略；若作主语则不能省。</div></details><details class=\"word-explain\"><summary>quotation</summary><div class=\"why\">quote（动词，引用）→ quotation（名词，引文）。</div></details><details class=\"word-explain\"><summary>comes</summary><div class=\"why\">一般现在时，主语 quotation 单数，come 加 -s；come from = 出自。</div></details></div><div class=\"grammar-sentence\"><h4>句子 10</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">并列谓语 writes and reminds</span><span class=\"grammar-tag\">代词 it</span><span class=\"grammar-tag\">反身代词 herself</span><span class=\"grammar-tag\">副词 constantly</span><span class=\"grammar-tag\">不定式 to practice</span></div><div class=\"en\">Nina writes it down, and constantly reminds herself to practice daily.</div><div class=\"zh\">Nina 把这句话记下，并不断提醒自己每天练习。</div><div class=\"explain\"><b>句子骨架：</b>and 连接两个同一主语 Nina 发出的动作 writes、reminds；herself 是反身代词；to practice 是 remind sb. to do 结构中的不定式。</div><details class=\"word-explain\"><summary>herself</summary><div class=\"why\">she → herself（反身代词），动作落回主语自己：提醒她自己。</div></details><details class=\"word-explain\"><summary>constantly</summary><div class=\"why\">constant（形容词，不断的）+ -ly → 副词“持续不断地”，修饰 reminds。</div></details><details class=\"word-explain\"><summary>to practice</summary><div class=\"why\">remind sb. to do sth. 提醒某人做某事；to 后接动词原形。</div></details></div><div class=\"grammar-sentence\"><h4>句子 11</h4><div class=\"grammar-tags\"><span class=\"grammar-tag\">ask sb. to do</span><span class=\"grammar-tag\">非谓语 to quote</span><span class=\"grammar-tag\">介词 from</span><span class=\"grammar-tag\">代词 their</span><span class=\"grammar-tag\">形容词 useful</span></div><div class=\"en\">A teacher asks students to quote one useful sentence from their notes.</div><div class=\"zh\">老师让学生们引用笔记中一句有用的话。</div><div class=\"explain\"><b>句子骨架：</b>主干 A teacher asks students；to quote... 是补充要做的事：ask sb. to do sth. 让某人做某事。</div><details class=\"word-explain\"><summary>to quote</summary><div class=\"why\">ask 后接宾语 + 不定式；quote 保持原形。</div></details><details class=\"word-explain\"><summary>their</summary><div class=\"why\">物主代词，修饰 notes，指代 students。</div></details></div></details><div class=\"panel-card\"><div class=\"section\"><h3>易混词提示</h3><div class=\"tip\"><b>assist / assistance / aid</b>：assist 是动词“协助”；assistance 是名词“帮助”；aid 既可作名词也可作动词，指援助、辅助。<br/><b>insist / persist</b>：insist 强调“坚称、坚决要求”；persist 强调“坚持下去、持续存在”。<br/><b>resist / resistant / resistance</b>：动词“抵抗”→ 形容词“有抵抗力的、耐…的”→ 名词“抵抗力、阻力”。<br/><b>consist / consistent / consistently / inconsistent</b>：动词“由…组成”→ 形容词“一致的”→ 副词“一贯地”→ 否定形容词“不一致的”。<br/><b>quote / quotation</b>：动词“引用”→ 名词“引文”。<br/><b>instant / instantly；constant / constantly</b>：形容词 + -ly 构成对应的副词。</div></div>\n</div>", "basicHTML": "<div class=\"section\" id=\"quiz\"><h3>复习测试 · 20 词全覆盖</h3><p class=\"muted\">根据中文或句子提示填写英文。每个 PDF 目标词都考查一次；完成后点击批改。</p><div class=\"quiz\" id=\"quizForm\"><div class=\"q\" data-answer=\"assist\">1. Several volunteers ______ the newcomers.（协助）<input aria-label=\"第1题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"assistance\">2. She offered her ______ to the girl.（帮助，名词）<input aria-label=\"第2题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"aid\">3. The charity sent food and ______ to the town.（援助）<input aria-label=\"第3题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"insisted\">4. He ______ that he was right.（坚称）<input aria-label=\"第4题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"persist\">5. If you ______, you will succeed.（坚持）<input aria-label=\"第5题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"resist\">6. I couldn't ______ laughing at the joke.（忍住）<input aria-label=\"第6题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"resistant\">7. These plants are ______ to cold weather.（耐…的；有抵抗力的）<input aria-label=\"第7题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"resistance\">8. The drug builds ______ to infection.（抵抗力）<input aria-label=\"第8题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"consist\">9. The meals ______ of soup and bread.（由…组成）<input aria-label=\"第9题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"consistent\">10. Her work quality is ______.（一贯的；一致的）<input aria-label=\"第10题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"consistently\">11. He ______ arrives on time.（一贯地）<input aria-label=\"第11题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"inconsistent\">12. His answers were ______ with the facts.（不一致的）<input aria-label=\"第12题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"ongoing\">13. The project is still ______.（进行中的）<input aria-label=\"第13题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"instant\">14. The book became an ______ success.（立即的）<input aria-label=\"第14题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"instantly\">15. She left ______ after the call.（立刻）<input aria-label=\"第15题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"sample\">16. Here is a free ______ of the product.（样品）<input aria-label=\"第16题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"quote\">17. Can you ______ a line from the poem?（引用）<input aria-label=\"第17题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"quotation\">18. The ______ was taken from his speech.（引文）<input aria-label=\"第18题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"constant\">19. Keep a ______ speed while running.（恒定的；不断的）<input aria-label=\"第19题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div><div class=\"q\" data-answer=\"constantly\">20. The phone rings ______ all day.（持续不断地）<input aria-label=\"第20题\" autocomplete=\"off\" placeholder=\"填写英文单词\"/></div></div><div class=\"quiz-tools\"><button class=\"quiz-btn\" onclick=\"gradeQuiz()\" type=\"button\">批改答案</button><button class=\"quiz-btn secondary\" onclick=\"resetQuiz()\" type=\"button\">重新作答</button></div><div aria-live=\"polite\" class=\"grade-summary\" id=\"gradeSummary\"></div>", "advancedHTML": "<div class=\"section\"><h3>Reading · The Summer Running Camp</h3><p class=\"muted\">全新短文，与今日故事不同。根据上下文、词性、搭配和逻辑选择单词。每个选项最多使用一次；15个选项中有5个不需要使用。</p>\n<div class=\"fill-bank\"><b>🏷️ Word Bank（15选10）</b><div class=\"fill-words\"><span class=\"fw-chip\">assistance</span><span class=\"fw-chip\">aid</span><span class=\"fw-chip\">insist</span><span class=\"fw-chip\">persist</span><span class=\"fw-chip\">resist</span><span class=\"fw-chip\">resistance</span><span class=\"fw-chip\">consistent</span><span class=\"fw-chip\">instantly</span><span class=\"fw-chip\">sample</span><span class=\"fw-chip\">quote</span><span class=\"fw-chip\">assist</span><span class=\"fw-chip\">resistant</span><span class=\"fw-chip\">consist</span><span class=\"fw-chip\">quotation</span><span class=\"fw-chip\">constant</span></div></div>\n<div class=\"fill-passage\">At a summer running camp, coaches offer <span class=\"fill-slot\">(1) <select aria-label=\"第1空\" data-answer=\"assistance\"><option value=\"\">请选择</option></select></span> to every new runner. They say that a little practical <span class=\"fill-slot\">(2) <select aria-label=\"第2空\" data-answer=\"aid\"><option value=\"\">请选择</option></select></span> can make a big difference in the first month. Trainers <span class=\"fill-slot\">(3) <select aria-label=\"第3空\" data-answer=\"insist\"><option value=\"\">请选择</option></select></span> that everyone should warm up before each run. Those who <span class=\"fill-slot\">(4) <select aria-label=\"第4空\" data-answer=\"persist\"><option value=\"\">请选择</option></select></span> and keep showing up every week usually improve fastest. Runners must <span class=\"fill-slot\">(5) <select aria-label=\"第5空\" data-answer=\"resist\"><option value=\"\">请选择</option></select></span> the urge to slow down when tired. Long-distance running builds the body's <span class=\"fill-slot\">(6) <select aria-label=\"第6空\" data-answer=\"resistance\"><option value=\"\">请选择</option></select></span> to fatigue. The best athletes keep a <span class=\"fill-slot\">(7) <select aria-label=\"第7空\" data-answer=\"consistent\"><option value=\"\">请选择</option></select></span> training schedule, not an irregular one. On the first day, each runner can <span class=\"fill-slot\">(8) <select aria-label=\"第8空\" data-answer=\"sample\"><option value=\"\">请选择</option></select></span> a short training plan designed for beginners. If asked about his secret, the coach would often <span class=\"fill-slot\">(9) <select aria-label=\"第9空\" data-answer=\"quote\"><option value=\"\">请选择</option></select></span> a line from his old mentor: “Slow and steady wins.” A good coach notices small problems <span class=\"fill-slot\">(10) <select aria-label=\"第10空\" data-answer=\"instantly\"><option value=\"\">请选择</option></select></span> and corrects them at once.</div>\n<div class=\"fill-controls\"><button class=\"quiz-btn\" type=\"button\" onclick=\"gradeFill()\">提交并批改</button><button class=\"quiz-btn secondary\" type=\"button\" onclick=\"resetFill()\">重新作答</button></div><div class=\"fill-result\" id=\"fillResult\" aria-live=\"polite\"></div><div class=\"fill-explanations\" id=\"fillExplanations\" style=\"display:none\">\n<h4>📖 全文翻译</h4><div class=\"fill-translation\"><p>在一个夏季跑步训练营，教练为每位新学员提供帮助。他们说，一点切实的辅助就能在头一个月带来很大不同。训练员坚称每个人都应该在每次跑步前热身。那些坚持下来、每周都到场的人通常进步最快。跑累的时候，跑者必须克制放慢速度的冲动。长跑能增强身体对疲劳的抵抗力。最优秀的运动员保持一贯的训练计划，而不是三天打鱼两天晒网。第一天，每位学员都可以试用一份为初学者设计的简短训练方案。当被问及秘诀时，教练常会引用他老导师的一句话：“慢而稳者胜。”好教练能立刻注意到小问题，并马上纠正。</p></div>\n<h4>🔤 词性分析 · 15个备选词</h4><div class=\"fill-pos-grid\">\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">名词 Nouns</div>\n<div class=\"fill-pos-item\"><b>assistance</b><span>帮助；援助</span></div>\n<div class=\"fill-pos-item\"><b>aid</b><span>援助；辅助</span></div>\n<div class=\"fill-pos-item\"><b>resistance</b><span>抵抗力；阻力</span></div>\n<div class=\"fill-pos-item\"><b>sample</b><span>样品；抽样</span></div>\n<div class=\"fill-pos-item\"><b>quotation</b><span>引文；报价</span></div></div>\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">动词 Verbs</div>\n<div class=\"fill-pos-item\"><b>assist</b><span>协助</span></div>\n<div class=\"fill-pos-item\"><b>insist</b><span>坚称；坚决要求</span></div>\n<div class=\"fill-pos-item\"><b>persist</b><span>坚持；持续</span></div>\n<div class=\"fill-pos-item\"><b>resist</b><span>抵抗；忍住</span></div>\n<div class=\"fill-pos-item\"><b>sample</b><span>试用；抽样</span></div>\n<div class=\"fill-pos-item\"><b>quote</b><span>引用；报价</span></div>\n<div class=\"fill-pos-item\"><b>consist</b><span>由…组成</span></div></div>\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">形容词 Adjectives</div>\n<div class=\"fill-pos-item\"><b>resistant</b><span>有抵抗力的；耐…的</span></div>\n<div class=\"fill-pos-item\"><b>consistent</b><span>一贯的；一致的</span></div>\n<div class=\"fill-pos-item\"><b>constant</b><span>不断的；恒定的</span></div></div>\n<div class=\"fill-pos-card\"><div class=\"fill-pos-title\">副词 Adverbs</div>\n<div class=\"fill-pos-item\"><b>instantly</b><span>立刻，马上</span></div></div></div><h4>📝 每题详细解析</h4>\n<ol>\n<li><b>assistance（名词，帮助）</b>：offer assistance to sb. 向某人提供帮助；动词 offer 后需要名词作宾语。</li>\n<li><b>aid（名词，辅助）</b>：practical 后接名词；aid 表示“援助、辅助物”。</li>\n<li><b>insist（动词，坚称）</b>：Trainers 后作谓语；insist that... 坚持认为 / 坚决要求。</li>\n<li><b>persist（动词，坚持）</b>：定语从句 who 后作谓语；persist 强调“持续坚持下去”。</li>\n<li><b>resist（动词，忍住）</b>：must 后接动词原形；resist the urge 克制冲动。</li>\n<li><b>resistance（名词，抵抗力）</b>：body's 所有格后需要名词；resistance to... 对……的抵抗力。</li>\n<li><b>consistent（形容词，一贯的）</b>：修饰名词 schedule；与后文 irregular 形成对照。</li>\n<li><b>sample（动词，试用）</b>：can 后接动词原形；sample a plan 试用一份方案。</li>\n<li><b>quote（动词，引用）</b>：would 后接原形；quote a line 引用一句话。</li>\n<li><b>instantly（副词，立刻）</b>：修饰动词 notices，表示“立刻注意到”。</li>\n</ol>\n<p><b>未使用的混淆项：</b>assist（动词“协助”，词性与空格不符）、resistant（形容词，需修饰名词）、consist（动词，搭配 consist of）、quotation（名词“引文”，语境不符）、constant（形容词“不断的”）。它们虽然意思或词性看似有用，但放入对应空格无法同时满足语法和语境。</p></div>", "bank": ["assistance", "aid", "insist", "persist", "resist", "resistance", "consistent", "instantly", "sample", "quote", "assist", "resistant", "consist", "quotation", "constant"], "words": [{"n": 21, "w": "assist", "p": "v.", "m": "帮助，协助；促进，有助于"}, {"n": 22, "w": "assistance", "p": "n.", "m": "帮助，援助，支持"}, {"n": 23, "w": "aid", "p": "n./v.", "m": "援助，救援物资；帮助，辅助"}, {"n": 24, "w": "insist", "p": "v.", "m": "坚持，坚决要求；坚称"}, {"n": 25, "w": "persist", "p": "v.", "m": "持续，延续；顽强坚持"}, {"n": 26, "w": "resist", "p": "v.", "m": "抵抗，抵制；忍住；抵御"}, {"n": 27, "w": "resistant", "p": "adj.", "m": "有抵抗力的；抗…的，耐…的"}, {"n": 28, "w": "resistance", "p": "n.", "m": "抵制；反抗；抵抗力；阻力"}, {"n": 29, "w": "consist", "p": "vi.", "m": "由…组成；在于"}, {"n": 30, "w": "consistent", "p": "adj.", "m": "一贯的；一致的；连续的"}, {"n": 31, "w": "consistently", "p": "adv.", "m": "一贯地，连续地，前后一致地"}, {"n": 32, "w": "inconsistent", "p": "adj.", "m": "不一致的；不符合的；无常的"}, {"n": 33, "w": "ongoing", "p": "adj.", "m": "进行中的，不间断的"}, {"n": 34, "w": "instant", "p": "adj./n.", "m": "立即的；刹那，顷刻；即食的"}, {"n": 35, "w": "instantly", "p": "adv.", "m": "立刻，立即，马上"}, {"n": 36, "w": "sample", "p": "n./v.", "m": "样本，样品；品尝；抽样检验"}, {"n": 37, "w": "quote", "p": "v./n.", "m": "引用，引述；报价；引文，引语"}, {"n": 38, "w": "quotation", "p": "n.", "m": "引文，引语；引用；报价"}, {"n": 39, "w": "constant", "p": "adj./n.", "m": "经常的，不断的；恒定的；常数"}, {"n": 40, "w": "constantly", "p": "adv.", "m": "持续不断地，经常地"}]}];
+let activeDay=0, activeView='read', activeTab='basic', vocabQuery='';
+const day=()=>DAYS[activeDay];
+const VIEW_TITLE={read:'文章精读',practice:'练习中心',vocab:'词汇总表'};
+
+function showApp(){
+  document.getElementById('view-home').classList.add('hidden');
+  document.getElementById('view-app').classList.remove('hidden');
+}
+function goHome(){
+  document.getElementById('view-app').classList.add('hidden');
+  document.getElementById('view-home').classList.remove('hidden');
+  window.scrollTo({top:0});
+}
+
+function populateBank(){
+  document.querySelectorAll('#advanced-fill select[data-answer]').forEach(sel=>{
+    day().bank.forEach(w=>{
+      const o=document.createElement('option');o.value=w;o.textContent=w;sel.appendChild(o);
+    });
+  });
+}
+
+function renderVocab(){
+  const data=day().words;
+  const q=vocabQuery.trim().toLowerCase();
+  const list=document.getElementById('vocabList');
+  const filtered=data.filter(w=>!q||w.w.toLowerCase().includes(q)||w.m.includes(q)||String(w.n).includes(q));
+  document.getElementById('vocabCount').textContent=`共 ${filtered.length} / ${data.length} 词`;
+  if(!filtered){list.innerHTML='<div class="v-empty">没有匹配的单词～</div>';return;}
+  list.innerHTML=filtered.map(w=>`
+    <div class="v-item">
+      <div class="v-idx">${w.n}</div>
+      <button class="speak-btn" data-word="${w.w}" title="播放发音" aria-label="播放发音">🔊</button>
+      <div class="v-main">
+        <div class="v-row"><span class="v-word">${w.w}</span><span class="v-pos">${w.p}</span></div>
+        <div class="v-mean">${w.m}</div>
+      </div>
+    </div>`).join('');
+}
+
+function switchTab(t){
+  activeTab=t;
+  document.querySelectorAll('#practiceSeg button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.getElementById('panel-basic').classList.toggle('hidden',t!=='basic');
+  document.getElementById('panel-advanced').classList.toggle('hidden',t!=='advanced');
+}
+
+function switchView(v){
+  activeView=v;
+  ['read','practice','vocab'].forEach(k=>{
+    document.getElementById('mod-'+k).classList.toggle('hidden',k!==v);
+  });
+  document.querySelectorAll('#moduleSeg button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.getElementById('curTitle').textContent=VIEW_TITLE[v]+' · '+day().title;
+}
+
+function renderDay(){
+  const d=day();
+  document.getElementById('readBody').innerHTML=d.readHTML;
+  document.getElementById('panel-basic').innerHTML=d.basicHTML;
+  document.getElementById('panel-advanced').innerHTML=
+    '<div id="advanced-fill" class="advanced-fill">'+d.advancedHTML+'</div>';
+  populateBank();
+  document.querySelectorAll('.day-pill').forEach((b,i)=>b.classList.toggle('active',i===activeDay));
+  renderVocab();
+  switchTab(activeTab);
+  switchView(activeView);
+}
+
+function openDay(i,view){
+  activeDay=i; activeView=view||'read'; activeTab='basic'; vocabQuery='';
+  document.getElementById('vocabSearch').value='';
+  renderDay(); showApp(); window.scrollTo({top:0});
+}
+
+document.querySelectorAll('.day-card').forEach(c=>{
+  c.addEventListener('click',()=>openDay(Number(c.dataset.day),'read'));
+});
+document.querySelectorAll('.day-pill').forEach(b=>{
+  b.addEventListener('click',()=>openDay(Number(b.dataset.day),activeView));
+});
+document.querySelectorAll('#moduleSeg button').forEach(b=>{
+  b.addEventListener('click',()=>switchView(b.dataset.view));
+});
+document.querySelectorAll('#practiceSeg button').forEach(b=>{
+  b.addEventListener('click',()=>switchTab(b.dataset.tab));
+});
+document.getElementById('vocabSearch').addEventListener('input',e=>{vocabQuery=e.target.value;renderVocab();});
+document.getElementById('vocabList').addEventListener('click',e=>{
+  const b=e.target.closest('.speak-btn');if(b)speakWord(b.dataset.word);
+});
+function speakWord(word){
+  if(!('speechSynthesis' in window)){alert('当前浏览器不支持语音播放');return;}
+  const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=.9;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+renderDay();
+</script>
+</body></html>

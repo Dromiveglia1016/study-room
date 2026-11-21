@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>选择学科 · STUDY ROOM</title>
+<meta name="description" content="四门学科：英语已上线，数学、语文、物理排队中。">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ff5fa8">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+/* ============================================================
+   学科选择页专项
+   ============================================================ */
+.board {
+  position: relative;
+  padding: clamp(20px, 2.6vw, 32px) clamp(20px, 3vw, 36px) clamp(18px, 2vw, 24px);
+  background-color: #fff;
+  background-image:
+    radial-gradient(circle, rgba(224, 49, 124, .16) .9px, transparent 1.1px);
+  background-size: 14px 14px;
+}
+
+/* ---- 页头 ---- */
+.board-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: clamp(12px, 1.6vw, 18px);
+  border-bottom: 2px dashed rgba(42, 22, 34, .18);
+}
+
+.board-title {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin: 8px 0 0;
+  flex-wrap: wrap;
+}
+
+.board-title .title-script {
+  font-size: clamp(40px, 4.6vw, 60px);
+  line-height: .9;
+}
+
+.board-title .title-serif {
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: .02em;
+}
+
+.board-lede {
+  margin: 10px 0 0;
+  max-width: 32em;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--ink-2);
+}
+
+.board-count {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 6px;
+}
+
+.board-count .num {
+  font-family: var(--f-pixel);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--rose-deep);
+}
+
+.board-count .num small { font-size: 11px; color: var(--ink-3); }
+
+/* ---- 海报网格 ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 18px);
+  margin-top: clamp(16px, 2vw, 24px);
+}
+
+.poster {
+  --sc: var(--rose);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1.6px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 4px 5px 0 rgba(42, 22, 34, .10);
+  transition: transform .32s var(--ease-pop), box-shadow .32s var(--ease-pop);
+  will-change: transform;
+}
+
+/* 顶部学科色条 */
+.poster::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: var(--sc);
+  z-index: 3;
+}
+
+.poster__img {
+  position: relative;
+  display: block;
+  margin: 5px 0 0;
+  overflow: hidden;
+  background: #f7f2f6;
+}
+
+.poster__img img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 6%;
+  transition: transform .55s cubic-bezier(.22, .8, .3, 1), filter .3s;
+}
+
+/* 状态徽章 */
+.poster__badge {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  z-index: 2;
+  transform: rotate(-4deg);
+  box-shadow: 2px 2px 0 rgba(42, 22, 34, .2);
+}
+
+.poster__badge--soon {
+  transform: rotate(3deg);
+  box-shadow: 3px 3px 0 rgba(255, 255, 255, .8);
+  opacity: .92;
+}
+
+/* 名牌 */
+.poster__plate {
+  position: relative;
+  padding: 9px 12px 10px;
+  border-top: 1.4px solid rgba(42, 22, 34, .16);
+  background: linear-gradient(180deg, #fff, #fff8fb);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.poster__script {
+  margin: 0;
+  font-family: var(--f-script);
+  font-size: 27px;
+  line-height: 1;
+  color: var(--sc);
+  letter-spacing: -.01em;
+}
+
+.poster__cn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 5px 0 0;
+  font-family: var(--f-cn);
+  font-weight: 800;
+  font-size: 13.5px;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+
+.poster__idx {
+  font-family: var(--f-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0 4px;
+  line-height: 1.7;
+}
+
+.poster__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 7px 0 0;
+}
+
+.poster__tags .tag {
+  font-size: 8.5px;
+  padding: 1px 7px;
+  letter-spacing: .08em;
+}
+
+.poster__go {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity .3s, transform .3s;
+}
+
+/* hover / focus */
+a.poster:hover,
+a.poster:focus-visible {
+  transform: translateY(-6px) rotate(-1.2deg);
+  box-shadow: 6px 12px 0 rgba(224, 49, 124, .22);
+}
+
+a.poster:hover .poster__img img { transform: scale(1.045); }
+a.poster:hover .poster__go { opacity: 1; transform: translateX(0); }
+
+/* 未上线 */
+.poster--soon {
+  cursor: not-allowed;
+  box-shadow: 4px 5px 0 rgba(42, 22, 34, .07);
+}
+
+.poster--soon .poster__img img {
+  filter: grayscale(.6) contrast(.98) brightness(1.06);
+  opacity: .92;
+}
+
+/* 未上线只做一层很淡的白色覆膜，别盖住人物 */
+.poster--soon .poster__img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 248, 251, .30), rgba(255, 248, 251, .58));
+  pointer-events: none;
+}
+
+.poster--soon .poster__script { color: var(--ink-3); }
+
+.poster--soon:hover { transform: translateY(-3px); }
+
+/* ---- 页脚 ---- */
+.board-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: clamp(14px, 1.8vw, 20px);
+  padding-top: clamp(10px, 1.4vw, 14px);
+  border-top: 2px dashed rgba(42, 22, 34, .18);
+}
+
+.board-foot p { margin: 0; }
+
+/* 装饰 */
+.head-title { position: relative; }
+
+.head-sticker {
+  position: absolute;
+  left: calc(100% + 30px);
+  top: -6px;
+  width: 84px;
+  transform: rotate(9deg);
+  --rot: 9deg;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 1px rgba(42, 22, 34, .10));
+}
+
+@media (max-width: 1250px) {
+  .head-sticker { display: none; }
+}
+.deco-sticker { position: absolute; mix-blend-mode: multiply; pointer-events: none; }
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1080px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .poster__img img { aspect-ratio: 4 / 5; }
+}
+
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; gap: 14px; }
+  .poster__img img { aspect-ratio: 1 / 1; object-position: 50% 12%; }
+  .board-head { align-items: flex-start; }
+  .board-count { padding-bottom: 0; }
+  .poster__go { opacity: 1; transform: none; }
+  .deco-star, .deco-sticker { display: none; }
+}
+
+@media (max-height: 940px) and (min-width: 1081px) {
+  .board-lede { display: none; }
+}
+@media (max-height: 830px) and (min-width: 1081px) {
+  .poster__img img { aspect-ratio: 1 / 1; object-position: 50% 4%; }
+  .strip--bottom { display: none; }
+  .board-foot { margin-top: 10px; padding-top: 8px; }
+  .board-title .title-script { font-size: clamp(36px, 4vw, 50px); }
+}
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2=".35" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".34" stop-color="#f0f3f8"/>
+      <stop offset=".5" stop-color="#a9b0bd"/>
+      <stop offset=".63" stop-color="#e2e7ef"/>
+      <stop offset="1" stop-color="#fdfdfe"/>
+    </linearGradient>
+  </defs>
+  <symbol id="i-star" viewBox="0 0 100 100">
+    <path d="M50 3 61.8 36.2 97 36.6 68.8 57.6 79.4 91.4 50 71.2 20.6 91.4 31.2 57.6 3 36.6 38.2 36.2Z"
+          fill="url(#chrome)" stroke="#7b8090" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M50 15 56.8 33.4 76 33.7 60.8 45.2 66.4 63.2 50 52.2 33.6 63.2 39.2 45.2 24 33.7 43.2 33.4Z"
+          fill="none" stroke="#fff" stroke-width="2.6" opacity=".9"/>
+  </symbol>
+</svg>
+
+<div class="page-root">
+
+  <div class="strip" aria-hidden="true">
+    <div class="strip__track">
+      <span>pick a subject <i>★</i> 04 subjects / 01 online <i>♡</i> 挑一门，翻到今天那一页 <i>✿</i> take your time <i>✦</i></span>
+      <span>pick a subject <i>★</i> 04 subjects / 01 online <i>♡</i> 挑一门，翻到今天那一页 <i>✿</i> take your time <i>✦</i></span>
+    </div>
+  </div>
+
+  <main class="stage">
+    <div class="window rise">
+
+      <div class="win-bar">
+        <div class="win-dots"><i></i><i></i><i></i></div>
+        <div class="win-url">
+          <svg width="9" height="9" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4 60 40 96 50 60 60 50 96 40 60 4 50 40 40Z" fill="#ff5fa8"/></svg>
+          https://<b>study.room</b>/subjects.html
+        </div>
+        <a class="link-mini" href="index.html">← 封面</a>
+      </div>
+
+      <div class="board">
+
+
+        <header class="board-head">
+          <div class="head-title">
+            <p class="kicker kicker--boxed">✿ choose a subject ✿</p>
+            <h1 class="board-title">
+              <span class="title-script">Pick a</span>
+              <span class="title-serif">Subject</span>
+            </h1>
+            <p class="board-lede">每门课都有一张自己的海报。做好的先挂上来，没做好的就在旁边排队 —— 不着急，一门一门来。</p>
+            <img class="head-sticker float" src="assets/art/stickers/st-05.jpg" alt="" aria-hidden="true">
+          </div>
+          <div class="board-count">
+            <span class="num" id="cntLive">01<small>/04</small></span>
+            <span class="mono-label">已上线<br>subjects</span>
+          </div>
+        </header>
+
+        <div class="grid" id="grid"></div>
+
+        <footer class="board-foot">
+          <p class="mono-label">04 subjects · 01 online · 更新于 2026.03</p>
+          <a class="link-mini" href="index.html">← 回到封面</a>
+        </footer>
+
+      </div>
+    </div>
+  </main>
+
+  <div class="strip strip--bottom" aria-hidden="true">
+    <div class="strip__track">
+      <span>study room <i>✦</i> pick a subject <i>✦</i> built by me, for me <i>✦</i> keep going ♡</span>
+      <span>study room <i>✦</i> pick a subject <i>✦</i> built by me, for me <i>✦</i> keep going ♡</span>
+    </div>
+  </div>
+
+</div>
+
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  const grid = document.getElementById('grid');
+  const list = window.SITE.subjects;
+  const live = list.filter(s => s.status === 'live').length;
+  document.getElementById('cntLive').innerHTML =
+    String(live).padStart(2, '0') + '<small>/' + String(list.length).padStart(2, '0') + '</small>';
+
+  const frag = document.createDocumentFragment();
+
+  list.forEach((s, i) => {
+    const isLive = s.status === 'live';
+    const el = document.createElement(isLive ? 'a' : 'div');
+    el.className = 'poster' + (isLive ? '' : ' poster--soon');
+    el.style.setProperty('--sc', s.color);
+    el.style.animation = 'rise-in .5s cubic-bezier(.22,.8,.3,1) ' + (0.06 * i + 0.1) + 's both';
+    if (isLive) {
+      el.href = s.href;
+      el.setAttribute('aria-label', s.name + ' · ' + s.en + '，进入学习');
+    } else {
+      el.setAttribute('aria-disabled', 'true');
+      el.title = s.name + ' 还在准备中';
+    }
+
+    el.innerHTML =
+      '<div class="poster__img">' +
+        '<img src="' + s.hero + '" alt="' + s.name + '学科代表形象" loading="' + (i < 2 ? 'eager' : 'lazy') + '">' +
+        (isLive
+          ? '<span class="poster__badge tag tag--rose">open</span>'
+          : '<span class="poster__badge poster__badge--soon px-badge">soon</span>') +
+      '</div>' +
+      '<div class="poster__plate">' +
+        '<p class="poster__script">' + s.script + '</p>' +
+        '<p class="poster__cn">' + s.name + '<span class="poster__idx">' + String(i + 1).padStart(2, '0') + '</span></p>' +
+        '<div class="poster__tags">' + s.tags.map(t => '<span class="tag">' + t + '</span>').join('') + '</div>' +
+        (isLive
+          ? '<span class="poster__go">enter →</span>'
+          : '<span class="poster__go" style="color:var(--ink-3);opacity:1;transform:none">' + s.note + '</span>') +
+      '</div>';
+
+    frag.appendChild(el);
+  });
+
+  grid.appendChild(frag);
+})();
+</script>
+</body>
+</html>
