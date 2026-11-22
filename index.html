@@ -13,6 +13,54 @@
 </head>
 <body>
 
+<!-- ============ 入场：拉链拉开 ============ -->
+<div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="进入自习室">
+  <div class="intro__half intro__half--l">
+      <div class="intro__face">
+        <div class="intro__paper" aria-hidden="true"></div>
+        <img class="intro__stk intro__stk--cat" src="assets/art/new/chatCat.webp" alt="" aria-hidden="true">
+        <img class="intro__stk intro__stk--star" src="assets/art/new/chatStar.webp" alt="" aria-hidden="true">
+        <img class="intro__stk intro__stk--rem" src="assets/art/new/reminders.webp" alt="" aria-hidden="true">
+        <img class="intro__stk intro__stk--ess" src="assets/art/new/essentials.webp" alt="" aria-hidden="true">
+        <div class="intro__mid">
+          <p class="intro__kick">a little room for you</p>
+          <h2 class="intro__title"><span class="t-s">Study</span><em>ROOM</em></h2>
+          <p class="intro__sub">英语 · 数学 · 语文 · 物理</p>
+        </div>
+      </div>
+  </div>
+  <div class="intro__half intro__half--r">
+      <div class="intro__face">
+        <div class="intro__paper" aria-hidden="true"></div>
+        <img class="intro__stk intro__stk--cat" src="assets/art/new/chatCat.webp" alt="" aria-hidden="true">
+        <img class="intro__stk intro__stk--star" src="assets/art/new/chatStar.webp" alt="" aria-hidden="true">
+        <img class="intro__stk intro__stk--rem" src="assets/art/new/reminders.webp" alt="" aria-hidden="true">
+        <img class="intro__stk intro__stk--ess" src="assets/art/new/essentials.webp" alt="" aria-hidden="true">
+        <div class="intro__mid">
+          <p class="intro__kick">a little room for you</p>
+          <h2 class="intro__title"><span class="t-s">Study</span><em>ROOM</em></h2>
+          <p class="intro__sub">英语 · 数学 · 语文 · 物理</p>
+        </div>
+      </div>
+  </div>
+
+  <div class="intro__zip" aria-hidden="true">
+    <span class="intro__teeth intro__teeth--l"></span>
+    <span class="intro__teeth intro__teeth--r"></span>
+  </div>
+
+  <button class="intro__pull" id="introPull" type="button" aria-label="拉开，进入自习室">
+    <svg viewBox="0 0 56 76" fill="none" aria-hidden="true">
+      <path class="pull__ring" d="M28 6c-6 0-10 4-10 9s4 9 10 9 10-4 10-9-4-9-10-9Z" stroke="currentColor" stroke-width="3.4"/>
+      <path class="pull__heart" d="M28 68C12 56 4 47 4 37.5 4 29 10.5 23 18.5 23c4.6 0 8 2.4 9.5 5.2C29.5 25.4 32.9 23 37.5 23 45.5 23 52 29 52 37.5 52 47 44 56 28 68Z" fill="currentColor"/>
+    </svg>
+    <span class="intro__hint">往下拉</span>
+  </button>
+
+  <p class="intro__tip">拖住爱心往下拉 · 或者点一下它</p>
+</div>
+
+
 <!-- ============ 图标精灵 ============ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-flower" viewBox="0 0 40 40">
@@ -106,11 +154,11 @@
       </span>
       <span class="s2">ROOM</span>
     </h1>
-    <div class="brand__side">
-      personal study space<br>
-      <b>04</b> subjects · <b>01</b> online
-      <br>
-      <span class="brand__badge"><i></i>ONLINE</span>
+    <div class="brand__aside">
+      <a class="brand__cta" href="subjects.html">
+        打开学科
+        <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-arrow"/></svg>
+      </a>
     </div>
   </header>
 
@@ -118,25 +166,6 @@
 
     <!-- ================= 左栏 ================= -->
     <div class="col col--side">
-
-      <!-- 资料 -->
-      <section class="card profile">
-        <div class="profile__top">
-          <div class="avatar">
-            <img src="assets/art/portrait-english.jpg" alt="我的头像：粉色系插画少女">
-          </div>
-          <div class="profile__id">
-            <p class="profile__name">我</p>
-            <p class="profile__handle">@study_room.exe</p>
-          </div>
-        </div>
-        <p class="profile__bio">把喜欢的东西，<em>一页一页</em>学成自己的。<br>今天也要慢慢来 ♡</p>
-        <div class="stats">
-          <div><b>02</b><span>day</span></div>
-          <div><b>40</b><span>words</span></div>
-          <div><b>02</b><span>streak</span></div>
-        </div>
-      </section>
 
       <!-- 音乐 -->
       <section class="card musiccard" id="music">
@@ -183,82 +212,13 @@
         <div class="cal__grid" id="calGrid"></div>
       </section>
 
-      <!-- 学科列表 -->
-      <section class="card subcard">
-        <div class="card__head">
-          <p class="card__title">
-            <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-flower"/></svg>
-            Subjects
-          </p>
-          <span class="card__meta">01 / 04</span>
-        </div>
-        <nav class="subs" aria-label="学科列表">
-          <a class="live" href="subjects/english/index.html">
-            <span class="no">01</span>
-            <span class="nm">英语</span>
-            <span class="en">English</span>
-            <span class="st"></span>
-          </a>
-          <div class="soon">
-            <span class="no">02</span>
-            <span class="nm">数学</span>
-            <span class="en">Maths</span>
-            <span class="st"></span>
-          </div>
-          <div class="soon">
-            <span class="no">03</span>
-            <span class="nm">语文</span>
-            <span class="en">Chinese</span>
-            <span class="st"></span>
-          </div>
-          <div class="soon">
-            <span class="no">04</span>
-            <span class="nm">物理</span>
-            <span class="en">Physics</span>
-            <span class="st"></span>
-          </div>
-        </nav>
-      </section>
-
-      <!-- 今日计划 -->
-      <section class="card todocard">
-        <div class="card__head">
-          <p class="card__title">
-            <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-spark"/></svg>
-            Today
-          </p>
-          <span class="card__meta">2 / 3 DONE</span>
-        </div>
-        <ul class="todo">
-          <li class="done">背 20 个单词 <small>AM</small></li>
-          <li class="done">精读 Day 02 <small>PM</small></li>
-          <li>复习昨天的错题 <small>PM</small></li>
-        </ul>
-      </section>
-
-      <!-- 最近学过 -->
-      <section class="card recent">
-        <div class="card__head">
-          <p class="card__title">
-            <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-clock"/></svg>
-            Recent
-          </p>
-          <span class="card__meta">02 ITEMS</span>
-        </div>
-        <ul class="recent__list">
-          <li class="now">
-            <span class="recent__no">02</span>
-            <span class="recent__txt">精读 + 20 词</span>
-            <span class="recent__tag">TODAY</span>
-          </li>
-          <li>
-            <span class="recent__no">01</span>
-            <span class="recent__txt">精读 + 20 词</span>
-            <span class="recent__tag">1D AGO</span>
-          </li>
-        </ul>
-        <p class="recent__hint">每天一页，慢慢叠起来 ♡</p>
-      </section>
+      <!-- 贴纸墙（纯装饰） -->
+      <aside class="stickerwall" aria-hidden="true">
+        <img class="sw-cat" src="assets/art/new/chatCat.webp" alt="">
+        <img class="sw-script" src="assets/art/new/script-pink.webp" alt="">
+        <img class="sw-star" src="assets/art/new/chatStar.webp" alt="">
+        <img class="sw-tag" src="assets/art/new/accessories.webp" alt="">
+      </aside>
 
     </div>
 
@@ -269,7 +229,7 @@
       <div class="newsbar">
         <span class="newsbar__ico"><svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-bell"/></svg></span>
         <p class="newsbar__txt"><b>NEW</b> · 英语 Day 02 已收录，新增 20 个词</p>
-        <span class="newsbar__date">2026.11.21</span>
+        <span class="newsbar__date" id="newsDate">—</span>
       </div>
 
       <!-- 主视觉 -->
@@ -363,37 +323,15 @@
         </ul>
       </section>
 
-      <!-- PLAYER CARD -->
-      <section class="card playercard">
-        <div class="card__head">
-          <p class="card__title">
-            <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-spark"/></svg>
-            Player Card
-          </p>
-          <span class="card__meta">NO.01</span>
-        </div>
-        <dl>
-          <dt>Player</dt><dd>我</dd>
-          <dt>Server</dt><dd>自习室 #01</dd>
-          <dt>Today</dt><dd>英语 · Day 02</dd>
-          <dt>Words</dt><dd>40 个<em>/ 2 天</em></dd>
-        </dl>
-        <p class="playercard__note">SINGLE MODE — 一个人也可以很认真地做很多页。</p>
-      </section>
-
       <!-- 入口 -->
       <div class="cta">
-        <a class="btn" href="subjects.html">
-          打开学科
-          <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-arrow"/></svg>
-        </a>
         <ul class="dots-list" aria-label="学科上线进度">
           <li class="on" title="英语 · 已上线">EN</li>
           <li title="数学 · 排队中">MA</li>
           <li title="语文 · 排队中">CN</li>
           <li title="物理 · 排队中">PH</li>
         </ul>
-        <span class="cta__hint">04 subjects<br>01 online</span>
+        <span class="cta__hint">04 subjects · 01 online</span>
       </div>
 
     </div>

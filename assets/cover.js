@@ -69,6 +69,13 @@
   tickClock();
   setInterval(tickClock, 1000);
 
+  /* 资讯条日期跟随当天 */
+  var elNewsDate = document.getElementById('newsDate');
+  if (elNewsDate) {
+    var nd = new Date();
+    elNewsDate.textContent = nd.getFullYear() + '.' + pad(nd.getMonth() + 1) + '.' + pad(nd.getDate());
+  }
+
   /* ---------------- 播放器 ---------------- */
   var musicCard = document.getElementById('music');
   var playBtn = document.getElementById('playBtn');
@@ -138,6 +145,132 @@
       } else {
         raf = null;
       }
+    }
+  }
+
+  /* ---------------- 入场：拉链拉开 ---------------- */
+  var intro = document.getElementById('intro');
+  var pull = document.getElementById('introPull');
+
+  if (intro) {
+    var KEY = 'studyroom:intro-seen';
+    var seen = false;
+    try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+    var force = /[?&]intro=1/.test(location.search);
+
+    function killIntro() {
+      if (intro.parentNode) intro.parentNode.removeChild(intro);
+      document.body.classList.remove('intro-open-lock');
+    }
+
+    if (reduce || (seen && !force)) {
+      killIntro();
+    } else {
+      document.body.classList.add('intro-open-lock');
+
+      var p = 0;
+      var dragging = false;
+      var moved = false;
+      var startY = 0;
+      var startP = 0;
+
+      var setP = function (v) {
+        p = Math.max(0, Math.min(1, v));
+        intro.style.setProperty('--zip', p.toFixed(4));
+      };
+
+      var finish = function () {
+        intro.classList.add('is-done');
+        document.body.classList.remove('intro-open-lock');
+        try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+        window.setTimeout(killIntro, 520);
+      };
+
+      var animateTo = function (to, cb) {
+        var from = p;
+        var t0 = performance.now();
+        var dur = 560;
+        var step = function (t) {
+          var k = Math.min(1, (t - t0) / dur);
+          var e = 1 - Math.pow(1 - k, 3);
+          setP(from + (to - from) * e);
+          if (k < 1) {
+            requestAnimationFrame(step);
+          } else if (cb) {
+            cb();
+          }
+        };
+        requestAnimationFrame(step);
+      };
+
+      var release = function () {
+        if (!dragging) return;
+        dragging = false;
+        if (!moved) {
+          animateTo(1, finish);
+        } else if (p > 0.4) {
+          animateTo(1, finish);
+        } else {
+          animateTo(0);
+        }
+        moved = false;
+      };
+
+      if (pull) {
+        pull.addEventListener('pointerdown', function (e) {
+          dragging = true;
+          moved = false;
+          startY = e.clientY;
+          startP = p;
+          if (pull.setPointerCapture) {
+            try { pull.setPointerCapture(e.pointerId); } catch (err) {}
+          }
+          e.preventDefault();
+        });
+
+        pull.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            animateTo(1, finish);
+          }
+        });
+
+        pull.addEventListener('pointermove', function (e) {
+          if (!dragging) return;
+          var dy = e.clientY - startY;
+          if (Math.abs(dy) > 4) moved = true;
+          setP(startP + dy / (window.innerHeight * 0.52));
+        });
+
+        pull.addEventListener('pointerup', release);
+        pull.addEventListener('pointercancel', release);
+      }
+
+      window.addEventListener('pointerup', function () {
+        if (dragging) release();
+      });
+
+      intro.addEventListener('wheel', function (e) {
+        if (dragging) return;
+        setP(p + e.deltaY / 780);
+        if (p >= 1) finish();
+      }, { passive: true });
+
+      // 触屏：向上滑动也能拉开
+      var touchStart = 0;
+      intro.addEventListener('touchstart', function (e) {
+        if (e.touches.length) touchStart = e.touches[0].clientY;
+      }, { passive: true });
+      intro.addEventListener('touchmove', function (e) {
+        if (!e.touches.length || dragging) return;
+        var dy = e.touches[0].clientY - touchStart;
+        if (dy > 0) setP(dy / (window.innerHeight * 0.52));
+      }, { passive: true });
+      intro.addEventListener('touchend', function () {
+        if (dragging) return;
+        if (p > 0.4) animateTo(1, finish);
+        else animateTo(0);
+      }, { passive: true });
     }
   }
 })();
