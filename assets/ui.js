@@ -23,6 +23,9 @@ function mountNav(active) {
         <svg viewBox="0 0 24 24"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>
         <b id="navPts">${pts}</b>pts
       </span>
+      <button class="set-btn" id="setBtn" type="button" aria-label="视频链接设置" title="视频链接">
+        <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1ZM8 13h8v-2H8v2Zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5Z"/></svg>
+      </button>
       <button class="cart-btn" id="cartBtn" type="button" aria-label="打开学习清单">
         <svg viewBox="0 0 24 24"><path d="M7 5.5h14l-1.7 9.2a2 2 0 0 1-2 1.6H10a2 2 0 0 1-2-1.6L6.2 3.6H3V1.4h4.6L8 3.6Zm1.2 12.6a2.1 2.1 0 1 1 0 4.2 2.1 2.1 0 0 1 0-4.2Zm9.4 0a2.1 2.1 0 1 1 0 4.2 2.1 2.1 0 0 1 0-4.2Z"/></svg>
         <span class="cart-btn__dot ${n ? 'on' : ''}" id="cartDot">${n}</span>
@@ -30,6 +33,7 @@ function mountNav(active) {
     </div>`;
   document.body.prepend(el);
   el.querySelector('#cartBtn').addEventListener('click', () => Drawer.open());
+  el.querySelector('#setBtn').addEventListener('click', () => Settings.open());
 
   // 滚动时给 nav 一点收起的呼吸感
   let last = 0;
@@ -155,7 +159,7 @@ const Drawer = (() => {
     setTimeout(() => {
       const made = Store.checkout();
       // 这单里如果有配视频的模块，把它的 mid 带到书桌页去弹一次
-      const pick = made.map(o => MODULES.find(m => m.id === o.mid)).find(m => m && m.link);
+      const pick = made.map(o => MODULES.find(m => m.id === o.mid)).find(m => m && Links.get(m.id));
       if (pick) Jump.markPending(pick.id);
 
       body.innerHTML = `

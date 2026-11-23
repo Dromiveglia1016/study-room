@@ -6,8 +6,7 @@
 /* 外链视频
    填了 link 的模块，买完、按下开始时都会问一句「要不要跳过去看」，
    书桌卡片上也会常驻一个「看视频」入口。
-   现在挂的是 B 站搜索页当占位，把 up 主的视频地址整条换上去就行。 */
-const bili = (kw) => 'https://search.bilibili.com/all?keyword=' + encodeURIComponent(kw);
+   页面右上角的链环按钮可以随时自己改这些链接，不用动这份代码。 */
 
 const MODULES = [
   /* ---------- 英语 ---------- */
@@ -53,7 +52,7 @@ const MODULES = [
     en: 'maths · lecture', name: '看教学视频',
     desc: '一节完整课，暂停三次记笔记，看完能自己复述。',
     min: 60, pts: 60, tag: 'best seller', img: 'video', theme: 'cream',
-    link: bili('专升本 数学')
+    link: 'https://www.bilibili.com/video/BV1husGzwEtZ/'
   },
 
   /* ---------- 政治 ---------- */
@@ -62,7 +61,7 @@ const MODULES = [
     en: 'politics · lecture', name: '看教学视频',
     desc: '一节课时长的串讲，边看边把框架画下来。',
     min: 90, pts: 90, tag: 'new', img: 'video', flip: true, theme: 'pink',
-    link: bili('专升本 政治 网课')
+    link: ''
   },
   {
     id: 'politics-recite', cat: 'politics', catCn: '政治',
@@ -85,7 +84,7 @@ const MODULES = [
     en: 'genetics · lecture', name: '看教学视频',
     desc: '半节课，盯着遗传图谱看，看不懂的倒回去。',
     min: 30, pts: 30, tag: 'new', img: 'dna', theme: 'pink',
-    link: bili('遗传学 专升本')
+    link: 'https://www.bilibili.com/video/BV1Fz421Y7JQ/'
   },
   {
     id: 'genetics-recite', cat: 'genetics', catCn: '遗传学',

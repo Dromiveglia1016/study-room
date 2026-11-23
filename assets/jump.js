@@ -40,7 +40,9 @@ const Jump = (() => {
   /* 返回 Promise<boolean>：去了 = true，没去 = false */
   function ask(mod, opt) {
     opt = opt || {};
-    if (!mod || !mod.link) return Promise.resolve(false);
+    if (!mod) return Promise.resolve(false);
+    const url = (typeof Links !== 'undefined' ? Links.get(mod.id) : '') || mod.link || '';
+    if (!url) return Promise.resolve(false);
     ensure();
 
     root.innerHTML = `
@@ -60,12 +62,16 @@ const Jump = (() => {
         计时照常走，看完回来收积分。
       </p>
       <div class="jump__acts">
-        <a class="btn btn--ink" href="${mod.link}" target="_blank" rel="noopener noreferrer">去 B 站看 ↗</a>
+        <a class="btn btn--ink" href="${url}" target="_blank" rel="noopener noreferrer">去 B 站看 ↗</a>
         <button class="btn" type="button" data-no>先不去</button>
       </div>
-      <p class="jump__hint">${opt.hint || '同一个视频看到一半关了，回来还能从头点开。'}</p>`;
+      <p class="jump__hint">${opt.hint || '同一个视频看到一半关了，回来还能从头点开。'}<button type="button" data-edit>链接不对？改一下 →</button></p>`;
 
     root.querySelector('.jump__x').addEventListener('click', () => close(false));
+    const edit = root.querySelector('[data-edit]');
+    if (edit && typeof Settings !== 'undefined') {
+      edit.addEventListener('click', () => Settings.open());
+    }
     root.querySelector('[data-no]').addEventListener('click', () => close(false));
     root.querySelector('.jump__acts a').addEventListener('click', () => {
       // 先让浏览器把新标签开出来，再收起弹层

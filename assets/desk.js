@@ -18,8 +18,8 @@ function taskHTML(o) {
       <div class="task__clock">00:00<small>已学</small></div>
     </div>
     <div class="task__body">
-      <h3>${m.name}<span class="cat">${m.catCn}</span>${m.link
-        ? `<a class="task__vid" href="${m.link}" target="_blank" rel="noopener noreferrer" title="在新标签打开视频">▶ 看视频</a>`
+      <h3>${m.name}<span class="cat">${m.catCn}</span>${Links.get(o.mid)
+        ? `<a class="task__vid" href="${Links.get(o.mid)}" target="_blank" rel="noopener noreferrer" title="在新标签打开视频">▶ 看视频</a>`
         : ''}</h3>
       <p class="task__target">目标 <b>${m.min} min</b> · 达标 <b>+${m.pts} pts</b> · 每超 10 分钟再 +5</p>
       <dl class="task__nums">
@@ -44,7 +44,7 @@ async function askJumpFor(id, title) {
   const o = Store.activeOrders().find(x => x.id === id);
   if (!o) return;
   const m = MODULES.find(x => x.id === o.mid);
-  if (!m || !m.link) return;
+  if (!m || !Links.get(m.id)) return;
   if ((o.jumpAsks || 0) >= 2) return;
   Store.noteJumpAsk(id);
   const go = await Jump.ask(m, { title: title || '开始前先看视频？' });
@@ -366,4 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 回到页面时补一次（后台标签页计时器会被节流）
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { paint(); renderStats(); } });
+
+  // 设置面板里改了视频链接，任务卡上的「看视频」跟着变
+  addEventListener('links:change', () => { renderTasks(); renderStats(); });
 });
