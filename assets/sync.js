@@ -443,7 +443,7 @@ const Sync = (() => {
       <button class="sy__x" type="button" aria-label="关掉">×</button>
       <p class="sy__kick"><i></i>cloud sync</p>
       <h3>积分跨设备同步</h3>
-      <p class="sy__sub">换设备、换浏览器，积分和订单都能带走。先试下面 ① 这一招，不用注册任何账号。</p>
+      <p class="sy__sub">换设备、换浏览器，积分和订单都能带走。先试 ① 这一招，不用注册。</p>
       <div class="sy__state"></div>
 
       <p class="sy__sec"><b>①</b>打包带走 · 不用注册</p>
