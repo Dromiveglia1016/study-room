@@ -3,159 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>study room · 今天也学一点</title>
-<meta name="description" content="一个用学习时间买单的小房间：学科商店、英语故事、书桌计时，都从这里进去。">
+<title>study room · 用学习时间付款的小房间</title>
+<meta name="description" content="把学习时间存进去，把奶茶、电影和好觉取出来。学科商店、英语故事、书桌计时，都从这里进去。">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#F1ECE1">
+<meta name="theme-color" content="#2F74F2">
 <link rel="icon" href="favicon.ico">
-<link rel="preload" as="image" href="assets/home/bg.jpg">
-<link rel="stylesheet" href="assets/home.css">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/anton-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/sky.css">
 </head>
 <body data-page="home">
 
-<main class="scene" id="scene">
+<div class="sky" aria-hidden="true"></div>
+<div class="sky__grain" aria-hidden="true"></div>
 
-  <div class="bg" id="bg">
-    <img src="assets/home/bg.jpg" alt="" id="bgImg" fetchpriority="high" decoding="async">
+<!-- ============================ 贴纸导航 ============================ -->
+<nav class="nav" id="nav" aria-label="主导航">
+  <a class="brand" href="index.html" aria-label="study room 首页">
+    <b>study</b><b>room</b><i>time is money</i>
+  </a>
+  <div class="menu">
+    <a class="is-on" href="index.html" aria-current="page">首页</a>
+    <a data-c="butter" href="shop.html">商店</a>
+    <a data-c="mint" href="subjects/english/index.html">英语</a>
+    <a data-c="blush" href="desk.html">书桌</a>
+    <a data-c="lilac" href="rewards.html">兑换</a>
   </div>
-  <div class="bg__tint"></div>
+  <a class="nav__go" href="shop.html">
+    <span>开始</span>
+    <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+  </a>
+</nav>
 
-  <div class="stars" aria-hidden="true">
-    <span class="star star--a"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--b"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--c"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--d"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--e"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--f"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--g"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--h"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-    <span class="star star--i"><svg viewBox="0 0 24 24"><path d="M12 1.6l2.7 6.4 6.9.6-5.2 4.6 1.5 6.8L12 16.5 6.1 20l1.5-6.8L2.4 8.6l6.9-.6z"/></svg></span>
-  </div>
-
-  <!-- ============================ 导航 ============================ -->
-  <header class="top">
-    <a class="logo" href="index.html" aria-label="study room 主页">study<i>room</i><b>a softer way</b></a>
-    <nav class="top__mid" aria-label="主导航">
-      <a href="shop.html">商店</a>
-      <a href="subjects/english/index.html">英语</a>
-      <a href="desk.html">书桌</a>
-      <a href="rewards.html">兑换</a>
-    </nav>
-    <a class="pill" href="shop.html">
-      <span class="pill__dot" aria-hidden="true"></span>
-      <span class="pill__txt">去学</span>一点
-      <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-    </a>
-  </header>
-
-  <!-- ============================ 主标题 ============================ -->
-  <section class="hero" id="hero">
-    <p class="hero__kick"><i></i>a room for slow days</p>
-    <h1>
-      <span>今天</span>
-      <span>也学<em>一点</em></span>
-      <span>就好。</span>
-    </h1>
-    <p class="hero__sub">学多久都算数，<b>时间会变成积分</b>，积分换成奶茶、电影，和一场好觉。</p>
-  </section>
-
-  <span class="scrap scrap--a" aria-hidden="true"></span>
-  <span class="scrap scrap--b" aria-hidden="true"></span>
-  <span class="scrap scrap--c" aria-hidden="true"></span>
-
-  <!-- ============================ 玩偶 ============================ -->
-  <div class="toys">
-    <button class="toy toy--bunny" id="bunny" type="button" aria-label="果冻兔">
-      <img src="assets/home/bunny.webp" alt="一只果冻质感的兔子玩偶" draggable="false">
-    </button>
-    <button class="toy toy--cat" id="cat" type="button" aria-label="纸袋猫">
-      <img src="assets/home/cat.webp" alt="一只戴着纸袋的猫玩偶" draggable="false">
-    </button>
-  </div>
-  <div class="bubble" id="bubble" role="status">今天想先学哪一科？</div>
-
-  <!-- ============================ 两张纸片 ============================ -->
-  <a class="note note--shop" id="noteShop" href="shop.html" data-sheet="shop">
-    <span class="note__hole" aria-hidden="true"></span>
-    <span class="note__k">01 / shop</span>
-    <span class="note__t">学科商店</span>
-    <span class="note__d">用学习时间买单，学够了才结算。</span>
-    <span class="note__go">点开看看
-      <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+<!-- ============================ 首屏 ============================ -->
+<section class="hero" id="hero">
+  <div class="sky-deco" id="deco" aria-hidden="true">
+    <span class="cloud cloud--a" data-depth="14">
+      <svg viewBox="0 0 120 70"><g fill="currentColor"><ellipse cx="38" cy="43" rx="29" ry="21"/><ellipse cx="62" cy="31" rx="25" ry="21"/><ellipse cx="86" cy="43" rx="23" ry="19"/><rect x="22" y="43" width="72" height="21" rx="10"/></g></svg>
     </span>
-  </a>
-
-  <a class="note note--en" id="noteEn" href="subjects/english/index.html" data-sheet="en">
-    <span class="note__hole" aria-hidden="true"></span>
-    <span class="note__k">02 / english</span>
-    <span class="note__t">Word Journey</span>
-    <span class="note__d">每天一篇单词故事，把词读进句子里。</span>
-    <span class="note__go">点开看看
-      <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    <span class="cloud cloud--b" data-depth="22">
+      <svg viewBox="0 0 120 70"><g fill="currentColor"><ellipse cx="38" cy="43" rx="29" ry="21"/><ellipse cx="62" cy="31" rx="25" ry="21"/><ellipse cx="86" cy="43" rx="23" ry="19"/><rect x="22" y="43" width="72" height="21" rx="10"/></g></svg>
     </span>
-  </a>
+    <span class="cloud cloud--c" data-depth="9">
+      <svg viewBox="0 0 120 70"><g fill="currentColor"><ellipse cx="38" cy="43" rx="29" ry="21"/><ellipse cx="62" cy="31" rx="25" ry="21"/><ellipse cx="86" cy="43" rx="23" ry="19"/><rect x="22" y="43" width="72" height="21" rx="10"/></g></svg>
+    </span>
+    <span class="cloud cloud--d" data-depth="30">
+      <svg viewBox="0 0 120 70"><g fill="currentColor"><ellipse cx="38" cy="43" rx="29" ry="21"/><ellipse cx="62" cy="31" rx="25" ry="21"/><ellipse cx="86" cy="43" rx="23" ry="19"/><rect x="22" y="43" width="72" height="21" rx="10"/></g></svg>
+    </span>
+  </div>
 
-  <!-- ============================ 今日小卡 ============================ -->
-  <a class="dcard" href="desk.html" id="dcard" aria-label="打开我的书桌">
-    <div class="dcard__stack" aria-hidden="true">
-      <div class="dcard__sheet"></div>
-      <div class="dcard__sheet"></div>
-    </div>
-    <div class="dcard__main">
-      <div class="dcard__row">
-        <span class="dcard__k">today</span>
-        <span class="dcard__go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+  <p class="sticker"><i aria-hidden="true"></i>只收时间，不收钱</p>
+
+  <h1>
+    <span class="line"><span>PUT IN</span></span>
+    <span class="line"><span>STUDY TIME</span></span>
+    <span class="line"><span class="accent">TAKE OUT</span></span>
+    <img class="float float--eye" data-depth="34" src="assets/home/eye.svg" alt="" aria-hidden="true">
+    <img class="float float--bow" data-depth="26" src="assets/home/rainbow.svg" alt="" aria-hidden="true">
+  </h1>
+
+  <p class="sub rise">存进去的是分钟，取出来的是<b>奶茶、电影票，和一场好觉</b>。<br>
+    学多久算多久，一分不白学。</p>
+
+  <div class="acts rise">
+    <a class="btn" href="shop.html">进商店挑一科
+      <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </a>
+    <a class="btn btn--ghost" href="subjects/english/index.html">先背几个词</a>
+  </div>
+
+  <p class="hero__meta"><span>scroll</span><i aria-hidden="true"></i><span>往下看一眼怎么玩</span></p>
+
+  <a class="corner" href="desk.html"><b>TIME = MONEY</b> 去书桌</a>
+</section>
+
+<!-- ============================ 跑马灯 ============================ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__in">
+    <span>english <i>✳</i> maths <i>✳</i> politics <i>✳</i> genetics <i>✳</i> milk tea <i>✳</i> movie ticket <i>✳</i> one good nap <i>✳</i></span>
+    <span>english <i>✳</i> maths <i>✳</i> politics <i>✳</i> genetics <i>✳</i> milk tea <i>✳</i> movie ticket <i>✳</i> one good nap <i>✳</i></span>
+  </div>
+</div>
+
+<!-- ============================ 怎么玩 ============================ -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec__head rise">
+      <div>
+        <p class="eyebrow">how it works</p>
+        <h2 class="disp">THREE STEPS.<span class="cn">别想复杂。</span></h2>
       </div>
-      <div class="dcard__v"><span id="dcardMin">0</span><small>min</small></div>
-      <div class="dcard__row">
-        <span class="dcard__tag" id="dcardTag">还没开始，第一段总是最难</span>
-      </div>
+      <p class="sec__cn">这里没有打卡、没有连续 100 天。你只要在开始的时候按一下，学完的时候再按一下——中间别骗自己就行。</p>
     </div>
-  </a>
 
-  <!-- ============================ 底部 dock ============================ -->
-  <nav class="dock" aria-label="快捷入口">
-    <a class="dock__i" href="shop.html" aria-label="学科商店">
-      <svg viewBox="0 0 24 24"><path d="M4 8h16l-1.4 11.2a1.6 1.6 0 0 1-1.6 1.4H7a1.6 1.6 0 0 1-1.6-1.4L4 8Z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
-      <span>商店</span>
-    </a>
-    <a class="dock__i" href="desk.html" aria-label="我的书桌">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4.4l2.6 1.6M9 2h6"/></svg>
-      <span>书桌</span>
-    </a>
-    <a class="dock__i" href="rewards.html" aria-label="积分兑换">
-      <svg viewBox="0 0 24 24"><path d="M3 9.5V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2.5a2.5 2.5 0 0 0 0 5V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4.5a2.5 2.5 0 0 0 0-5Z"/><path d="M14 6v12" stroke-dasharray="2 3"/></svg>
-      <span>兑换</span>
-    </a>
-    <span class="dock__sep" aria-hidden="true"></span>
-    <a class="dock__i" href="subjects/english/index.html" aria-label="英语故事">
-      <svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15.5H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M8 7.5h7M8 11h5"/></svg>
-      <span>英语</span>
-    </a>
-  </nav>
+    <div class="steps">
+      <article class="step rise">
+        <p class="step__n">01</p>
+        <h3>挑一个模块</h3>
+        <p>每个模块都标着分钟：30 分钟、60 分钟。挑你今天真的扛得住的那个。</p>
+        <span class="step__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V9h-4a3 3 0 0 0 0 6h4v1.5A1.5 1.5 0 0 1 19.5 18h-15A1.5 1.5 0 0 1 3 16.5v-9Z"/><path d="M14 12h7"/></svg>
+        </span>
+      </article>
 
-  <!-- ============================ 展开的纸卡 ============================ -->
-  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT" hidden>
-    <div class="sheet__scrim" data-close></div>
-    <article class="sheet__paper">
-      <button class="sheet__close" type="button" data-close aria-label="关上">
-        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-      <p class="sheet__k" id="sheetK">01 / shop</p>
-      <h2 class="sheet__t" id="sheetT">学科商店</h2>
-      <p class="sheet__d" id="sheetD">用学习时间买单，学够了才结算。</p>
-      <ul class="sheet__list" id="sheetL"></ul>
-      <div class="sheet__acts">
-        <a class="btn btn--ink" id="sheetGo" href="shop.html">出发
+      <article class="step rise">
+        <p class="step__n">02</p>
+        <h3>按下开始，正着数</h3>
+        <p>不是倒计时，是正计时。学多久记多久，走开就暂停，不催你。</p>
+        <span class="step__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v4l2.6 1.6M9.2 2.5h5.6"/></svg>
+        </span>
+      </article>
+
+      <article class="step rise">
+        <p class="step__n">03</p>
+        <h3>学够了，积分到账</h3>
+        <p>1 分钟 = 1 积分，学超了每 10 分钟再送 5 分。攒起来换券。</p>
+        <span class="step__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6c.7 5.9 3.8 9 9.4 9.4-5.6.4-8.7 3.5-9.4 9.4-.7-5.9-3.8-9-9.4-9.4C8.2 11.6 11.3 8.5 12 2.6Z"/></svg>
+        </span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 两个入口 ============================ -->
+<section class="sec sec--plain" id="doors">
+  <div class="wrap">
+    <div class="sec__head rise">
+      <div>
+        <p class="eyebrow">two doors</p>
+        <h2 class="disp--cn">挑一扇门 <em>进去。</em></h2>
+      </div>
+      <p class="sec__cn">左边是商店，用时间买单；右边是英语故事，读一篇再走。两边都算学时。</p>
+    </div>
+
+    <div class="doors">
+      <a class="door door--shop rise" href="shop.html">
+        <img class="door__art" src="assets/shop/cards.webp" alt="" aria-hidden="true">
+        <div>
+          <p class="door__k">01 / the shop</p>
+          <p class="door__t door__t--cn">学科<br>商店</p>
+          <p class="door__cn">11 个模块 · 标价全是分钟</p>
+        </div>
+        <span class="door__go">推门进去
           <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-        </a>
-        <button class="btn btn--ghost" type="button" data-close>再想想</button>
-      </div>
-    </article>
+        </span>
+      </a>
+
+      <a class="door door--en rise" href="subjects/english/index.html">
+        <img class="door__art" src="assets/shop/book.webp" alt="" aria-hidden="true">
+        <div>
+          <p class="door__k">02 / english</p>
+          <p class="door__t">Word<br>Journey</p>
+          <p class="door__cn">每天一篇单词故事</p>
+        </div>
+        <span class="door__go">读一篇
+          <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    </div>
   </div>
+</section>
 
-</main>
+<!-- ============================ 今天 ============================ -->
+<section class="sec" id="today">
+  <div class="wrap">
+    <div class="today rise">
+      <p class="today__t">TODAY<small>今天的账，现在算</small></p>
+      <div class="today__nums">
+        <div class="today__i"><b id="tMin">0</b><span>今日分钟</span></div>
+        <div class="today__i"><b id="tPts">0</b><span>积分余额</span></div>
+        <div class="today__i"><b id="tStreak">0</b><span>连续天数</span></div>
+      </div>
+      <a class="btn btn--orange today__go" href="desk.html">看我的书桌
+        <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
 
-<script src="assets/home.js" defer></script>
+<!-- ============================ 页脚 ============================ -->
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__big">READY TO<br>BE <em>RICH</em>?</p>
+    <div class="foot__row">
+      <p class="foot__note">这里的钱是自己一分钟一分钟挣的。<br>所以花起来，一点也不心虚。</p>
+      <div class="foot__links">
+        <a href="shop.html">学科商店</a>
+        <a href="subjects/english/index.html">英语故事</a>
+        <a href="desk.html">我的书桌</a>
+        <a href="rewards.html">积分兑换</a>
+      </div>
+    </div>
+    <div class="foot__end">
+      <span>study room © 2026</span>
+      <span>built by me, for me</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js" defer></script>
+<script src="assets/store.js" defer></script>
+<script src="assets/sky.js" defer></script>
 </body>
 </html>

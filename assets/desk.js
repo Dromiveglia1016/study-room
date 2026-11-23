@@ -18,7 +18,7 @@ function taskHTML(o) {
       <div class="task__clock">00:00<small>已学</small></div>
     </div>
     <div class="task__body">
-      <h3>${m.name}<span class="cat">${m.catCn}</span>${Links.get(o.mid)
+      <h3>${m.name}<span class="cat">${m.catCn}</span>${o.qty > 1 ? `<span class="cat cat--seq">第 ${o.seq}/${o.qty} 次</span>` : ''}${Links.get(o.mid)
         ? `<a class="task__vid" href="${Links.get(o.mid)}" target="_blank" rel="noopener noreferrer" title="在新标签打开视频">▶ 看视频</a>`
         : ''}</h3>
       <p class="task__target">目标 <b>${m.min} min</b> · 达标 <b>+${m.pts} pts</b> · 每超 10 分钟再 +5</p>

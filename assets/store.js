@@ -15,17 +15,41 @@ const Store = (() => {
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} };
   const now = () => Date.now();
 
-  /* ---------- 购物车 ---------- */
-  const inCart = (id) => db.cart.includes(id);
-  const cart = () => db.cart.map(mid => MODULES.find(m => m.id === mid)).filter(Boolean);
+  /* ---------- 学习清单（同一种可以加购多份） ---------- */
+  const MAX_QTY = 9;
 
-  function toggleCart(id) {
-    const i = db.cart.indexOf(id);
-    if (i > -1) db.cart.splice(i, 1);
-    else if (!hasActive(id)) db.cart.push(id);
+  // 老数据是字符串数组，统一升级成 { id, qty }
+  if (!Array.isArray(db.cart)) db.cart = [];
+  db.cart = db.cart.map(c => (typeof c === 'string' ? { id: c, qty: 1 } : c))
+    .filter(c => c && c.id && MODULES.some(m => m.id === c.id))
+    .map(c => ({ id: c.id, qty: Math.min(MAX_QTY, Math.max(1, parseInt(c.qty, 10) || 1)) }));
+
+  const line = (id) => db.cart.find(c => c.id === id) || null;
+  const qty = (id) => { const l = line(id); return l ? l.qty : 0; };
+  const inCart = (id) => qty(id) > 0;
+  const cart = () => db.cart
+    .map(c => { const m = MODULES.find(x => x.id === c.id); return m ? { ...m, qty: c.qty } : null; })
+    .filter(Boolean);
+  const cartCount = () => db.cart.reduce((s, c) => s + c.qty, 0);
+
+  function add(id, n = 1) {
+    if (!MODULES.some(m => m.id === id)) return 0;
+    const l = line(id);
+    if (l) l.qty = Math.min(MAX_QTY, l.qty + n);
+    else db.cart.push({ id, qty: Math.min(MAX_QTY, Math.max(1, n)) });
     save();
-    return inCart(id);
+    return qty(id);
   }
+  function dec(id) {
+    const l = line(id);
+    if (!l) return 0;
+    l.qty -= 1;
+    if (l.qty <= 0) db.cart = db.cart.filter(c => c.id !== id);
+    save();
+    return qty(id);
+  }
+  function removeItem(id) { db.cart = db.cart.filter(c => c.id !== id); save(); }
+  function toggleCart(id) { return inCart(id) ? (dec(id), 0) : add(id); }
   function clearCart() { db.cart = []; save(); }
 
   /* ---------- 订单 ---------- */
@@ -36,11 +60,18 @@ const Store = (() => {
   function checkout() {
     const list = cart();
     if (!list.length) return [];
-    const made = list.map(m => ({
-      id: 'o' + now().toString(36) + Math.random().toString(36).slice(2, 5),
-      mid: m.id, target: m.min * 60, accum: 0, runningAt: null,
-      done: false, createdAt: now(), settledAt: null, earned: 0, jumpAsks: 0
-    }));
+    const made = [];
+    // 每份都是一个独立的计时单：买两份就背两轮，各自结算
+    list.forEach(m => {
+      for (let i = 0; i < m.qty; i++) {
+        made.push({
+          id: 'o' + now().toString(36) + Math.random().toString(36).slice(2, 5),
+          mid: m.id, target: m.min * 60, accum: 0, runningAt: null,
+          done: false, createdAt: now(), settledAt: null, earned: 0, jumpAsks: 0,
+          qty: m.qty, seq: i + 1
+        });
+      }
+    });
     db.orders.push(...made);
     // 只有第一单自动开始计时，其余待命
     made[0].runningAt = now();
@@ -144,7 +175,7 @@ const Store = (() => {
   }
 
   return {
-    cart, inCart, toggleCart, clearCart, hasActive,
+    cart, cartCount, qty, inCart, add, dec, removeItem, toggleCart, clearCart, hasActive, MAX_QTY,
     activeOrders, runningOrder, checkout,
     elapsed, reached, start, pause, isRunning, settle, drop, noteJumpAsk,
     points, history, vouchers, redeem, stats, save

@@ -3,14 +3,16 @@
    ============================================================ */
 
 const NAV_ITEMS = [
+  { id: 'home', href: 'index.html', label: 'home' },
   { id: 'shop', href: 'shop.html', label: 'shop' },
+  { id: 'english', href: 'subjects/english/index.html', label: 'english' },
   { id: 'desk', href: 'desk.html', label: 'my desk' },
   { id: 'rewards', href: 'rewards.html', label: 'rewards' }
 ];
 
 function mountNav(active) {
   const pts = Store.points();
-  const n = Store.cart().length;
+  const n = Store.cartCount();
   const el = document.createElement('nav');
   el.className = 'nav';
   el.innerHTML = `
@@ -49,7 +51,7 @@ function refreshNav() {
   const d = document.getElementById('cartDot');
   if (p) p.textContent = Store.points();
   if (d) {
-    const n = Store.cart().length;
+    const n = Store.cartCount();
     d.textContent = n;
     d.classList.toggle('on', n > 0);
   }
@@ -76,7 +78,7 @@ function toast(msg) {
 
 /* ---------------------------------------------------------------- drawer */
 const Drawer = (() => {
-  let root, scrim, body, foot;
+  let root, scrim, body, foot, openState = false;
 
   function ensure() {
     if (root) return;
@@ -115,21 +117,27 @@ const Drawer = (() => {
       foot.querySelector('a').addEventListener('click', close);
       return;
     }
-    const totalMin = list.reduce((s, m) => s + m.min, 0);
-    const totalPts = list.reduce((s, m) => s + m.pts, 0);
+    const totalMin = list.reduce((s, m) => s + m.min * m.qty, 0);
+    const totalPts = list.reduce((s, m) => s + m.pts * m.qty, 0);
+    const totalQty = list.reduce((s, m) => s + m.qty, 0);
 
     body.innerHTML = list.map(m => `
       <div class="ci" data-id="${m.id}">
         <span class="ci__img"><img src="assets/shop/${m.img}.webp" alt=""></span>
         <div>
           <p class="ci__nm">${m.name}</p>
-          <p class="ci__meta">${m.catCn} · ${m.min} min · +${m.pts} pts</p>
+          <p class="ci__meta">${m.catCn} · ${m.min} min × ${m.qty} · +${m.pts * m.qty} pts</p>
+          <div class="ci__qty">
+            <button type="button" data-act="dec" aria-label="减一份">−</button>
+            <span>${m.qty}</span>
+            <button type="button" data-act="inc" aria-label="加一份">+</button>
+          </div>
         </div>
         <button class="ci__rm" type="button" aria-label="移除">×</button>
       </div>`).join('');
 
     foot.innerHTML = `
-      <div class="sum"><span>合计学习时长</span><b>${totalMin} min</b></div>
+      <div class="sum"><span>一共 ${totalQty} 份</span><b>${totalMin} min</b></div>
       <div class="sum"><span>结算可得</span><b>${totalPts} pts</b></div>
       <div class="sum sum--big"><span>现在要付的</span><b>${totalMin} 分钟</b></div>
       <button class="btn btn--ink btn--wide" id="payBtn">用时间支付 · 开始学习</button>
@@ -137,10 +145,22 @@ const Drawer = (() => {
         钱不收，只收时间。计时达标才算付款成功。
       </p>`;
 
-    body.querySelectorAll('.ci__rm').forEach(b => {
-      b.addEventListener('click', () => {
-        Store.toggleCart(b.closest('.ci').dataset.id);
+    body.querySelectorAll('.ci').forEach(row => {
+      const id = row.dataset.id;
+      row.querySelector('.ci__rm').addEventListener('click', () => {
+        Store.removeItem(id);
         render(); refreshNav(); syncCards();
+      });
+      row.querySelectorAll('[data-act]').forEach(b => {
+        b.addEventListener('click', () => {
+          if (b.dataset.act === 'inc') {
+            if (Store.qty(id) >= Store.MAX_QTY) toast(`一种最多 ${Store.MAX_QTY} 份`);
+            else Store.add(id);
+          } else {
+            Store.dec(id);
+          }
+          render(); refreshNav(); syncCards();
+        });
       });
     });
     foot.querySelector('#payBtn').addEventListener('click', pay);
@@ -148,7 +168,7 @@ const Drawer = (() => {
 
   function pay() {
     const list = Store.cart();
-    const totalMin = list.reduce((s, m) => s + m.min, 0);
+    const totalMin = list.reduce((s, m) => s + m.min * m.qty, 0);
     body.innerHTML = `
       <div class="paying">
         <div class="paying__ring"></div>
@@ -179,24 +199,38 @@ const Drawer = (() => {
     ensure(); render();
     requestAnimationFrame(() => { scrim.classList.add('on'); root.classList.add('on'); });
     document.body.style.overflow = 'hidden';
+    openState = true;
   }
   function close() {
     if (!root) return;
     scrim.classList.remove('on'); root.classList.remove('on');
     document.body.style.overflow = '';
+    openState = false;
   }
-  return { open, close, render };
+  return { open, close, render, isOpen: () => openState };
 })();
 
-/* 卡片上的 add 按钮状态与清单同步 */
+/* 卡片上的 add / 份数与清单同步 */
 function syncCards() {
   document.querySelectorAll('.crate').forEach(c => {
     const id = c.dataset.id;
-    const btn = c.querySelector('.add');
-    if (!btn) return;
-    const inCart = Store.inCart(id);
-    btn.classList.toggle('is-on', inCart);
-    btn.textContent = inCart ? 'in list ✓' : 'add +';
-    c.classList.toggle('is-in', inCart);
+    const add = c.querySelector('.add');
+    const box = c.querySelector('.qty');
+    if (!add || !box) return;
+    const q = Store.qty(id);
+    c.classList.toggle('is-in', q > 0);
+    add.hidden = q > 0;
+    box.hidden = q === 0;
+    box.querySelector('b').textContent = q;
+
+    const live = c.querySelector('.crate__live');
+    if (Store.hasActive(id) && !live) {
+      const tag = document.createElement('span');
+      tag.className = 'crate__live';
+      tag.textContent = '已经在学';
+      c.appendChild(tag);
+    } else if (!Store.hasActive(id) && live) {
+      live.remove();
+    }
   });
 }

@@ -17,7 +17,14 @@ function cardHTML(m) {
         <b>${m.min}</b><small>min</small>
         <span class="price__pts"><i>+${m.pts} 积分</i></span>
       </span>
-      <button class="add" type="button">add +</button>
+      <div class="crate__buy">
+        <button class="add" type="button" data-act="add" aria-label="加入清单">add +</button>
+        <div class="qty" hidden>
+          <button type="button" data-act="dec" aria-label="减一份">−</button>
+          <b>1</b>
+          <button type="button" data-act="inc" aria-label="加一份">+</button>
+        </div>
+      </div>
     </div>
   </article>`;
 }
@@ -27,23 +34,6 @@ function renderGrid() {
   const list = MODULES.filter(m => curCat === 'all' || m.cat === curCat);
   host.innerHTML = list.map(cardHTML).join('');
 
-  host.querySelectorAll('.crate').forEach(c => {
-    const id = c.dataset.id;
-    const btn = c.querySelector('.add');
-    btn.addEventListener('click', () => {
-      const on = Store.toggleCart(id);
-      syncCards(); refreshNav();
-      toast(on ? '已放进清单 · 待会儿用时间付' : '拿出来了');
-    });
-
-    // 已在学习中的模块，加一层锁定
-    if (Store.hasActive(id)) {
-      const lock = document.createElement('div');
-      lock.className = 'crate__lock';
-      lock.innerHTML = `<div><span>正在学习</span>这一单还没结算<br><a href="desk.html">去书桌看看 →</a></div>`;
-      c.appendChild(lock);
-    }
-  });
   syncCards();
 
   const n = list.length;
@@ -56,6 +46,32 @@ function renderGrid() {
 
   document.getElementById('count').innerHTML =
     `<b>${n}</b> 个模块 · 平均 <b>${Math.round(list.reduce((s, m) => s + m.min, 0) / n)}</b> 分钟一个`;
+}
+
+/* 卡片上的加购 / 加减份数 */
+function bindGrid() {
+  const host = document.getElementById('grid');
+  host.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const card = btn.closest('.crate');
+    if (!card) return;
+    const id = card.dataset.id;
+    const act = btn.dataset.act;
+
+    if (act === 'add') {
+      Store.add(id);
+      toast('放进清单 · 待会儿用时间付');
+    } else if (act === 'inc') {
+      if (Store.qty(id) >= Store.MAX_QTY) toast(`一种最多 ${Store.MAX_QTY} 份`);
+      else Store.add(id);
+    } else if (act === 'dec') {
+      Store.dec(id);
+    }
+    syncCards();
+    refreshNav();
+    if (Drawer.isOpen()) Drawer.render();
+  });
 }
 
 function mountPills() {
@@ -76,11 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
   mountNav('shop');
   mountPills();
   renderGrid();
+  bindGrid();
 
   document.getElementById('bundle').addEventListener('click', () => {
     const pack = ['vocab-basic', 'listening', 'politics-recite'];
-    pack.forEach(id => { if (!Store.inCart(id) && !Store.hasActive(id)) Store.toggleCart(id); });
-    refreshNav(); renderGrid();
+    pack.forEach(id => { if (!Store.inCart(id)) Store.add(id); });
+    syncCards(); refreshNav();
     Drawer.open();
   });
 });
