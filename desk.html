@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>study room · 我的书桌</title>
+<meta name="description" content="正计时番茄钟：学够了才算付款成功。">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFF3E3">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="assets/shop.css">
+</head>
+<body data-page="desk">
+
+<main class="desk wrap">
+  <div class="desk__head">
+    <div>
+      <h1>MY DESK<em>我 的 书 桌</em></h1>
+    </div>
+    <p id="headline">—</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat stat--pink">
+      <p class="stat__k">积分余额</p>
+      <p class="stat__v"><span id="stPts">0</span><small>pts</small></p>
+    </div>
+    <div class="stat stat--orange">
+      <p class="stat__k">今日学习</p>
+      <p class="stat__v" id="stMin">0<small>min</small></p>
+    </div>
+    <div class="stat">
+      <p class="stat__k">连续天数</p>
+      <p class="stat__v" id="stStreak">0<small>天</small></p>
+    </div>
+  </div>
+
+  <div id="tasks"></div>
+
+  <section class="hist">
+    <div class="hist__head">
+      <h2>结算记录</h2>
+      <span>最近 8 笔</span>
+    </div>
+    <div id="history"></div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <span class="foot__l">计时是正的：学多少记多少，超了还能多拿。</span>
+  <span>study room © 2026</span>
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/desk.js"></script>
+<script src="assets/timer.js"></script>
+</body>
+</html>
