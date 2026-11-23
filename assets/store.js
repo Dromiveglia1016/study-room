@@ -111,10 +111,12 @@ const Store = (() => {
     const doneToday = db.history.filter(h => h.at >= t0);
     const allMinutes = db.history.reduce((s, h) => s + h.spent, 0) / 60;
     const active = db.orders.filter(o => !o.done);
+    // 今日学习 = 已结算 + 正在学的（和日历同一口径）
+    const liveMin = active.reduce((s, o) => s + elapsed(o) / 60, 0);
     return {
       points: db.points,
       doneToday: doneToday.length,
-      minToday: doneToday.reduce((s, h) => s + h.spent, 0) / 60,
+      minToday: doneToday.reduce((s, h) => s + h.spent, 0) / 60 + liveMin,
       allMinutes,
       activeCount: active.length,
       streak: streakDays()

@@ -68,11 +68,11 @@ function renderTasks() {
       const r = Store.settle(id);
       if (!r) { toast('还没学够，再撑一会儿'); return; }
       toast(`+${r.pts} 积分已入账${r.bonus ? ` · 超额奖励 +${r.bonus}` : ''}`);
-      renderStats(); renderTasks(); renderHistory(); refreshNav(); Pop.update();
+      renderStats(); renderTasks(); renderHistory(); renderCal(); refreshNav(); Pop.update();
     });
     card.querySelector('[data-act="drop"]').addEventListener('click', () => {
       if (!confirm('这单不要了？已学的时间不会变成积分。')) return;
-      Store.drop(id); renderTasks(); renderStats(); refreshNav(); Pop.update();
+      Store.drop(id); renderTasks(); renderStats(); renderCal(); refreshNav(); Pop.update();
     });
   });
   paint();
@@ -154,13 +154,188 @@ function renderHistory() {
     </div>`).join('');
 }
 
+/* ============================================================
+   学习日历
+   ============================================================ */
+const CAL = { y: 0, m: 0, sel: '' };
+const DKEY = (d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+
+function dayMap() {
+  const map = {};
+  const push = (t, item) => {
+    const k = DKEY(new Date(t));
+    (map[k] = map[k] || { min: 0, items: [] });
+    map[k].min += item.min;
+    map[k].items.push(item);
+  };
+
+  Store.history().forEach(h => push(h.at, {
+    name: h.name, cat: h.cat, min: h.spent / 60, pts: h.pts, at: h.at, live: false
+  }));
+
+  // 正在学但还没结算的，也算进今天
+  Store.activeOrders().forEach(o => {
+    const sec = Store.elapsed(o);
+    if (sec < 20) return;
+    const m = MODULES.find(x => x.id === o.mid) || { name: o.mid, catCn: '' };
+    push(Date.now(), {
+      name: m.name, cat: m.catCn, min: sec / 60, pts: 0, at: Date.now(), live: true
+    });
+  });
+
+  Object.values(map).forEach(v => v.items.sort((a, b) => b.at - a.at));
+  return map;
+}
+
+function monthSummary(map) {
+  let days = 0, min = 0, best = 0, bestDay = 0;
+  Object.keys(map).forEach(k => {
+    const [yy, mm, dd] = k.split('-').map(Number);
+    if (yy !== CAL.y || mm !== CAL.m) return;
+    days++;
+    min += map[k].min;
+    if (map[k].min > best) { best = map[k].min; bestDay = dd; }
+  });
+  return { days, min, best, bestDay };
+}
+
+function renderMonth(map) {
+  const host = document.getElementById('calMonth');
+  if (!host) return;
+  const { days, min, best, bestDay } = monthSummary(map);
+  host.innerHTML = `
+    <h3>本月学习</h3>
+    <dl class="cal__mstats">
+      <div><dt>打卡</dt><dd>${days} 天</dd></div>
+      <div><dt>累计</dt><dd>${fmtMin(min * 60)}</dd></div>
+    </dl>
+    <p class="cal__mbest">${best ? `最长一天 ${fmtMin(best * 60)} · ${bestDay} 日` : '这个月还没有记录'}</p>`;
+}
+
+function renderDay(key, map) {
+  const host = document.getElementById('calDetail');
+  if (!host) return;
+  const db = map || dayMap();
+  const rec = db[key];
+  const [yy, mm, dd] = key.split('-').map(Number);
+  const wd = '日一二三四五六'[new Date(yy, mm, dd).getDay()];
+  const head = `${mm + 1} 月 ${dd} 日 · 周${wd}`;
+
+  if (!rec || !rec.items.length) {
+    host.innerHTML = `
+      <p class="cal__d">${head}</p>
+      <p class="cal__empty">这天没有学习记录。<br>空一天也没关系，明天再来。</p>`;
+    return;
+  }
+
+  host.innerHTML = `
+    <p class="cal__d">${head}</p>
+    <p class="cal__min">${Math.round(rec.min)}<small>min</small></p>
+    <ul class="cal__list">
+      ${rec.items.map(it => `
+        <li class="cal__item">
+          <b>${it.name}</b>
+          <em class="${it.live ? 'is-live' : ''}">${it.live ? '计时中' : '+' + it.pts}</em>
+          <i>${it.cat || '学习'} · ${Math.round(it.min)} min</i>
+        </li>`).join('')}
+    </ul>`;
+}
+
+function renderCal() {
+  const grid = document.getElementById('calGrid');
+  if (!grid) return;
+
+  const map = dayMap();
+  const { y, m } = CAL;
+  const start = (new Date(y, m, 1).getDay() + 6) % 7;   // 周一开头
+  const total = new Date(y, m + 1, 0).getDate();
+  const cells = Math.ceil((start + total) / 7) * 7;
+
+  const now = new Date();
+  const todayK = DKEY(now);
+  document.getElementById('calLabel').textContent = `${y} 年 ${m + 1} 月`;
+
+  const next = document.getElementById('calNext');
+  if (next) next.disabled = (y > now.getFullYear()) || (y === now.getFullYear() && m >= now.getMonth());
+
+  let html = '';
+  for (let i = 0; i < cells; i++) {
+    const dnum = i - start + 1;
+    const out = dnum < 1 || dnum > total;
+    const d = new Date(y, m, dnum);
+    const k = DKEY(d);
+    const rec = map[k];
+    const min = rec ? rec.min : 0;
+    const lv = min >= 90 ? ' lv3' : (min >= 45 ? ' lv2' : '');
+    const cls = ['day'];
+    if (out) cls.push('is-out');
+    else {
+      if (rec) cls.push('has' + lv);
+      if (k === todayK) cls.push('is-today');
+      if (k === CAL.sel) cls.push('is-on');
+      if (d > now) cls.push('is-future');
+      if (rec && !rec.items.some(x => x.live) && d > now) cls.push('is-future');
+    }
+    const lab = min >= 60
+      ? `${Math.floor(min / 60)}h${Math.round(min % 60) || ''}`
+      : (min > 0 ? `${Math.round(min)}m` : '');
+    html += `<button type="button" class="${cls.join(' ')}"${out
+      ? ' disabled tabindex="-1"'
+      : ` data-k="${k}" data-d="${dnum}"`}>
+      <b>${d.getDate()}</b>${!out && lab ? `<small>${lab}</small>` : ''}
+    </button>`;
+  }
+
+  grid.innerHTML = html;
+  grid.querySelectorAll('.day[data-k]').forEach(b => {
+    b.addEventListener('click', () => {
+      CAL.sel = b.dataset.k;
+      grid.querySelectorAll('.day').forEach(x => x.classList.remove('is-on'));
+      b.classList.add('is-on');
+      renderDay(b.dataset.k, map);
+    });
+  });
+
+  // 选中日不在当前月时，回落到今天 / 月初
+  if (!CAL.sel.startsWith(`${y}-${m}-`)) {
+    CAL.sel = (y === now.getFullYear() && m === now.getMonth())
+      ? todayK : DKEY(new Date(y, m, 1));
+    renderCal();
+    return;
+  }
+  renderDay(CAL.sel, map);
+  renderMonth(map);
+}
+
+function shiftMonth(n) {
+  const d = new Date(CAL.y, CAL.m + n, 1);
+  CAL.y = d.getFullYear();
+  CAL.m = d.getMonth();
+  renderCal();
+}
+
+function initCal() {
+  const t = new Date();
+  CAL.y = t.getFullYear();
+  CAL.m = t.getMonth();
+  CAL.sel = DKEY(t);
+  document.getElementById('calPrev').addEventListener('click', () => shiftMonth(-1));
+  document.getElementById('calNext').addEventListener('click', () => shiftMonth(1));
+  renderCal();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   mountNav('desk');
   renderStats();
   renderTasks();
   renderHistory();
+  initCal();
 
   setInterval(paint, 500);
+  // 日历里“今天”的进行中时长，每 30 秒补一次
+  setInterval(() => {
+    if (CAL.y === new Date().getFullYear() && CAL.m === new Date().getMonth()) renderCal();
+  }, 30000);
 
   // 回到页面时补一次（后台标签页计时器会被节流）
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { paint(); renderStats(); } });

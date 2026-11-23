@@ -88,8 +88,8 @@ const CATS = [
 ];
 
 const VOUCHERS = [
-  { id: 'milk-tea', en: 'milk tea', name: '奶茶一杯', desc: '大杯的，加料随你挑。', cost: 150 },
-  { id: 'dessert', en: 'dessert', name: '甜品一份', desc: '蛋糕或冰淇淋，今天不称体重。', cost: 90 },
+  { id: 'milk-tea', en: 'milk tea · large', name: '奶茶一杯（大杯）', desc: '大杯，加料随你挑。', cost: 150 },
+  { id: 'milk-tea-m', en: 'milk tea · regular', name: '奶茶一杯（中杯）', desc: '中杯，少糖去冰，喝完接着学。', cost: 120 },
   { id: 'game-hour', en: 'game hour', name: '游戏一小时', desc: '一局接一局，理直气壮。', cost: 150 },
   { id: 'ai-chat', en: 'ai chat', name: '和 AI 聊天一小时', desc: '聊到忘了时间，这也算休息。', cost: 100 },
   { id: 'movie', en: 'movie ticket', name: '电影票一张', desc: '挑个周末，一个人也去。', cost: 300 },

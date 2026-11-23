@@ -37,6 +37,36 @@
 
   <div id="tasks"></div>
 
+  <section class="cal">
+    <div class="cal__head">
+      <div>
+        <h2>学习日历</h2>
+        <p class="cal__sub">学过的那天会亮起来 · 点一天看那天学了什么</p>
+      </div>
+      <div class="cal__nav">
+        <button type="button" id="calPrev" aria-label="上个月">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="cal__label" id="calLabel">—</span>
+        <button type="button" id="calNext" aria-label="下个月">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="cal__body">
+      <div>
+        <div class="cal__week" aria-hidden="true">
+          <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+        </div>
+        <div class="cal__grid" id="calGrid"></div>
+      </div>
+      <div class="cal__side">
+        <aside class="cal__detail" id="calDetail"></aside>
+        <div class="cal__mcard" id="calMonth"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="hist">
     <div class="hist__head">
       <h2>结算记录</h2>
