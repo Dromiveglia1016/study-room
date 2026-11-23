@@ -358,7 +358,7 @@ h2.disp--cn{
 .door:hover .door__go{transform:translateY(-2px);box-shadow:0 6px 0 rgba(6,18,46,.75)}
 .door__go svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .door__art{
-  position:absolute;right:6%;bottom:12%;
+  pointer-events:none;position:absolute;right:6%;bottom:12%;
   width:clamp(104px,12.5vw,176px);height:auto;z-index:-1;
   transform:rotate(-5deg);
   filter:drop-shadow(0 14px 22px rgba(6,18,46,.22));

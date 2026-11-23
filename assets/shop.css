@@ -361,6 +361,7 @@ ul{margin:0;padding:0;list-style:none}
 .boxup::after{
   content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;
   border-radius:50%;border:2px dashed rgba(59,30,18,.28);
+  pointer-events:none;
 }
 .boxup h2{
   font-family:var(--f-title);font-weight:800;font-size:clamp(28px,3.6vw,40px);
