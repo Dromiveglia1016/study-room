@@ -153,12 +153,17 @@ const Drawer = (() => {
       </div>`;
     foot.innerHTML = '';
     setTimeout(() => {
-      Store.checkout();
+      const made = Store.checkout();
+      // 这单里如果有配视频的模块，把它的 mid 带到书桌页去弹一次
+      const pick = made.map(o => MODULES.find(m => m.id === o.mid)).find(m => m && m.link);
+      if (pick) Jump.markPending(pick.id);
+
       body.innerHTML = `
         <div class="paying">
           <div class="empty__face" style="background:var(--lime);border-style:solid">✓</div>
           <p style="font-family:var(--f-cn);font-weight:900;font-size:18px;color:var(--ink)">付款成功</p>
           <p style="margin-top:8px">你欠自己 <b>${totalMin}</b> 分钟。<br>计时开始，学够了再来领积分。</p>
+          ${pick ? `<p class="paying__tip">《${pick.catCn} · ${pick.name}》配了视频，<br>到书桌会问你要不要打开。</p>` : ''}
         </div>`;
       foot.innerHTML = `<a class="btn btn--ink btn--wide" href="desk.html">去书桌 · 开始计时</a>`;
       refreshNav();

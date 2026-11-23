@@ -848,3 +848,114 @@ ul{margin:0;padding:0;list-style:none}
   .cart-btn{width:33px;height:33px}
   .day{font-size:12.5px;border-radius:10px}
 }
+
+/* ==========================================================================
+   jump dialog —— 带视频的模块，问一句要不要跳去 B 站
+   ========================================================================== */
+.jump__scrim{
+  position:fixed;inset:0;z-index:130;background:rgba(59,30,18,.32);
+  backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.jump__scrim.on{opacity:1;pointer-events:auto}
+
+.jump{
+  position:fixed;z-index:135;left:50%;top:50%;
+  width:min(432px,calc(100% - 32px));padding:24px 26px 18px;
+  background:var(--cream);border:var(--bd);border-radius:28px;
+  box-shadow:var(--sh-3);
+  opacity:0;pointer-events:none;
+  transform:translate(-50%,-46%) scale(.965);
+  transition:transform .4s var(--ease-out),opacity .26s;
+}
+.jump.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+
+.jump__x{
+  position:absolute;top:14px;right:14px;width:34px;height:34px;
+  display:grid;place-items:center;border-radius:50%;
+  border:2px solid var(--ink);background:var(--paper);
+  transition:transform .2s var(--ease),background .2s;
+}
+.jump__x:hover{background:var(--pink-pale);transform:rotate(90deg)}
+.jump__x svg{width:12px;height:12px;fill:var(--ink)}
+
+.jump__kick{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:4px 12px 4px 10px;border-radius:var(--r-pill);
+  background:var(--pink-pale);border:1.5px solid rgba(59,30,18,.45);
+  font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+.jump__kick i{
+  width:7px;height:7px;border-radius:50%;background:#F2557B;
+  box-shadow:0 0 0 0 rgba(242,85,123,.6);
+  animation:jumpPulse 2s infinite;
+}
+@keyframes jumpPulse{
+  0%{box-shadow:0 0 0 0 rgba(242,85,123,.55)}
+  70%{box-shadow:0 0 0 7px rgba(242,85,123,0)}
+  100%{box-shadow:0 0 0 0 rgba(242,85,123,0)}
+}
+
+.jump__row{display:flex;align-items:center;gap:14px;margin-top:16px}
+.jump__thumb{
+  flex:0 0 auto;width:74px;height:74px;display:grid;place-items:center;
+  background:var(--paper);border:2px solid var(--ink);border-radius:20px;
+  box-shadow:0 3px 0 var(--ink);overflow:hidden;
+}
+.jump__thumb img{width:60px;height:60px;object-fit:contain}
+.jump__id h3{
+  font-family:var(--f-cn);font-weight:900;font-size:19px;
+  letter-spacing:-.01em;line-height:1.35;
+}
+.jump__id p{
+  margin-top:5px;font-size:10.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+
+.jump__body{
+  margin-top:16px;font-size:13.5px;line-height:1.8;color:var(--ink-2);
+}
+.jump__body b{color:var(--ink);font-weight:700}
+
+.jump__acts{display:flex;gap:10px;margin-top:18px}
+.jump__acts .btn--ink{flex:1}
+.jump .btn:focus-visible{outline:none;box-shadow:0 3px 0 var(--ink),0 0 0 3px var(--cream),0 0 0 5px var(--pink-2)}
+.jump .btn--ink:focus-visible{box-shadow:0 3px 0 var(--ink),0 0 0 3px var(--cream),0 0 0 5px var(--pink-2)}
+.jump__x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--pink-2)}
+
+.jump__hint{
+  margin-top:12px;font-size:11.5px;line-height:1.7;color:var(--ink-3);
+}
+
+/* 付款成功里的小提示 */
+.paying__tip{
+  margin-top:14px;padding:9px 14px;border-radius:14px;
+  background:var(--pink-pale);border:1.5px dashed rgba(59,30,18,.42);
+  font-size:12px;line-height:1.75;color:var(--ink-2);
+}
+
+/* 书桌任务卡上的常驻入口 */
+.task__vid{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--f-ui);font-size:10.5px;font-weight:600;letter-spacing:.04em;
+  padding:4px 11px;border-radius:var(--r-pill);
+  background:var(--cream);border:2px solid var(--ink);
+  box-shadow:0 2px 0 var(--ink);color:var(--ink);
+  transition:transform .16s,box-shadow .16s,background .16s;
+}
+.task__vid:hover{transform:translateY(-1px);background:var(--pink-pale);box-shadow:0 3px 0 var(--ink)}
+.task__vid:active{transform:translateY(1px);box-shadow:0 1px 0 var(--ink)}
+
+@media (max-width:460px){
+  .jump{padding:20px 18px 16px;border-radius:24px}
+  .jump__x{top:11px;right:11px;width:30px;height:30px}
+  .jump__row{gap:12px;margin-top:14px}
+  .jump__thumb{width:62px;height:62px;border-radius:17px}
+  .jump__thumb img{width:50px;height:50px}
+  .jump__id h3{font-size:17px}
+  .jump__body{font-size:13px;margin-top:14px}
+  .jump__acts{flex-direction:column-reverse;gap:9px}
+  .jump__acts .btn{width:100%;height:42px}
+  .jump__hint{text-align:center}
+}

@@ -39,7 +39,7 @@ const Store = (() => {
     const made = list.map(m => ({
       id: 'o' + now().toString(36) + Math.random().toString(36).slice(2, 5),
       mid: m.id, target: m.min * 60, accum: 0, runningAt: null,
-      done: false, createdAt: now(), settledAt: null, earned: 0
+      done: false, createdAt: now(), settledAt: null, earned: 0, jumpAsks: 0
     }));
     db.orders.push(...made);
     // 只有第一单自动开始计时，其余待命
@@ -91,6 +91,15 @@ const Store = (() => {
     save();
   }
 
+  /* 这一单已经问过几次「要不要看视频」，同一单最多打扰两次 */
+  function noteJumpAsk(id) {
+    const o = db.orders.find(x => x.id === id);
+    if (!o) return 0;
+    o.jumpAsks = Math.min(2, (o.jumpAsks || 0) + 1);
+    save();
+    return o.jumpAsks;
+  }
+
   /* ---------- 积分 / 券 ---------- */
   const points = () => db.points;
   const history = () => db.history;
@@ -137,7 +146,7 @@ const Store = (() => {
   return {
     cart, inCart, toggleCart, clearCart, hasActive,
     activeOrders, runningOrder, checkout,
-    elapsed, reached, start, pause, isRunning, settle, drop,
+    elapsed, reached, start, pause, isRunning, settle, drop, noteJumpAsk,
     points, history, vouchers, redeem, stats, save
   };
 })();

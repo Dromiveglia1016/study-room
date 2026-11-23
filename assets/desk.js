@@ -18,7 +18,9 @@ function taskHTML(o) {
       <div class="task__clock">00:00<small>已学</small></div>
     </div>
     <div class="task__body">
-      <h3>${m.name}<span class="cat">${m.catCn}</span></h3>
+      <h3>${m.name}<span class="cat">${m.catCn}</span>${m.link
+        ? `<a class="task__vid" href="${m.link}" target="_blank" rel="noopener noreferrer" title="在新标签打开视频">▶ 看视频</a>`
+        : ''}</h3>
       <p class="task__target">目标 <b>${m.min} min</b> · 达标 <b>+${m.pts} pts</b> · 每超 10 分钟再 +5</p>
       <dl class="task__nums">
         <div><dt>目标</dt><dd data-k="target">${m.min}min</dd></div>
@@ -35,6 +37,22 @@ function taskHTML(o) {
       </div>
     </div>
   </article>`;
+}
+
+/* 配了视频的模块，在「开始 / 继续」时问一次；同一单最多打扰两次 */
+async function askJumpFor(id, title) {
+  const o = Store.activeOrders().find(x => x.id === id);
+  if (!o) return;
+  const m = MODULES.find(x => x.id === o.mid);
+  if (!m || !m.link) return;
+  if ((o.jumpAsks || 0) >= 2) return;
+  Store.noteJumpAsk(id);
+  const go = await Jump.ask(m, { title: title || '开始前先看视频？' });
+  if (go) {
+    // 已经打开过了，就不再问第二遍
+    Store.noteJumpAsk(id);
+    toast('视频在新标签里 · 这边计时不停');
+  }
 }
 
 function renderStats() {
@@ -61,8 +79,10 @@ function renderTasks() {
   host.querySelectorAll('.task').forEach(card => {
     const id = card.dataset.id;
     card.querySelector('[data-act="toggle"]').addEventListener('click', () => {
-      if (Store.isRunning(id)) Store.pause(id); else Store.start(id);
+      const wasRunning = Store.isRunning(id);
+      if (wasRunning) Store.pause(id); else Store.start(id);
       paint();
+      if (!wasRunning) askJumpFor(id);
     });
     card.querySelector('[data-act="settle"]').addEventListener('click', () => {
       const r = Store.settle(id);
@@ -330,6 +350,13 @@ document.addEventListener('DOMContentLoaded', () => {
   renderTasks();
   renderHistory();
   initCal();
+
+  // 刚从商店付款过来：问一次要不要打开视频
+  const pend = Jump.takePending();
+  if (pend) {
+    const o = Store.activeOrders().find(x => x.mid === pend);
+    if (o) setTimeout(() => askJumpFor(o.id, '视频现在打开吗？'), 650);
+  }
 
   setInterval(paint, 500);
   // 日历里“今天”的进行中时长，每 30 秒补一次
