@@ -1,0 +1,15 @@
+# 可选：命令行部署方式（不想用网页后台粘贴代码时用）
+#   npm i -g wrangler
+#   wrangler login
+#   把下面 id 换成 Cloudflare 后台 KV 命名空间页面显示的 Namespace ID
+#   wrangler deploy
+#
+# 网页后台部署的话，这个文件不用管，直接把 worker.js 内容粘贴进 Editor 即可。
+
+name = "studyroom-sync"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "SYNC"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"

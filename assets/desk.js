@@ -369,4 +369,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 设置面板里改了视频链接，任务卡上的「看视频」跟着变
   addEventListener('links:change', () => { renderTasks(); renderStats(); });
+
+  // 云端/别的标签页把数据换掉时，整页重画
+  addEventListener('store:change', e => {
+    if (e.detail && e.detail.source === 'local') return;
+    renderStats();
+    renderTasks();
+    renderHistory();
+    renderCal();
+    paint();
+    refreshNav();
+  });
 });

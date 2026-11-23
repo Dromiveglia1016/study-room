@@ -71,10 +71,14 @@
 
   /* ---------- 今日数据 ---------- */
   const put = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  try {
-    const s = Store.stats();
-    put('tMin', Math.round(s.minToday));
-    put('tPts', s.points);
-    put('tStreak', s.streak);
-  } catch (e) { /* 首次来没有数据也算正常 */ }
+  const paintToday = () => {
+    try {
+      const s = Store.stats();
+      put('tMin', Math.round(s.minToday));
+      put('tPts', s.points);
+      put('tStreak', s.streak);
+    } catch (e) { /* 首次来没有数据也算正常 */ }
+  };
+  paintToday();
+  addEventListener('store:change', paintToday);
 })();

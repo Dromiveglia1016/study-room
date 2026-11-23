@@ -64,4 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
   renderBalance();
   renderTickets();
   renderWallet();
+
+  addEventListener('store:change', e => {
+    if (e.detail && e.detail.source === 'local') return;
+    renderBalance();
+    renderTickets();
+    renderWallet();
+    refreshNav();
+  });
 });

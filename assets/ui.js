@@ -46,6 +46,8 @@ function mountNav(active) {
   }, { passive: true });
 }
 
+addEventListener('store:change', () => refreshNav());
+
 function refreshNav() {
   const p = document.getElementById('navPts');
   const d = document.getElementById('cartDot');

@@ -94,6 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGrid();
   bindGrid();
 
+  // 云端/别的标签页把数据换掉时，卡片和清单跟着刷新
+  addEventListener('store:change', e => {
+    if (e.detail && e.detail.source === 'local') return;
+    renderGrid();
+    refreshNav();
+    if (Drawer.isOpen()) Drawer.render();
+  });
+
   document.getElementById('bundle').addEventListener('click', () => {
     const pack = ['vocab-basic', 'listening', 'politics-recite'];
     pack.forEach(id => { if (!Store.inCart(id)) Store.add(id); });

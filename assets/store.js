@@ -6,23 +6,62 @@
 const KEY = 'studyroom.v2';
 
 const Store = (() => {
-  const blank = () => ({ v: 2, points: 0, orders: [], history: [], vouchers: [], cart: [] });
+  const MAX_QTY = 9;
+  const blank = () => ({ v: 2, points: 0, orders: [], history: [], vouchers: [], cart: [], updatedAt: 0 });
+  const now = () => Date.now();
+  const emit = (name, detail) => { try { dispatchEvent(new CustomEvent(name, { detail })); } catch (e) {} };
+
+  /* 老数据、云端数据、其它标签页写进来的数据都从这里过一遍 */
+  function normalize(raw) {
+    const d = (raw && typeof raw === 'object') ? raw : {};
+    return {
+      v: 2,
+      points: Number.isFinite(+d.points) ? Math.max(0, +d.points) : 0,
+      orders: Array.isArray(d.orders) ? d.orders.filter(o => o && o.id && o.mid) : [],
+      history: Array.isArray(d.history) ? d.history : [],
+      vouchers: Array.isArray(d.vouchers) ? d.vouchers : [],
+      // 老数据是字符串数组，统一升级成 { id, qty }
+      cart: (Array.isArray(d.cart) ? d.cart : [])
+        .map(c => (typeof c === 'string' ? { id: c, qty: 1 } : c))
+        .filter(c => c && c.id && MODULES.some(m => m.id === c.id))
+        .map(c => ({ id: c.id, qty: Math.min(MAX_QTY, Math.max(1, parseInt(c.qty, 10) || 1)) })),
+      updatedAt: Number.isFinite(+d.updatedAt) ? +d.updatedAt : 0
+    };
+  }
 
   let db;
-  try { db = JSON.parse(localStorage.getItem(KEY)) || blank(); } catch (e) { db = blank(); }
-  if (!db.orders) db = blank();
+  try { db = normalize(JSON.parse(localStorage.getItem(KEY))); } catch (e) { db = blank(); }
 
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} };
-  const now = () => Date.now();
+  /* touch = 更新「最后修改时间」；notify = 通知 UI 和云同步 */
+  function persist(touch = true, notify = true) {
+    if (touch) db.updatedAt = now();
+    try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {}
+    if (notify) {
+      emit('store:change', { source: 'local' });
+      emit('store:dirty', { source: 'local' });
+    }
+  }
+  const save = () => persist(true, true);
+  const snapshot = () => JSON.parse(JSON.stringify(db));
+  const mark = (ts) => { db.updatedAt = ts; persist(false, false); };
 
-  /* ---------- 学习清单（同一种可以加购多份） ---------- */
-  const MAX_QTY = 9;
+  /* 云端/别的标签页的数据整包换进来，不再触发上传 */
+  function replace(next, source = 'cloud') {
+    db = normalize(next);
+    persist(false, false);
+    emit('store:change', { source });
+  }
 
-  // 老数据是字符串数组，统一升级成 { id, qty }
-  if (!Array.isArray(db.cart)) db.cart = [];
-  db.cart = db.cart.map(c => (typeof c === 'string' ? { id: c, qty: 1 } : c))
-    .filter(c => c && c.id && MODULES.some(m => m.id === c.id))
-    .map(c => ({ id: c.id, qty: Math.min(MAX_QTY, Math.max(1, parseInt(c.qty, 10) || 1)) }));
+  /* 同一台设备开两个标签页时，数据保持一致 */
+  addEventListener('storage', e => {
+    if (e.key !== KEY || !e.newValue) return;
+    try {
+      const next = normalize(JSON.parse(e.newValue));
+      if (JSON.stringify(next) === JSON.stringify(db)) return;
+      db = next;
+      emit('store:change', { source: 'storage' });
+    } catch (err) {}
+  });
 
   const line = (id) => db.cart.find(c => c.id === id) || null;
   const qty = (id) => { const l = line(id); return l ? l.qty : 0; };
@@ -178,7 +217,8 @@ const Store = (() => {
     cart, cartCount, qty, inCart, add, dec, removeItem, toggleCart, clearCart, hasActive, MAX_QTY,
     activeOrders, runningOrder, checkout,
     elapsed, reached, start, pause, isRunning, settle, drop, noteJumpAsk,
-    points, history, vouchers, redeem, stats, save
+    points, history, vouchers, redeem, stats, save,
+    snapshot, replace, mark
   };
 })();
 
