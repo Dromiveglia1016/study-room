@@ -3,7 +3,7 @@
    ============================================================ */
 
 const NAV_ITEMS = [
-  { id: 'shop', href: 'index.html', label: 'shop' },
+  { id: 'shop', href: 'shop.html', label: 'shop' },
   { id: 'desk', href: 'desk.html', label: 'my desk' },
   { id: 'rewards', href: 'rewards.html', label: 'rewards' }
 ];
@@ -17,7 +17,7 @@ function mountNav(active) {
     <div class="nav__l">
       ${NAV_ITEMS.map(i => `<a class="nav__link ${i.id === active ? 'is-on' : ''}" href="${i.href}">${i.label}</a>`).join('')}
     </div>
-    <a class="logo" href="index.html">study<i>room</i><b>time is money</b></a>
+    <a class="logo" href="index.html" title="回到主页">study<i>room</i><b>time is money</b></a>
     <div class="nav__r">
       <span class="pts-chip" title="我的积分">
         <svg viewBox="0 0 24 24"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>
@@ -111,7 +111,7 @@ const Drawer = (() => {
           <div class="empty__face">:(</div>
           <p>清单还是空的。<br>挑一个模块，用时间把它买下来。</p>
         </div>`;
-      foot.innerHTML = `<a class="btn btn--ink btn--wide" href="index.html">去挑一个</a>`;
+      foot.innerHTML = `<a class="btn btn--ink btn--wide" href="shop.html">去挑一个</a>`;
       foot.querySelector('a').addEventListener('click', close);
       return;
     }

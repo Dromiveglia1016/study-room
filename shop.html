@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>study room · 学科商店</title>
+<meta name="description" content="用学习时间付款的学科商店。挑一个模块，学够它，换积分，换奶茶。">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F9B9CF">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="assets/shop.css">
+</head>
+<body data-page="shop">
+
+<!-- ============ 拉开入场 ============ -->
+<div class="intro" id="intro">
+  <div class="intro__half intro__half--l">
+    <div class="intro__face"></div>
+    <div class="intro__mid">
+      <p class="intro__kick">a room for you</p>
+      <h2 class="intro__title"><span class="t-s">study</span></h2>
+    </div>
+    <span class="intro__teeth intro__teeth--l" aria-hidden="true"></span>
+  </div>
+  <div class="intro__half intro__half--r">
+    <div class="intro__face"></div>
+    <div class="intro__mid">
+      <h2 class="intro__title"><em>room</em></h2>
+      <p class="intro__sub">用时间付款的学科商店</p>
+    </div>
+    <span class="intro__teeth intro__teeth--r" aria-hidden="true"></span>
+  </div>
+  <button class="intro__pull" id="introPull" type="button" aria-label="拉开进入">
+    <svg viewBox="0 0 56 76" fill="none" aria-hidden="true">
+      <path class="pull__ring" d="M28 6c-6 0-10 4-10 9s4 9 10 9 10-4 10-9-4-9-10-9Z" stroke="currentColor" stroke-width="3.4"/>
+      <path class="pull__heart" d="M28 68C12 56 4 47 4 37.5 4 29 10.5 23 18.5 23c4.6 0 8 2.4 9.5 5.2C29.5 25.4 32.9 23 37.5 23 45.5 23 52 29 52 37.5 52 47 44 56 28 68Z" fill="currentColor"/>
+    </svg>
+    <span class="intro__hint">pull</span>
+  </button>
+  <p class="intro__tip">拖住爱心往下拉 · 或者点一下它</p>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-spark" viewBox="0 0 24 24">
+    <path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/>
+  </symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24">
+    <path d="M12 21.2S2.6 15.4 2.6 9.5C2.6 6.4 5.1 4 8 4c1.7 0 3.1.8 4 2 .9-1.2 2.3-2 4-2 2.9 0 5.4 2.4 5.4 5.5 0 5.9-9.4 11.7-9.4 11.7Z"/>
+  </symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24">
+    <path d="M13.6 4 22 12l-8.4 8-1.7-1.8 5.3-5H2v-2.4h15.2L11.9 5.8Z"/>
+  </symbol>
+</svg>
+
+<!-- ============ 头图 ============ -->
+<header class="hero">
+  <div class="wrap hero__head">
+    <p class="hero__kick">
+      <svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>
+      open 24h · 只收时间
+    </p>
+    <h1>THE SHOP</h1>
+    <p class="hero__cn">学 科 商 店</p>
+    <p class="hero__sub">
+      这里的标价不是钱，是<b>分钟</b>。挑一个模块，把你要学的时间付掉，
+      计时达标，积分到账，再去换一杯奶茶。
+    </p>
+    <div class="hero__rules">
+      <span class="rule"><b>1</b> 分钟 = <b>1</b> 积分 <span>·</span> 学多少换多少</span>
+      <span class="rule">每超 <b>10</b> 分钟 <span>额外</span> <b>+5</b></span>
+      <span class="rule"><span>兑</span> 奶茶 / 电影票 / 和 AI 聊天</span>
+    </div>
+  </div>
+  <img class="hero__float hero__float--a" src="assets/shop/cards.webp" alt="" aria-hidden="true">
+  <img class="hero__float hero__float--b" src="assets/shop/magnet.webp" alt="" aria-hidden="true">
+  <img class="hero__float hero__float--c" src="assets/shop/headphones.webp" alt="" aria-hidden="true">
+</header>
+<div class="seam" aria-hidden="true"></div>
+
+<!-- ============ 商店 ============ -->
+<main class="shop wrap">
+  <div class="shop__top">
+    <div class="pills" id="pills"></div>
+    <p class="shop__count" id="count"></p>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <section class="boxup">
+    <div>
+      <h2>CAN'T DECIDE?</h2>
+      <p>整一份 85 分钟套餐：单词 30 + 听力 25 + 政治背考题 30。三样一起，一口气清掉，省得来回挑。</p>
+    </div>
+    <div class="boxup__acts">
+      <button class="btn btn--ink" id="bundle" type="button">
+        打包带走
+        <svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
+      </button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <span class="foot__l">
+    <svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>
+    built by me, for me · 学够了才有得花
+  </span>
+  <span>study room © 2026</span>
+</footer>
+
+<script src="assets/data.js" defer></script>
+<script src="assets/store.js" defer></script>
+<script src="assets/intro.js" defer></script>
+<script src="assets/links.js" defer></script>
+<script src="assets/jump.js" defer></script>
+<script src="assets/ui.js" defer></script>
+<script src="assets/shop.js" defer></script>
+<script src="assets/timer.js" defer></script>
+</body>
+</html>

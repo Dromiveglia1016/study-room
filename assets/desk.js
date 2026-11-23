@@ -71,7 +71,7 @@ function renderTasks() {
       <div class="empty" style="border:2.5px dashed rgba(59,30,18,.3);border-radius:30px;padding:56px 20px">
         <div class="empty__face">0</div>
         <p>桌上没有正在学的模块。<br>去商店下第一单，用 30 分钟换 30 积分。</p>
-        <a class="btn btn--ink" href="index.html" style="margin-top:18px">去商店</a>
+        <a class="btn btn--ink" href="shop.html" style="margin-top:18px">去商店</a>
       </div>`;
     return;
   }
