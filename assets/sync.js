@@ -69,6 +69,61 @@ const Sync = (() => {
     } catch (e) { return null; }
   }
 
+  /* -------------------------------------- 免注册搬运：整包压成一段文字 */
+  const BAK = 'studyroom.v2.bak';
+  const b64u = (u8) => toB64(u8).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const unb64u = (s) => {
+    let t = String(s).replace(/-/g, '+').replace(/_/g, '/');
+    while (t.length % 4) t += '=';
+    return fromB64(t);
+  };
+
+  /* SR1. 开头 = deflate 压缩过；SR0. = 没压缩（老浏览器兜底） */
+  async function pack() {
+    const doc = { v: 1, t: Date.now(), db: Store.snapshot() };
+    const raw = enc.encode(JSON.stringify(doc));
+    let body = raw, tag = 'SR0.';
+    if (typeof CompressionStream === 'function') {
+      try {
+        const cs = new CompressionStream('deflate-raw');
+        const w = cs.writable.getWriter();
+        const out = new Response(cs.readable).arrayBuffer();
+        w.write(raw).catch(() => {});
+        w.close().catch(() => {});
+        body = new Uint8Array(await out);
+        tag = 'SR1.';
+      } catch (e) { /* 压缩失败就发原文，顶多长一点 */ }
+    }
+    return tag + b64u(body);
+  }
+
+  async function unpack(str) {
+    const s = String(str || '').replace(/\s+/g, '');
+    const m = s.match(/^SR([01])\.([A-Za-z0-9\-_]+)$/i);
+    if (!m) throw new Error('这串不是学习数据，确认整段都复制了');
+    let bytes = unb64u(m[2]);
+    if (m[1] === '1') {
+      if (typeof DecompressionStream !== 'function') throw new Error('这台设备的浏览器太旧，换个新的再来');
+      try {
+        const ds = new DecompressionStream('deflate-raw');
+        const w = ds.writable.getWriter();
+        const out = new Response(ds.readable).arrayBuffer();
+        w.write(bytes).catch(() => {});
+        w.close().catch(() => {});
+        bytes = new Uint8Array(await out);
+      } catch (e) { throw new Error('这串数据不完整，重新复制一次'); }
+    }
+    let doc;
+    try { doc = JSON.parse(dec.decode(bytes)); } catch (e) { throw new Error('这串数据不完整，重新复制一次'); }
+    if (!doc || !doc.db || typeof doc.db !== 'object') throw new Error('这串数据里没有学习记录');
+    return doc;
+  }
+
+  const sizeTxt = (s) => {
+    const n = new Blob([s]).size;
+    return n < 1024 ? n + ' B' : (n / 1024).toFixed(1) + ' KB';
+  };
+
   /* ---------------------------------------------------------- 状态 */
   let cfg = null, meta = null;
   let hash = '', key = null, rev = -1, lastSync = 0, dirty = false, busy = false;
@@ -265,6 +320,32 @@ const Sync = (() => {
   max-width:min(86vw,420px);text-align:center;line-height:1.5;
   box-shadow:0 6px 0 rgba(43,27,18,.22)}
 .sy__toast.on{opacity:1;transform:translate(-50%,0)}
+/* 免注册 · 打包搬运 */
+.sy__sec{display:flex;align-items:center;gap:7px;margin:20px 0 10px;font-size:10.5px;
+  font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a7c6c}
+.sy__sec::after{content:"";flex:1;height:1px;background:rgba(43,27,18,.13)}
+.sy__sec b{color:#f1662a;letter-spacing:0}
+.sy__pack{padding:14px;border:1.5px dashed rgba(43,27,18,.32);border-radius:14px;background:#fff}
+.sy__pack>p{margin:0 0 11px;font-size:12px;line-height:1.7;color:#6d5f50}
+.sy__pack>p b{color:#2b1b12}
+.sy__packacts{display:flex;gap:8px;flex-wrap:wrap}
+.sy__packacts .sy__mini{flex:1;min-width:132px}
+.sy__ta{width:100%;box-sizing:border-box;height:74px;resize:vertical;padding:9px 11px;margin-top:10px;
+  border:1.5px solid #2b1b12;border-radius:10px;background:#fdfaf3;color:#2b1b12;outline:none;
+  font-size:11px;line-height:1.55;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.sy__ta:focus{box-shadow:0 0 0 3px rgba(47,116,242,.18)}
+.sy__ta::placeholder{color:#b3a89a;font-family:inherit;word-break:normal}
+.sy__meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:7px;font-size:10.5px;color:#8a7c6c}
+.sy__meta .sy__link[hidden]{display:none}
+/* 进阶：折叠起来，不吵人 */
+.sy__adv{margin-top:20px;padding-top:14px;border-top:1.5px solid rgba(43,27,18,.12)}
+.sy__adv>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:800;color:#2b1b12}
+.sy__adv>summary::-webkit-details-marker{display:none}
+.sy__adv>summary::before{content:"+";display:grid;place-items:center;width:17px;height:17px;flex:none;
+  border-radius:50%;background:#ffe7a3;font-size:12px;font-weight:900;line-height:1}
+.sy__adv[open]>summary::before{content:"−"}
+.sy__adv>summary:focus-visible{outline:3px solid #2f74f2;outline-offset:3px;border-radius:6px}
 @media (max-width:520px){
   .sy__panel{padding:22px 18px 18px;width:calc(100vw - 24px)}
   .sy__fab{left:12px;width:42px;height:42px}
@@ -275,6 +356,8 @@ const Sync = (() => {
   .sy__code{flex-wrap:wrap}
   .sy__code .sy__inp{flex:1 1 100%;letter-spacing:.06em}
   .sy__mini{flex:1;height:36px}
+  .sy__packacts .sy__mini{flex:1 1 0;min-width:0;padding:0 4px;font-size:11.5px}
+  .sy__ta{height:88px;font-size:10.5px}
 }
 `;
 
@@ -327,7 +410,7 @@ const Sync = (() => {
     const box = panel.querySelector('.sy__state');
     if (box) {
       const map = {
-        off: ['还没连接 · 数据只存在这台设备', ''],
+        off: ['自动同步没开 · 数据只在本机', ''],
         idle: ['已连接 · 等待第一次同步', cfg ? ago(lastSync) : ''],
         ok: ['已同步 · ' + Store.points() + ' pts', ago(lastSync)],
         offline: ['离线中 · 本机照常用，联网后自动补', ago(lastSync)],
@@ -360,39 +443,143 @@ const Sync = (() => {
       <button class="sy__x" type="button" aria-label="关掉">×</button>
       <p class="sy__kick"><i></i>cloud sync</p>
       <h3>积分跨设备同步</h3>
-      <p class="sy__sub">在两台设备上填同一个「同步码」，积分、订单、学时、兑换券和学习清单就会自动互通。数据先在这台设备加密，云端只存密文。</p>
+      <p class="sy__sub">换设备、换浏览器，积分和订单都能带走。先试下面 ① 这一招，不用注册任何账号。</p>
       <div class="sy__state"></div>
 
-      <label class="sy__lbl" for="syUrl">Worker 地址</label>
-      <input class="sy__inp" id="syUrl" type="url" spellcheck="false" autocomplete="off"
-        placeholder="https://xxxx.workers.dev">
+      <p class="sy__sec"><b>①</b>打包带走 · 不用注册</p>
+      <div class="sy__pack">
+        <p>点<b>「复制本机数据」</b>，把这串发到微信「文件传输助手」；在另一台设备打开本站，粘进来点<b>「粘贴恢复」</b>。</p>
+        <div class="sy__packacts">
+          <button class="sy__mini" type="button" id="syPack">复制本机数据</button>
+          <button class="sy__mini" type="button" id="syUnpack">粘贴恢复</button>
+        </div>
+        <textarea class="sy__ta" id="syText" spellcheck="false" autocomplete="off"
+          placeholder="点上面的「复制本机数据」生成一串，或把另一台设备那串粘到这里"></textarea>
+        <div class="sy__meta">
+          <span id="sySize">还没生成</span>
+          <button class="sy__link" type="button" id="syUndo" hidden>撤销上次恢复</button>
+        </div>
+      </div>
 
-      <label class="sy__lbl" for="syCode">同步码</label>
-      <div class="sy__code">
-        <input class="sy__inp" id="syCode" type="text" spellcheck="false" autocomplete="off" placeholder="XXXXX-XXXXX-XXXXX-XXXXX">
-        <button class="sy__mini" type="button" id="syGen">生成</button>
-        <button class="sy__mini" type="button" id="syCopy">复制</button>
-      </div>
-      <p class="sy__hint">同步码就是钥匙，别发给别人。换设备时填同一个码；丢了可以重新生成，旧数据会留在云端。</p>
+      <details class="sy__adv" ${cfg ? 'open' : ''}>
+        <summary>② 自动同步 · 要部署一次（选做）</summary>
+        <p class="sy__hint" style="margin-top:11px">上面那招够用就不用管这里。部署完一次之后，两台设备打开就自动对齐，不用再复制粘贴。</p>
 
-      <div class="sy__acts">
-        <button class="sy__btn sy__primary" type="button" id="syConnect">连接并同步</button>
-        <button class="sy__btn sy__ghost" type="button" id="syNow">立即同步</button>
-      </div>
-      <div class="sy__row2" ${cfg ? '' : 'hidden'}>
-        <button class="sy__link" type="button" id="syForce">用本机覆盖云端</button>
-        <button class="sy__link" type="button" id="syOff">断开同步</button>
-      </div>
+        <label class="sy__lbl" for="syUrl">Worker 地址</label>
+        <input class="sy__inp" id="syUrl" type="url" spellcheck="false" autocomplete="off"
+          placeholder="https://xxxx.workers.dev">
+
+        <label class="sy__lbl" for="syCode">同步码</label>
+        <div class="sy__code">
+          <input class="sy__inp" id="syCode" type="text" spellcheck="false" autocomplete="off" placeholder="XXXXX-XXXXX-XXXXX-XXXXX">
+          <button class="sy__mini" type="button" id="syGen">生成</button>
+          <button class="sy__mini" type="button" id="syCopy">复制</button>
+        </div>
+        <p class="sy__hint">同步码就是钥匙，别发给别人。两台设备填同一个码。</p>
+
+        <div class="sy__acts">
+          <button class="sy__btn sy__primary" type="button" id="syConnect">连接并同步</button>
+          <button class="sy__btn sy__ghost" type="button" id="syNow">立即同步</button>
+        </div>
+        <div class="sy__row2" ${cfg ? '' : 'hidden'}>
+          <button class="sy__link" type="button" id="syForce">用本机覆盖云端</button>
+          <button class="sy__link" type="button" id="syOff">断开同步</button>
+        </div>
+      </details>
 
       <div class="sy__note">
-        <b>会同步</b>　积分 · 计时订单 · 学时记录 · 兑换券 · 学习清单<br>
-        <b>不同步</b>　视频链接（每台设备自己填）<br>
-        断网时本机照常用，联网后自动补传；同一时刻最好只在一台设备上计时。
+        <b>带得走</b>　积分 · 计时订单 · 学时记录 · 兑换券 · 学习清单<br>
+        <b>带不走</b>　视频链接（每台设备自己填）<br>
+        打包时会压缩，用一年也只有几 KB；恢复前自动备份，点错了能撤销。同一时刻最好只在一台设备上计时。
       </div>`;
 
     const $ = (id) => panel.querySelector('#' + id);
     $('syUrl').value = cfg ? cfg.url : '';
     $('syCode').value = cfg ? prettyCode(cfg.code) : '';
+
+    /* ---- 打包带走 ---- */
+    const bakFresh = () => {
+      try {
+        const b = JSON.parse(localStorage.getItem(BAK));
+        return !!(b && b.db && b.at && Date.now() - b.at < 86400000);
+      } catch (e) { return false; }
+    };
+    if (bakFresh()) $('syUndo').hidden = false;
+
+    $('syPack').addEventListener('click', async () => {
+      const btn = $('syPack');
+      btn.disabled = true;
+      btn.textContent = '打包中…';
+      try {
+        const s = await pack();
+        $('syText').value = s;
+        $('sySize').textContent = '已生成 ' + sizeTxt(s) + ' · 发给自己就行';
+        try {
+          await navigator.clipboard.writeText(s);
+          notify('已复制到剪贴板，去粘给另一台设备');
+        } catch (e) {
+          $('syText').focus();
+          $('syText').select();
+          notify('已生成，按 Ctrl/Cmd + C 复制');
+        }
+      } catch (e) {
+        notify('打包失败：' + (e && e.message ? e.message : '未知错误'));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '复制本机数据';
+      }
+    });
+
+    $('syUnpack').addEventListener('click', async () => {
+      let s = $('syText').value.trim();
+      if (!s) {
+        try {
+          const clip = await navigator.clipboard.readText();
+          if (clip && /^SR[01]\./i.test(clip.trim())) { s = clip.trim(); $('syText').value = s; }
+        } catch (e) { /* 没给剪贴板权限就算了 */ }
+      }
+      if (!s) return notify('先把另一台设备那串粘到框里');
+
+      let doc;
+      try { doc = await unpack(s); }
+      catch (e) { return notify(e && e.message ? e.message : '这串数据看不懂'); }
+
+      const cur = Store.snapshot();
+      const inc = doc.db;
+      const when = doc.t ? new Date(doc.t).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '未知时间';
+      const nOrders = Array.isArray(inc.orders) ? inc.orders.length : 0;
+      const ok = confirm(
+        '本机现在：' + cur.points + ' pts · ' + cur.orders.length + ' 个订单\n' +
+        '要恢复的：' + (inc.points || 0) + ' pts · ' + nOrders + ' 个订单\n' +
+        '（打于 ' + when + '）\n\n' +
+        '恢复会用这份数据覆盖本机。覆盖前自动备份，点错了能撤销。继续？'
+      );
+      if (!ok) return;
+
+      try { localStorage.setItem(BAK, JSON.stringify({ at: Date.now(), db: cur })); } catch (e) {}
+      Store.replace(inc, 'import');
+      Store.mark(Date.now());
+      dispatchEvent(new CustomEvent('store:dirty', { detail: { source: 'import' } }));
+      $('syUndo').hidden = false;
+      $('sySize').textContent = '已恢复 · ' + Store.points() + ' pts';
+      paintState();
+      notify('恢复好了 · ' + Store.points() + ' pts · ' + Store.snapshot().orders.length + ' 个订单');
+    });
+
+    $('syUndo').addEventListener('click', () => {
+      let b = null;
+      try { b = JSON.parse(localStorage.getItem(BAK)); } catch (e) {}
+      if (!b || !b.db) return notify('没有可撤销的备份了');
+      if (!confirm('回到恢复前的数据？现在的数据会被换掉。')) return;
+      Store.replace(b.db, 'import');
+      Store.mark(Date.now());
+      dispatchEvent(new CustomEvent('store:dirty', { detail: { source: 'import' } }));
+      try { localStorage.removeItem(BAK); } catch (e) {}
+      $('syUndo').hidden = true;
+      $('sySize').textContent = '已撤销 · ' + Store.points() + ' pts';
+      paintState();
+      notify('已回到恢复前 · ' + Store.points() + ' pts');
+    });
 
     panel.querySelector('.sy__x').addEventListener('click', close);
     $('syGen').addEventListener('click', () => { $('syCode').value = prettyCode(makeCode()); notify('生成好了，记得复制保存'); });
