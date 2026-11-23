@@ -8,7 +8,7 @@ function cardHTML(m) {
   return `
   <article class="crate" data-id="${m.id}" data-cat="${m.cat}" data-theme="${m.theme}">
     <span class="crate__tag">${m.tag}</span>
-    <div class="crate__box"><img src="assets/shop/${m.img}.webp" alt="${m.name}"></div>
+    <div class="crate__box"><img class="${m.flip ? 'is-flip' : ''}" src="assets/shop/${m.img}.webp" alt="${m.name}"></div>
     <p class="crate__cat">${m.en}</p>
     <h3 class="crate__name">${m.name}</h3>
     <p class="crate__desc">${m.desc}</p>
@@ -47,6 +47,13 @@ function renderGrid() {
   syncCards();
 
   const n = list.length;
+  // 最后一行若只剩两张，各占一半，避免右侧空一格
+  if (n > 2 && n % 3 === 2) {
+    host.querySelectorAll('.crate').forEach((c, i) => {
+      if (i >= n - 2) c.classList.add('is-wide');
+    });
+  }
+
   document.getElementById('count').innerHTML =
     `<b>${n}</b> 个模块 · 平均 <b>${Math.round(list.reduce((s, m) => s + m.min, 0) / n)}</b> 分钟一个`;
 }
@@ -71,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGrid();
 
   document.getElementById('bundle').addEventListener('click', () => {
-    const pack = ['vocab-basic', 'listening', 'classical'];
+    const pack = ['vocab-basic', 'listening', 'politics-recite'];
     pack.forEach(id => { if (!Store.inCart(id) && !Store.hasActive(id)) Store.toggleCart(id); });
     refreshNav(); renderGrid();
     Drawer.open();

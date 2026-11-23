@@ -230,8 +230,12 @@ ul{margin:0;padding:0;list-style:none}
 .shop__count b{color:var(--ink);font-weight:600}
 
 .grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:22px;
 }
+.crate{grid-column:span 2}
+.crate.is-wide{grid-column:span 3}
+.crate.is-wide .crate__box{height:228px}
+.crate.is-wide .crate__box img{width:214px;height:214px}
 
 /* ---------- card ---------- */
 .crate{
@@ -257,16 +261,18 @@ ul{margin:0;padding:0;list-style:none}
 .crate__tag:empty{display:none}
 
 .crate__box{
-  position:relative;height:198px;border-radius:var(--r-md);
+  position:relative;height:204px;border-radius:var(--r-md);
   border:2px dashed rgba(59,30,18,.5);
   display:grid;place-items:center;overflow:hidden;
 }
 .crate__box img{
-  width:176px;height:176px;object-fit:contain;
+  width:190px;height:190px;object-fit:contain;
   filter:drop-shadow(0 10px 10px rgba(59,30,18,.22));
   transition:transform .35s var(--ease);
 }
+.crate__box img.is-flip{transform:scaleX(-1)}
 .crate:hover .crate__box img{transform:scale(1.06) rotate(-2deg)}
+.crate:hover .crate__box img.is-flip{transform:scaleX(-1) scale(1.06) rotate(2deg)}
 
 .crate__cat{
   margin-top:14px;font-size:10.5px;font-weight:600;letter-spacing:.16em;
@@ -681,7 +687,8 @@ ul{margin:0;padding:0;list-style:none}
    responsive
    ========================================================================== */
 @media (max-width:1080px){
-  .grid{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .crate,.crate.is-wide{grid-column:span 2}
   .hero__float--c{display:none}
 }
 @media (max-width:860px){
@@ -714,6 +721,7 @@ ul{margin:0;padding:0;list-style:none}
   .logo{font-size:17px}
   .logo i{display:none}
   .grid{grid-template-columns:1fr;gap:18px}
+  .crate,.crate.is-wide{grid-column:auto}
   .crate__box{height:160px}
   .crate__box img{width:130px;height:130px}
   .stats{grid-template-columns:1fr}

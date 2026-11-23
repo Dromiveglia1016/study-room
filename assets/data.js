@@ -4,6 +4,7 @@
    ============================================================ */
 
 const MODULES = [
+  /* ---------- 英语 ---------- */
   {
     id: 'vocab-basic', cat: 'english', catCn: '英语',
     en: 'english · vocab', name: '单词普通版',
@@ -34,23 +35,47 @@ const MODULES = [
     desc: '一篇阅读，划出五个长难句，翻到能讲出来。',
     min: 45, pts: 45, tag: '', img: 'magnifier', theme: 'orange'
   },
+
+  /* ---------- 数学 ---------- */
   {
-    id: 'maths', cat: 'maths', catCn: '数学',
-    en: 'maths · redo', name: '错题重做',
-    desc: '八道错题，遮住答案重算，步骤写全。',
-    min: 30, pts: 30, tag: '', img: 'calculator', theme: 'cream'
+    id: 'maths-video', cat: 'maths', catCn: '数学',
+    en: 'maths · lecture', name: '看教学视频',
+    desc: '一节完整课，暂停三次记笔记，看完能自己复述。',
+    min: 60, pts: 60, tag: 'best seller', img: 'video', theme: 'cream'
+  },
+
+  /* ---------- 政治 ---------- */
+  {
+    id: 'politics-video', cat: 'politics', catCn: '政治',
+    en: 'politics · lecture', name: '看教学视频',
+    desc: '一节课时长的串讲，边看边把框架画下来。',
+    min: 90, pts: 90, tag: 'new', img: 'video', flip: true, theme: 'pink'
   },
   {
-    id: 'classical', cat: 'chinese', catCn: '语文',
-    en: 'chinese · dictation', name: '文言默写',
-    desc: '默一篇，逐句订正，错的字单拎出来写三遍。',
-    min: 25, pts: 25, tag: '', img: 'brush', theme: 'pink'
+    id: 'politics-recite', cat: 'politics', catCn: '政治',
+    en: 'politics · recite', name: '背诵考题',
+    desc: '三道大题，掐着表背，背完合上书默一遍。',
+    min: 30, pts: 30, tag: '', img: 'exam', theme: 'orange'
   },
   {
-    id: 'physics', cat: 'physics', catCn: '物理',
-    en: 'physics · derive', name: '公式推导',
-    desc: '手推三个公式，推到能讲给空气听明白。',
-    min: 35, pts: 35, tag: 'limited', img: 'magnet', theme: 'orange'
+    id: 'politics-drill', cat: 'politics', catCn: '政治',
+    en: 'politics · drill', name: '做练习题',
+    desc: '一整套选择题，错的标出来，找出它在哪一章。',
+    min: 30, pts: 30, tag: '', img: 'workbook', theme: 'pink'
+  },
+
+  /* ---------- 遗传学 ---------- */
+  {
+    id: 'genetics-video', cat: 'genetics', catCn: '遗传学',
+    en: 'genetics · lecture', name: '看教学视频',
+    desc: '半节课，盯着遗传图谱看，看不懂的倒回去。',
+    min: 30, pts: 30, tag: 'new', img: 'dna', theme: 'pink'
+  },
+  {
+    id: 'genetics-recite', cat: 'genetics', catCn: '遗传学',
+    en: 'genetics · recite', name: '背诵考题',
+    desc: '实验设计与推导大题，背到能默写出每一步。',
+    min: 30, pts: 30, tag: '', img: 'exam', flip: true, theme: 'cream'
   }
 ];
 
@@ -58,15 +83,15 @@ const CATS = [
   { id: 'all', label: 'all modules' },
   { id: 'english', label: '英语' },
   { id: 'maths', label: '数学' },
-  { id: 'chinese', label: '语文' },
-  { id: 'physics', label: '物理' }
+  { id: 'politics', label: '政治' },
+  { id: 'genetics', label: '遗传学' }
 ];
 
 const VOUCHERS = [
-  { id: 'milk-tea', en: 'milk tea', name: '奶茶一杯', desc: '中杯，加料随你挑。', cost: 120 },
+  { id: 'milk-tea', en: 'milk tea', name: '奶茶一杯', desc: '大杯的，加料随你挑。', cost: 150 },
   { id: 'dessert', en: 'dessert', name: '甜品一份', desc: '蛋糕或冰淇淋，今天不称体重。', cost: 90 },
   { id: 'game-hour', en: 'game hour', name: '游戏一小时', desc: '一局接一局，理直气壮。', cost: 150 },
-  { id: 'sleep-in', en: 'sleep in', name: '睡到自然醒', desc: '不设闹钟，睡到不想睡。', cost: 200 },
+  { id: 'ai-chat', en: 'ai chat', name: '和 AI 聊天一小时', desc: '聊到忘了时间，这也算休息。', cost: 100 },
   { id: 'movie', en: 'movie ticket', name: '电影票一张', desc: '挑个周末，一个人也去。', cost: 300 },
   { id: 'blind-box', en: 'blind box', name: '盲盒一个', desc: '买的就是拆开那一下。', cost: 500 }
 ];
