@@ -144,16 +144,16 @@ const Store = (() => {
     const spent = elapsed(o);
     if (spent < o.target) return null;
     if (o.runningAt) { o.accum = spent; o.runningAt = null; }
-    const base = Math.round(o.target / 60);
-    const bonus = Math.floor(Math.max(0, spent - o.target) / 600) * 5;
-    o.earned = base + bonus;
+    // 一分钟一积分：按实际学了多久算，超出目标的部分也照样算
+    const mins = Math.floor(spent / 60);
+    o.earned = mins;
     o.done = true;
     o.settledAt = now();
     db.points += o.earned;
     const m = MODULES.find(x => x.id === o.mid) || { name: o.mid, catCn: '' };
     db.history.unshift({ mid: o.mid, name: m.name, cat: m.catCn, target: o.target, spent, pts: o.earned, at: now() });
     save();
-    return { pts: o.earned, base, bonus, spent };
+    return { pts: o.earned, minutes: mins, spent };
   }
 
   function drop(id) {

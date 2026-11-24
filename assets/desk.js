@@ -21,12 +21,12 @@ function taskHTML(o) {
       <h3>${m.name}<span class="cat">${m.catCn}</span>${o.qty > 1 ? `<span class="cat cat--seq">第 ${o.seq}/${o.qty} 次</span>` : ''}${Links.get(o.mid)
         ? `<a class="task__vid" href="${Links.get(o.mid)}" target="_blank" rel="noopener noreferrer" title="在新标签打开视频">▶ 看视频</a>`
         : ''}</h3>
-      <p class="task__target">目标 <b>${m.min} min</b> · 达标 <b>+${m.pts} pts</b> · 每超 10 分钟再 +5</p>
+      <p class="task__target">目标 <b>${m.min} min</b> · <b>1</b> 分钟 <b>1</b> 积分 · 多学多算</p>
       <dl class="task__nums">
         <div><dt>目标</dt><dd data-k="target">${m.min}min</dd></div>
         <div><dt>已学</dt><dd data-k="spent">00:00</dd></div>
         <div><dt>还差</dt><dd data-k="left">${m.min}:00</dd></div>
-        <div><dt>可得</dt><dd data-k="earn">${m.pts}</dd></div>
+        <div><dt>可得</dt><dd data-k="earn">${m.min}</dd></div>
       </dl>
       <div class="task__bar"><i></i></div>
       <div class="task__acts">
@@ -87,7 +87,7 @@ function renderTasks() {
     card.querySelector('[data-act="settle"]').addEventListener('click', () => {
       const r = Store.settle(id);
       if (!r) { toast('还没学够，再撑一会儿'); return; }
-      toast(`+${r.pts} 积分已入账${r.bonus ? ` · 超额奖励 +${r.bonus}` : ''}`);
+      toast(`+${r.pts} 积分已入账 · 学了 ${r.minutes} 分钟`);
       renderStats(); renderTasks(); renderHistory(); renderCal(); refreshNav(); Pop.update();
     });
     card.querySelector('[data-act="drop"]').addEventListener('click', () => {
@@ -125,12 +125,13 @@ function paint() {
     q('spent').textContent = fmtClock(cur);
     q('left').textContent = over ? '达标' : fmtClock(o.target - cur);
     q('left').style.color = over ? '#2F6B2A' : '';
-    q('earn').textContent = Math.round(o.target / 60) + Math.floor(Math.max(0, cur - o.target) / 600) * 5;
+    // 未达标时先按目标分显示，达标后随时长实时往上走
+    q('earn').textContent = Math.floor(Math.max(cur, o.target) / 60);
 
     const note = card.querySelector('.task__note');
     note.textContent = !o.runningAt
       ? '已暂停'
-      : (over ? `够 ${m.min} 分钟了，继续学还算超额分` : `还差 ${fmtClock(o.target - cur)}`);
+      : (over ? `够 ${m.min} 分钟了，继续学照样一分钟一分` : `还差 ${fmtClock(o.target - cur)}`);
 
     const toggle = card.querySelector('[data-act="toggle"]');
     toggle.textContent = o.runningAt ? '暂停' : '继续';
@@ -138,8 +139,7 @@ function paint() {
     const settle = card.querySelector('[data-act="settle"]');
     settle.disabled = !over;
     if (over) {
-      const bonus = Math.floor((cur - o.target) / 600) * 5;
-      settle.textContent = `收下 ${Math.round(o.target / 60) + bonus} 积分`;
+      settle.textContent = `收下 ${Math.floor(cur / 60)} 积分`;
     } else {
       settle.textContent = '收下积分';
     }
@@ -199,7 +199,8 @@ function dayMap() {
     if (sec < 20) return;
     const m = MODULES.find(x => x.id === o.mid) || { name: o.mid, catCn: '' };
     push(Date.now(), {
-      name: m.name, cat: m.catCn, min: sec / 60, pts: 0, at: Date.now(), live: true
+      name: m.name, cat: m.catCn, min: sec / 60, pts: 0, at: Date.now(),
+      live: true, running: !!o.runningAt
     });
   });
 
@@ -255,7 +256,7 @@ function renderDay(key, map) {
       ${rec.items.map(it => `
         <li class="cal__item">
           <b>${it.name}</b>
-          <em class="${it.live ? 'is-live' : ''}">${it.live ? '计时中' : '+' + it.pts}</em>
+          <em class="${it.live && it.running ? 'is-live' : ''}">${it.live ? (it.running ? '计时中' : '暂停中') : '+' + it.pts}</em>
           <i>${it.cat || '学习'} · ${Math.round(it.min)} min</i>
         </li>`).join('')}
     </ul>`;
